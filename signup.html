@@ -1,0 +1,420 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Registration | AD ASTRA BIT</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #0b0b14;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 15px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: #151522;
+            border: 1px solid #29293b;
+            border-radius: 12px;
+            padding: 35px;
+        }
+
+        h1 {
+            font-size: 27px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #9999ad;
+            font-size: 14px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 9px;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 13px;
+            background: #0b0b14;
+            border: 1px solid #343448;
+            border-radius: 6px;
+            color: white;
+            font-size: 14px;
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: #a5a5ff;
+        }
+
+        input:disabled {
+            opacity: 0.65;
+        }
+
+        select option {
+            background: #151522;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: white;
+            color: #111;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.85;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .back {
+            display: block;
+            text-align: center;
+            margin-top: 22px;
+            color: #aaaabb;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .back:hover {
+            color: white;
+        }
+
+        #message {
+            margin-top: 18px;
+            font-size: 14px;
+            line-height: 1.5;
+            text-align: center;
+            color: #ff9999;
+        }
+
+        .note {
+            font-size: 12px;
+            color: #888899;
+            margin-top: 8px;
+        }
+
+        @media (max-width: 500px) {
+            .container {
+                padding: 25px 20px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Student Registration</h1>
+
+        <p class="subtitle">
+            Welcome to AD ASTRA BIT.
+            Complete your registration to become part
+            of our student community.
+        </p>
+
+        <form id="signupForm">
+
+            <div class="form-group">
+                <label for="name">Full Name</label>
+
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="Your full name"
+                    required
+                    maxlength="100">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Google Email</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    disabled>
+
+                <p class="note">
+                    Automatically retrieved from your Google account.
+                </p>
+            </div>
+
+            <div class="form-group">
+                <label for="usn">University Seat Number (USN)</label>
+
+                <input
+                    type="text"
+                    id="usn"
+                    placeholder="Enter your USN"
+                    required
+                    maxlength="30">
+            </div>
+
+            <div class="form-group">
+                <label for="branch">Branch</label>
+
+                <select id="branch" required>
+
+                    <option value="">Select your branch</option>
+                    <option value="CSE">Computer Science and Engineering</option>
+                    <option value="ISE">Information Science and Engineering</option>
+                    <option value="AIML">AI and Machine Learning</option>
+                    <option value="ECE">Electronics and Communication</option>
+                    <option value="EEE">Electrical and Electronics</option>
+                    <option value="ME">Mechanical Engineering</option>
+                    <option value="Civil">Civil Engineering</option>
+                    <option value="Other">Other</option>
+
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="year">Academic Year</label>
+
+                <select id="year" required>
+
+                    <option value="">Select academic year</option>
+                    <option value="1">1st Year</option>
+                    <option value="2">2nd Year</option>
+                    <option value="3">3rd Year</option>
+                    <option value="4">4th Year</option>
+
+                </select>
+            </div>
+
+            <button type="submit" id="submitBtn" disabled>
+                Submit Registration
+            </button>
+
+            <p id="message">Checking Google sign-in...</p>
+
+        </form>
+
+        <a href="index.html" class="back">
+            ← Back to Homepage
+        </a>
+
+    </div>
+
+
+    <!-- Firebase Integration -->
+
+    
+<script type="module">
+
+    import { initializeApp }
+        from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+
+    import {
+        getAuth,
+        onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+    import {
+        getFirestore,
+        doc,
+        getDoc,
+        setDoc,
+        serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyB9BQOlOO-tfuFzxjK0KEA7YcV3O11_WjM",
+        authDomain: "ad-astra-bit.firebaseapp.com",
+        projectId: "ad-astra-bit",
+        storageBucket: "ad-astra-bit.firebasestorage.app",
+        messagingSenderId: "104444066688",
+        appId: "1:104444066688:web:d84478465cd3084f315f65"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const form = document.getElementById("signupForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const message = document.getElementById("message");
+
+    let currentUser = null;
+    let authReady = false;
+
+    // WAIT FOR FIREBASE AUTHENTICATION
+
+    onAuthStateChanged(auth, async (user) => {
+
+        authReady = true;
+        console.log("SIGNUP PAGE AUTH CHECK");
+console.log("User:", user);
+console.log("Project:", auth.app.options.projectId);
+console.log("UID:", user?.uid);
+
+        if (!user) {
+            currentUser = null;
+            message.textContent =
+                "No Google account found. Please return to the homepage and sign in.";
+            submitBtn.disabled = true;
+            return;
+        }
+
+        currentUser = user;
+
+        document.getElementById("name").value =
+            user.displayName || "";
+
+        document.getElementById("email").value =
+            user.email || "";
+
+        try {
+
+            const userRef = doc(db, "users", user.uid);
+            const userSnapshot = await getDoc(userRef);
+
+            if (userSnapshot.exists()) {
+
+                const data = userSnapshot.data();
+
+                if (data.role === "admin") {
+                    message.textContent = "Admin account detected.";
+                    return;
+                }
+
+                if (data.status === "approved") {
+                    message.textContent =
+                        "Your account is approved. Dashboard is under development.";
+                    return;
+                }
+
+                if (data.status === "pending") {
+                    window.location.replace("pending.html");
+                    return;
+                }
+
+                if (data.status === "rejected") {
+                    message.textContent =
+                        "Your previous application was rejected. Please contact an administrator.";
+                    return;
+                }
+
+            }
+
+            message.textContent = "Complete your registration.";
+            submitBtn.disabled = false;
+
+        } catch (error) {
+
+            console.error("SIGNUP AUTH CHECK FAILED:", error);
+
+            message.textContent =
+                "Unable to check registration status: " + error.message;
+
+        }
+
+    });
+
+
+    // SUBMIT REGISTRATION
+
+    form.addEventListener("submit", async (event) => {
+
+        event.preventDefault();
+
+        if (!authReady || !currentUser) {
+            message.textContent =
+                "Please sign in using Google before registering.";
+            return;
+        }
+
+        submitBtn.disabled = true;
+
+        message.textContent = "Submitting your registration...";
+
+        try {
+
+            const userRef = doc(db, "users", currentUser.uid);
+            const userSnapshot = await getDoc(userRef);
+
+            if (userSnapshot.exists()) {
+                message.textContent =
+                    "An application already exists for this account.";
+                submitBtn.disabled = true;
+                return;
+            }
+
+            await setDoc(userRef, {
+
+                uid: currentUser.uid,
+
+                name: document.getElementById("name").value.trim(),
+
+                email: currentUser.email,
+
+                usn: document.getElementById("usn").value.trim().toUpperCase(),
+
+                branch: document.getElementById("branch").value,
+
+                academicYear: document.getElementById("year").value,
+
+                role: "student",
+
+                status: "pending",
+
+                createdAt: serverTimestamp()
+
+            });
+
+            window.location.replace("pending.html");
+
+        } catch (error) {
+
+            console.error("REGISTRATION ERROR:", error);
+
+            message.textContent =
+                "Registration failed: " + error.message;
+
+            submitBtn.disabled = false;
+
+        }
+
+    });
+
+</script>
+
+
+</body>
+</html>

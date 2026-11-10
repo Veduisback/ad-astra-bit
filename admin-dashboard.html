@@ -1,0 +1,787 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | AD ASTRA BIT</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #0b0b14;
+            color: white;
+            min-height: 100vh;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 22px 6%;
+            border-bottom: 1px solid #252535;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        #adminEmail {
+            color: #aaaabb;
+            font-size: 13px;
+        }
+
+        button {
+            border: none;
+            border-radius: 6px;
+            padding: 11px 17px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .logout-btn {
+            background: transparent;
+            border: 1px solid #777;
+            color: white;
+        }
+
+        .logout-btn:hover {
+            background: white;
+            color: #111;
+        }
+
+        main {
+            width: 88%;
+            max-width: 1250px;
+            margin: 45px auto;
+        }
+
+        .heading {
+            margin-bottom: 30px;
+        }
+
+        .heading h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .heading p {
+            color: #9999ad;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 35px;
+        }
+
+        .stat-card {
+            background: #151522;
+            border: 1px solid #29293b;
+            border-radius: 9px;
+            padding: 22px;
+        }
+
+        .stat-card p {
+            color: #9999ad;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .stat-card h2 {
+            font-size: 29px;
+        }
+
+        .applications {
+            background: #151522;
+            border: 1px solid #29293b;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .applications-header {
+            padding: 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid #29293b;
+        }
+
+        .applications-header h2 {
+            font-size: 19px;
+        }
+
+        .refresh-btn {
+            background: white;
+            color: #111;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 850px;
+        }
+
+        th, td {
+            padding: 17px 15px;
+            text-align: left;
+            border-bottom: 1px solid #29293b;
+            font-size: 13px;
+        }
+
+        th {
+            color: #9999ad;
+            font-weight: normal;
+            background: #11111c;
+        }
+
+        td {
+            color: #e5e5ed;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .pending {
+            background: #332b17;
+            color: #facc15;
+        }
+
+        .approved {
+            background: #153323;
+            color: #86efac;
+        }
+
+        .rejected {
+            background: #351c25;
+            color: #ff9999;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .approve-btn {
+            background: #86efac;
+            color: #102015;
+        }
+
+        .reject-btn {
+            background: #ff9999;
+            color: #2a1010;
+        }
+
+        .empty-message {
+            padding: 35px;
+            text-align: center;
+            color: #9999ad;
+            font-size: 14px;
+        }
+
+        #message {
+            color: #a5a5ff;
+            font-size: 13px;
+            margin-top: 18px;
+            min-height: 20px;
+        }
+
+        footer {
+            text-align: center;
+            color: #777788;
+            padding: 25px;
+            font-size: 12px;
+        }
+
+        @media (max-width: 700px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+                flex-wrap: wrap;
+            }
+
+            main {
+                width: 94%;
+                margin: 30px auto;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .heading h1 {
+                font-size: 26px;
+            }
+
+            .applications-header {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+
+        <div class="logo">AD ASTRA BIT</div>
+
+        <div class="header-right">
+
+            <span id="adminEmail">Checking admin access...</span>
+
+            <button class="logout-btn" id="logoutBtn" disabled>
+                Logout
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <main>
+
+        <section class="heading">
+
+            <h1>Admin Dashboard</h1>
+
+            <p>
+                Manage student registrations and control access
+                to the AD ASTRA BIT community.
+            </p>
+
+        </section>
+
+
+        <section class="stats">
+
+            <div class="stat-card">
+                <p>Total Applications</p>
+                <h2 id="totalCount">0</h2>
+            </div>
+
+            <div class="stat-card">
+                <p>Pending Applications</p>
+                <h2 id="pendingCount">0</h2>
+            </div>
+
+            <div class="stat-card">
+                <p>Approved Students</p>
+                <h2 id="approvedCount">0</h2>
+            </div>
+
+        </section>
+
+
+        <section class="applications">
+
+            <div class="applications-header">
+
+                <h2>Student Applications</h2>
+
+                <button class="refresh-btn" id="refreshBtn" disabled>
+                    Refresh Applications
+                </button>
+
+            </div>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>USN</th>
+                            <th>Branch</th>
+                            <th>Year</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="applicationsBody">
+
+                        <tr>
+                            <td colspan="7" class="empty-message">
+                                Checking administrator access...
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <p id="message"></p>
+
+    </main>
+
+
+    <footer>
+        © 2026 AD ASTRA BIT. Admin Portal.
+    </footer>
+
+
+    <script type="module">
+
+        import {
+            initializeApp
+        } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+
+        import {
+            getAuth,
+            onAuthStateChanged,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+        import {
+            getFirestore,
+            collection,
+            getDocs,
+            doc,
+            updateDoc,
+            serverTimestamp
+        } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+
+        // FIREBASE CONFIGURATION
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyB9BQOlOO-tfuFzxjK0KEA7YcV3O11_WjM",
+            authDomain: "ad-astra-bit.firebaseapp.com",
+            projectId: "ad-astra-bit",
+            storageBucket: "ad-astra-bit.firebasestorage.app",
+            messagingSenderId: "104444066688",
+            appId: "1:104444066688:web:d84478465cd3084f315f65"
+        };
+
+
+        // INITIALIZE FIREBASE
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+
+        // ADMIN EMAIL ALLOWLIST
+
+        const ADMIN_EMAILS = [
+            "rachnf99@gmail.com"
+        ];
+
+
+        // ELEMENTS
+
+        const adminEmail = document.getElementById("adminEmail");
+        const applicationsBody = document.getElementById("applicationsBody");
+        const message = document.getElementById("message");
+
+        const totalCount = document.getElementById("totalCount");
+        const pendingCount = document.getElementById("pendingCount");
+        const approvedCount = document.getElementById("approvedCount");
+
+        const refreshBtn = document.getElementById("refreshBtn");
+        const logoutBtn = document.getElementById("logoutBtn");
+
+
+        let currentAdmin = null;
+
+
+        // SHOW MESSAGE
+
+        function showMessage(text) {
+            message.textContent = text;
+        }
+
+
+        // CREATE TABLE CELL SAFELY
+
+        function createCell(value) {
+
+            const cell = document.createElement("td");
+            cell.textContent = value || "—";
+
+            return cell;
+        }
+
+
+        // LOAD APPLICATIONS
+
+        async function loadApplications() {
+
+            refreshBtn.disabled = true;
+
+            applicationsBody.replaceChildren();
+
+            const loadingRow = document.createElement("tr");
+            const loadingCell = document.createElement("td");
+
+            loadingCell.colSpan = 7;
+            loadingCell.className = "empty-message";
+            loadingCell.textContent = "Loading applications...";
+
+            loadingRow.appendChild(loadingCell);
+            applicationsBody.appendChild(loadingRow);
+
+            showMessage("");
+
+
+            try {
+
+                const snapshot = await getDocs(
+                    collection(db, "users")
+                );
+
+                const students = snapshot.docs
+                    .map(documentSnapshot => ({
+                        id: documentSnapshot.id,
+                        ...documentSnapshot.data()
+                    }))
+                    .filter(student => student.role === "student")
+                    .sort((a, b) => {
+
+                        const dateA = a.createdAt?.toMillis?.() || 0;
+                        const dateB = b.createdAt?.toMillis?.() || 0;
+
+                        return dateB - dateA;
+
+                    });
+
+
+                // UPDATE STATISTICS
+
+                const pending = students.filter(
+                    student => student.status === "pending"
+                ).length;
+
+                const approved = students.filter(
+                    student => student.status === "approved"
+                ).length;
+
+                totalCount.textContent = students.length;
+                pendingCount.textContent = pending;
+                approvedCount.textContent = approved;
+
+
+                applicationsBody.replaceChildren();
+
+
+                if (students.length === 0) {
+
+                    const row = document.createElement("tr");
+                    const cell = document.createElement("td");
+
+                    cell.colSpan = 7;
+                    cell.className = "empty-message";
+                    cell.textContent = "No student applications found.";
+
+                    row.appendChild(cell);
+                    applicationsBody.appendChild(row);
+
+                    return;
+                }
+
+
+                // RENDER STUDENTS
+
+                students.forEach(student => {
+
+                    const row = document.createElement("tr");
+
+                    row.appendChild(createCell(student.name));
+                    row.appendChild(createCell(student.email));
+                    row.appendChild(createCell(student.usn));
+                    row.appendChild(createCell(student.branch));
+                    row.appendChild(createCell(student.academicYear));
+
+
+                    // STATUS
+
+                    const statusCell = document.createElement("td");
+                    const statusBadge = document.createElement("span");
+
+                    const currentStatus = student.status || "unknown";
+
+                    statusBadge.className =
+                        "status " + currentStatus;
+
+                    statusBadge.textContent =
+                        currentStatus.toUpperCase();
+
+                    statusCell.appendChild(statusBadge);
+                    row.appendChild(statusCell);
+
+
+                    // ACTIONS
+
+                    const actionsCell = document.createElement("td");
+                    const actions = document.createElement("div");
+
+                    actions.className = "actions";
+
+
+                    if (currentStatus === "pending") {
+
+                        const approveBtn = document.createElement("button");
+
+                        approveBtn.className = "approve-btn";
+                        approveBtn.textContent = "Approve";
+
+                        approveBtn.addEventListener("click", () => {
+                            updateStudentStatus(
+                                student.id,
+                                "approved",
+                                approveBtn,
+                                rejectBtn
+                            );
+                        });
+
+
+                        const rejectBtn = document.createElement("button");
+
+                        rejectBtn.className = "reject-btn";
+                        rejectBtn.textContent = "Reject";
+
+                        rejectBtn.addEventListener("click", () => {
+                            updateStudentStatus(
+                                student.id,
+                                "rejected",
+                                approveBtn,
+                                rejectBtn
+                            );
+                        });
+
+
+                        actions.appendChild(approveBtn);
+                        actions.appendChild(rejectBtn);
+
+                    } else {
+
+                        actions.textContent = "No action required";
+
+                    }
+
+
+                    actionsCell.appendChild(actions);
+                    row.appendChild(actionsCell);
+
+                    applicationsBody.appendChild(row);
+
+                });
+
+
+                showMessage("Applications loaded successfully.");
+
+            } catch (error) {
+
+                console.error("APPLICATION LOADING ERROR:", error);
+
+                applicationsBody.replaceChildren();
+
+                const row = document.createElement("tr");
+                const cell = document.createElement("td");
+
+                cell.colSpan = 7;
+                cell.className = "empty-message";
+                cell.textContent =
+                    "Unable to load applications: " + error.message;
+
+                row.appendChild(cell);
+                applicationsBody.appendChild(row);
+
+                showMessage("Please check Firestore permissions.");
+
+            } finally {
+
+                refreshBtn.disabled = false;
+
+            }
+
+        }
+
+
+        // UPDATE STUDENT STATUS
+
+        async function updateStudentStatus(
+            studentId,
+            newStatus,
+            approveBtn,
+            rejectBtn
+        ) {
+
+            const confirmed = window.confirm(
+                `Are you sure you want to ${newStatus} this student application?`
+            );
+
+            if (!confirmed) return;
+
+            approveBtn.disabled = true;
+            rejectBtn.disabled = true;
+
+            showMessage("Updating student application...");
+
+            try {
+
+                const studentRef = doc(db, "users", studentId);
+
+                await updateDoc(studentRef, {
+
+                    status: newStatus,
+                    updatedAt: serverTimestamp()
+
+                });
+
+                showMessage(
+                    `Student application ${newStatus} successfully.`
+                );
+
+                await loadApplications();
+
+            } catch (error) {
+
+                console.error("STATUS UPDATE ERROR:", error);
+
+                showMessage(
+                    "Unable to update application: " + error.message
+                );
+
+                approveBtn.disabled = false;
+                rejectBtn.disabled = false;
+
+            }
+
+        }
+
+
+        // AUTHENTICATION AND ADMIN ACCESS
+
+        onAuthStateChanged(auth, async (user) => {
+
+            if (!user) {
+
+                adminEmail.textContent = "Not signed in";
+
+                showMessage(
+                    "Please sign in using your administrator Google account."
+                );
+
+                window.location.replace("index.html");
+                return;
+
+            }
+
+
+            if (
+                !user.emailVerified ||
+                !ADMIN_EMAILS.includes(user.email.toLowerCase())
+            ) {
+
+                showMessage(
+                    "Access denied. This account is not an authorized administrator."
+                );
+
+                await signOut(auth);
+
+                window.location.replace("index.html");
+                return;
+
+            }
+
+
+            currentAdmin = user;
+
+            adminEmail.textContent = user.email;
+
+            logoutBtn.disabled = false;
+            refreshBtn.disabled = false;
+
+            await loadApplications();
+
+        });
+
+
+        // REFRESH
+
+        refreshBtn.addEventListener("click", () => {
+
+            if (currentAdmin) {
+                loadApplications();
+            }
+
+        });
+
+
+        // LOGOUT
+
+        logoutBtn.addEventListener("click", async () => {
+
+            try {
+
+                logoutBtn.disabled = true;
+
+                await signOut(auth);
+
+                window.location.replace("index.html");
+
+            } catch (error) {
+
+                console.error("LOGOUT ERROR:", error);
+
+                showMessage("Logout failed. Please try again.");
+
+                logoutBtn.disabled = false;
+
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,436 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Application Under Review | AD ASTRA BIT</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #0b0b14;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background: #151522;
+            border: 1px solid #29293b;
+            border-radius: 12px;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 35px;
+        }
+
+        .status-icon {
+            width: 75px;
+            height: 75px;
+            border: 2px solid #a5a5ff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 25px;
+            font-size: 32px;
+        }
+
+        h1 {
+            font-size: 27px;
+            margin-bottom: 15px;
+        }
+
+        .description {
+            color: #aaaabb;
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+
+        .status-box {
+            background: #0b0b14;
+            border: 1px solid #343448;
+            border-radius: 8px;
+            padding: 18px;
+            margin-bottom: 25px;
+        }
+
+        .status-label {
+            color: #888899;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .status-value {
+            color: #a5a5ff;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .details {
+            color: #888899;
+            font-size: 12px;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        button {
+            padding: 13px 25px;
+            background: transparent;
+            color: white;
+            border: 1px solid #777;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: white;
+            color: #111;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: wait;
+        }
+
+        #message {
+            color: #a5a5ff;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .rejected {
+            color: #ff9999;
+        }
+
+        .approved {
+            color: #86efac;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="logo">
+            AD ASTRA BIT
+        </div>
+
+        <div class="status-icon" id="statusIcon">
+            ⏳
+        </div>
+
+        <h1 id="heading">
+            Application Under Review
+        </h1>
+
+        <p class="description" id="description">
+            Thank you for registering with AD ASTRA BIT.
+            Your application has been successfully submitted.
+            Our administrators will review your details.
+        </p>
+
+        <div class="status-box">
+
+            <p class="status-label">
+                APPLICATION STATUS
+            </p>
+
+            <p class="status-value" id="status">
+                PENDING APPROVAL
+            </p>
+
+        </div>
+
+        <p id="message">
+            Checking your application...
+        </p>
+
+        <p class="details" id="details">
+            You will be able to access the student dashboard
+            and community after your application is approved.
+        </p>
+
+        <button id="logoutBtn" disabled>
+            Logout
+        </button>
+
+    </div>
+
+
+    <!-- FIREBASE -->
+
+    <script type="module">
+
+        import {
+            initializeApp
+        } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+
+        import {
+            getAuth,
+            onAuthStateChanged,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+        import {
+            getFirestore,
+            doc,
+            getDoc
+        } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+
+        // FIREBASE CONFIGURATION
+
+        const firebaseConfig = {
+
+             apiKey: "AIzaSyB9BQOlOO-tfuFzxjK0KEA7YcV3O11_WjM",
+  authDomain: "ad-astra-bit.firebaseapp.com",
+  projectId: "ad-astra-bit",
+  storageBucket: "ad-astra-bit.firebasestorage.app",
+  messagingSenderId: "104444066688",
+  appId: "1:104444066688:web:d84478465cd3084f315f65"
+
+        };
+
+
+        // INITIALIZE FIREBASE
+
+        const app = initializeApp(firebaseConfig);
+
+        const auth = getAuth(app);
+
+        const db = getFirestore(app);
+
+
+        // ADMIN EMAILS
+
+        const ADMIN_EMAILS = [
+            "rachnf99@gmail.com"
+
+            // Add more admin emails here later.
+        ];
+
+
+        const heading = document.getElementById("heading");
+        const description = document.getElementById("description");
+        const status = document.getElementById("status");
+        const message = document.getElementById("message");
+        const details = document.getElementById("details");
+        const statusIcon = document.getElementById("statusIcon");
+        const logoutBtn = document.getElementById("logoutBtn");
+
+
+        // AUTHENTICATION AND APPLICATION STATUS
+
+        onAuthStateChanged(auth, async (user) => {
+
+            if (!user) {
+
+                window.location.replace("index.html");
+
+                return;
+
+            }
+
+            logoutBtn.disabled = false;
+
+            try {
+
+                // CHECK ADMIN
+
+                if (
+                    user.emailVerified &&
+                    ADMIN_EMAILS.includes(user.email.toLowerCase())
+                ) {
+
+                    window.location.replace("admin-dashboard.html");
+
+                    return;
+
+                }
+
+
+                // GET STUDENT DOCUMENT
+
+                const userRef = doc(db, "users", user.uid);
+
+                const userSnapshot = await getDoc(userRef);
+
+
+                // REGISTRATION NOT FOUND
+
+                if (!userSnapshot.exists()) {
+
+                    window.location.replace("signup.html");
+
+                    return;
+
+                }
+
+
+                const userData = userSnapshot.data();
+
+
+                // PENDING
+
+                if (
+                    userData.status === "pending" &&
+                    userData.role === "student"
+                ) {
+
+                    heading.textContent = "Application Under Review";
+
+                    status.textContent = "PENDING APPROVAL";
+
+                    message.textContent =
+                        "Your application is waiting for admin approval.";
+
+                    return;
+
+                }
+
+
+                // APPROVED
+
+                if (
+                    userData.status === "approved" &&
+                    userData.role === "student"
+                ) {
+
+                    heading.textContent = "Application Approved!";
+
+                    heading.classList.add("approved");
+
+                    status.textContent = "APPROVED";
+
+                    status.classList.add("approved");
+
+                    statusIcon.textContent = "✓";
+
+                    statusIcon.style.borderColor = "#86efac";
+
+                    description.textContent =
+                        "Congratulations! Your application has been approved. Welcome to AD ASTRA BIT.";
+
+                    message.textContent =
+                        "Redirecting to your student dashboard...";
+
+                    details.textContent =
+                        "You now have access to the student portal and community.";
+
+                    setTimeout(() => {
+
+                        window.location.href = "student-dashboard.html";
+
+                    }, 2000);
+
+                    return;
+
+                }
+
+
+                // REJECTED
+
+                if (userData.status === "rejected") {
+
+                    heading.textContent = "Application Rejected";
+
+                    heading.classList.add("rejected");
+
+                    status.textContent = "REJECTED";
+
+                    status.classList.add("rejected");
+
+                    statusIcon.textContent = "✕";
+
+                    statusIcon.style.borderColor = "#ff9999";
+
+                    description.textContent =
+                        "Unfortunately, your application has not been approved.";
+
+                    message.textContent =
+                        "Please contact an AD ASTRA BIT administrator.";
+
+                    details.textContent =
+                        "You cannot access the student dashboard or community.";
+
+                    return;
+
+                }
+
+
+                // INVALID ACCOUNT STATUS
+
+                message.textContent =
+                    "Your account status could not be recognized. Contact an administrator.";
+
+            }
+
+            catch (error) {
+
+                console.error(error);
+
+                message.textContent =
+                    "Unable to retrieve your application status. Please try again.";
+
+            }
+
+        });
+
+
+        // LOGOUT
+
+        logoutBtn.addEventListener("click", async () => {
+
+            try {
+
+                logoutBtn.disabled = true;
+
+                await signOut(auth);
+
+                window.location.replace("index.html");
+
+            }
+
+            catch (error) {
+
+                console.error(error);
+
+                message.textContent = "Logout failed. Please try again.";
+
+                logoutBtn.disabled = false;
+
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>

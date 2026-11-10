@@ -1,0 +1,488 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard | AD ASTRA BIT</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #080b12;
+            color: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        header {
+            height: 75px;
+            padding: 0 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #202633;
+            background: #0c1019;
+        }
+
+        .logo {
+            font-size: 21px;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .logo span {
+            color: #8b9cff;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+        }
+
+        .user-email {
+            color: #9ba4b5;
+            font-size: 13px;
+        }
+
+        .settings {
+            position: relative;
+        }
+
+        .settings-btn, .logout-btn {
+            background: transparent;
+            color: white;
+            border: 1px solid #343c4c;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .settings-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 45px;
+            width: 170px;
+            background: #151b27;
+            border: 1px solid #343c4c;
+            border-radius: 9px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .settings-menu a {
+            display: block;
+            padding: 13px 15px;
+            color: white;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .settings-menu a:hover {
+            background: #252e40;
+        }
+
+        .settings-menu.show {
+            display: block;
+        }
+
+        main {
+            width: 86%;
+            max-width: 1200px;
+            margin: 45px auto;
+        }
+
+        .welcome {
+            margin-bottom: 35px;
+        }
+
+        .welcome .eyebrow {
+            color: #8b9cff;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 11px;
+            margin-bottom: 13px;
+        }
+
+        .welcome h1 {
+            font-size: clamp(28px, 5vw, 42px);
+            margin-bottom: 12px;
+        }
+
+        .welcome p {
+            color: #9ba4b5;
+            line-height: 1.6;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: #111722;
+            border: 1px solid #252e3d;
+            border-radius: 14px;
+            padding: 25px;
+        }
+
+        .card h2 {
+            font-size: 18px;
+            margin-bottom: 18px;
+        }
+
+        .profile-item {
+            margin: 15px 0;
+        }
+
+        .profile-item small {
+            display: block;
+            color: #8792a6;
+            margin-bottom: 6px;
+        }
+
+        .profile-item strong {
+            font-size: 14px;
+            font-weight: 500;
+            overflow-wrap: anywhere;
+        }
+
+        .action-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 190px;
+        }
+
+        .action-card p, .events-card p {
+            color: #9ba4b5;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .action-link {
+            display: inline-block;
+            width: fit-content;
+            margin-top: 22px;
+            padding: 11px 17px;
+            border-radius: 8px;
+            background: #8294ff;
+            color: #080b12;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .action-link:hover {
+            background: #aab5ff;
+        }
+
+        .events-card {
+            grid-column: 1 / -1;
+        }
+
+        .empty-state {
+            padding: 25px 0 5px;
+            color: #8792a6;
+            font-size: 13px;
+        }
+
+        .status {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 6px 11px;
+            border-radius: 20px;
+            background: #123a2b;
+            color: #72e0a8;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #pageMessage {
+            color: #ff9999;
+            margin-top: 20px;
+            font-size: 13px;
+        }
+
+        footer {
+            padding: 25px;
+            text-align: center;
+            color: #667085;
+            font-size: 12px;
+            border-top: 1px solid #202633;
+            margin-top: 70px;
+        }
+
+        @media (max-width: 700px) {
+            header {
+                padding: 0 5%;
+            }
+
+            .user-email {
+                display: none;
+            }
+
+            main {
+                width: 90%;
+                margin-top: 30px;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .events-card {
+                grid-column: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">AD ASTRA <span>BIT</span></div>
+
+    <div class="header-right">
+        <span class="user-email" id="headerEmail"></span>
+
+        <div class="settings">
+            <button class="settings-btn" id="settingsBtn">
+                Settings &#9662;
+            </button>
+
+            <div class="settings-menu" id="settingsMenu">
+                <a href="edit-profile.html">Edit Profile</a>
+            </div>
+        </div>
+
+        <button class="logout-btn" id="logoutBtn">Logout</button>
+    </div>
+</header>
+
+<main>
+
+    <section class="welcome">
+        <div class="eyebrow">Student Portal</div>
+        <h1>Welcome, <span id="studentName">Student</span>.</h1>
+        <p>Your AD ASTRA BIT student dashboard.</p>
+        <span class="status">Approved Student</span>
+    </section>
+
+    <section class="dashboard-grid">
+
+        <div class="card">
+            <h2>My Profile</h2>
+
+            <div class="profile-item">
+                <small>Full Name</small>
+                <strong id="profileName">Loading...</strong>
+            </div>
+
+            <div class="profile-item">
+                <small>Email Address</small>
+                <strong id="profileEmail">Loading...</strong>
+            </div>
+
+            <div class="profile-item">
+                <small>USN</small>
+                <strong id="profileUSN">Loading...</strong>
+            </div>
+
+            <div class="profile-item">
+                <small>Branch</small>
+                <strong id="profileBranch">Loading...</strong>
+            </div>
+
+            <div class="profile-item">
+                <small>Academic Year</small>
+                <strong id="profileYear">Loading...</strong>
+            </div>
+        </div>
+
+        <div class="card action-card">
+            <div>
+                <h2>Community</h2>
+                <p>
+                    Connect with fellow students, participate in discussions,
+                    and stay updated with the AD ASTRA BIT community.
+                </p>
+            </div>
+
+            <a href="community.html" class="action-link">
+                Enter Community
+            </a>
+        </div>
+
+        <div class="card events-card">
+            <h2>Events & Announcements</h2>
+            <p>
+                Stay updated with upcoming college events and important
+                announcements.
+            </p>
+
+            <div class="empty-state" id="eventsMessage">
+                No announcements available yet.
+            </div>
+        </div>
+
+    </section>
+
+    <p id="pageMessage"></p>
+
+</main>
+
+<footer>
+    AD ASTRA BIT · Student Portal
+</footer>
+
+<script type="module">
+    import { initializeApp } from
+        "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+
+    import {
+        getAuth,
+        onAuthStateChanged,
+        signOut
+    } from
+        "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+    import {
+        getFirestore,
+        doc,
+        getDoc
+    } from
+        "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyB9BQOlOO-tfuFzxjK0KEA7YcV3O11_WjM",
+        authDomain: "ad-astra-bit.firebaseapp.com",
+        projectId: "ad-astra-bit",
+        storageBucket: "ad-astra-bit.firebasestorage.app",
+        messagingSenderId: "104444066688",
+        appId: "1:104444066688:web:d84478465cd3084f315f65"
+    };
+
+    const ADMIN_EMAILS = ["rachnf99@gmail.com"];
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const pageMessage = document.getElementById("pageMessage");
+
+    function showError(message) {
+        pageMessage.textContent = message;
+    }
+
+    function setText(id, value) {
+        document.getElementById(id).textContent =
+            value || "Not provided";
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+            window.location.replace("index.html");
+            return;
+        }
+
+        if (!user.emailVerified) {
+            await signOut(auth);
+            window.location.replace("index.html");
+            return;
+        }
+
+        const email = user.email.toLowerCase();
+
+        if (ADMIN_EMAILS.includes(email)) {
+            window.location.replace("admin-dashboard.html");
+            return;
+        }
+
+        try {
+            const studentRef = doc(db, "users", user.uid);
+            const studentSnap = await getDoc(studentRef);
+
+            if (!studentSnap.exists()) {
+                window.location.replace("signup.html");
+                return;
+            }
+
+            const student = studentSnap.data();
+
+            if (student.role !== "student") {
+                await signOut(auth);
+                window.location.replace("index.html");
+                return;
+            }
+
+            if (student.status === "pending") {
+                window.location.replace("pending.html");
+                return;
+            }
+
+            if (student.status === "rejected") {
+                showError("Your application has been rejected. Please contact the administration.");
+                await signOut(auth);
+                return;
+            }
+
+            if (student.status !== "approved") {
+                showError("Your account status could not be verified.");
+                return;
+            }
+
+            // Approved student: load dashboard
+            const name = student.name || "Student";
+
+            setText("studentName", name);
+            setText("profileName", name);
+            setText("profileEmail", student.email || user.email);
+            setText("profileUSN", student.usn);
+            setText("profileBranch", student.branch);
+            setText("profileYear", student.academicYear);
+
+            document.getElementById("headerEmail").textContent =
+                user.email;
+
+        } catch (error) {
+            console.error("Dashboard error:", error);
+            showError("Unable to load your dashboard. Please refresh the page.");
+        }
+    });
+
+    document.getElementById("settingsBtn").addEventListener("click", () => {
+        document.getElementById("settingsMenu").classList.toggle("show");
+    });
+
+    document.addEventListener("click", (event) => {
+        const settings = document.querySelector(".settings");
+
+        if (!settings.contains(event.target)) {
+            document.getElementById("settingsMenu").classList.remove("show");
+        }
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+        try {
+            await signOut(auth);
+            window.location.replace("index.html");
+        } catch (error) {
+            console.error("Logout error:", error);
+            showError("Unable to log out. Please try again.");
+        }
+    });
+</script>
+
+</body>
+</html>

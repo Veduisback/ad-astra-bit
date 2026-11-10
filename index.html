@@ -1,0 +1,520 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AD ASTRA BIT | Official Club Portal</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #0b0b14;
+            color: white;
+            min-height: 100vh;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 22px 7%;
+            border-bottom: 1px solid #252535;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        nav a {
+            color: #c5c5d4;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        nav a:hover {
+            color: white;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        button {
+            padding: 11px 20px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .signup-btn {
+            background: transparent;
+            color: white;
+            border: 1px solid #777;
+        }
+
+        .signin-btn {
+            background: white;
+            color: #111;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: wait;
+        }
+
+        .hero {
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .hero h1 {
+            font-size: clamp(42px, 7vw, 76px);
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: #a5a5ff;
+        }
+
+        .hero p {
+            max-width: 600px;
+            color: #aaaabb;
+            font-size: 17px;
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .hero-buttons button {
+            padding: 14px 28px;
+        }
+
+        #authMessage {
+            margin-top: 20px;
+            color: #a5a5ff;
+            font-size: 14px;
+            min-height: 20px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #777788;
+            border-top: 1px solid #252535;
+            font-size: 13px;
+        }
+
+        @media (max-width: 700px) {
+            header {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+
+            .hero h1 {
+                letter-spacing: 2px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+
+    <header>
+
+        <div class="logo">
+            AD ASTRA BIT
+        </div>
+
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="#about">About</a>
+            <a href="#" id="communityLink">Community</a>
+        </nav>
+
+        <div class="buttons">
+
+            <button class="signup-btn" id="signupBtn">
+                Sign Up
+            </button>
+
+            <button class="signin-btn" id="signinBtn">
+                Google Sign In
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- Homepage -->
+
+    <main>
+
+        <section class="hero">
+
+            <h1>
+                AD ASTRA <span>BIT</span>
+            </h1>
+
+            <p>
+                Welcome to the official AD ASTRA BIT student portal.
+                Connect with fellow students, explore opportunities,
+                participate in events and become part of our community.
+            </p>
+
+            <div class="hero-buttons">
+
+                <button class="signin-btn" id="joinBtn">
+                    Join Our Community
+                </button>
+
+                <button class="signup-btn" id="heroSigninBtn">
+                    Sign In With Google
+                </button>
+
+            </div>
+
+            <p id="authMessage"></p>
+
+        </section>
+
+        <section id="about">
+            <!-- About section will be developed later -->
+        </section>
+
+    </main>
+
+
+    <footer>
+        © 2026 AD ASTRA BIT. All Rights Reserved.
+    </footer>
+
+
+    <!-- Firebase Authentication -->
+
+    <script type="module">
+
+        import {
+            initializeApp
+        } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+
+        import {
+            getAuth,
+            GoogleAuthProvider,
+            signInWithPopup,
+            onAuthStateChanged,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+        import {
+            getFirestore,
+            doc,
+            getDoc
+        } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+
+        // FIREBASE CONFIGURATION
+
+        const firebaseConfig = {
+
+            apiKey: "AIzaSyB9BQOlOO-tfuFzxjK0KEA7YcV3O11_WjM",
+            authDomain: "ad-astra-bit.firebaseapp.com",
+            projectId: "ad-astra-bit",
+            storageBucket: "ad-astra-bit.firebasestorage.app",
+            messagingSenderId: "104444066688",
+            appId: "1:104444066688:web:d84478465cd3084f315f65"
+
+        };
+
+
+        // INITIALIZE FIREBASE
+
+        const app = initializeApp(firebaseConfig);
+
+        const auth = getAuth(app);
+
+        const db = getFirestore(app);
+
+        const provider = new GoogleAuthProvider();
+
+        provider.setCustomParameters({
+            prompt: "select_account"
+        });
+
+
+        // ADMIN EMAIL ALLOWLIST
+
+        const ADMIN_EMAILS = [
+            "rachnf99@gmail.com"
+
+            // Add more admin emails here later.
+        ];
+
+
+        let currentUser = null;
+
+
+        // AUTHENTICATION STATE
+
+onAuthStateChanged(auth, user => {
+    currentUser = user;
+});
+
+        // DISPLAY STATUS
+
+        function showMessage(text) {
+
+            document.getElementById("authMessage").textContent = text;
+
+        }
+
+
+        // DETERMINE USER DESTINATION
+
+
+async function routeUser(user, intent = "signin") {
+
+    if (!user || !user.email || !user.emailVerified) {
+        throw new Error("Please use a verified Google account.");
+    }
+
+    const email = user.email.toLowerCase();
+
+    // ADMIN CHECK
+if (ADMIN_EMAILS.includes(email)) {
+
+    if (intent === "community") {
+        showMessage("Community is currently under development.");
+        return;
+    }
+
+    window.location.replace("admin-dashboard.html");
+    return;
+}
+
+    // CHECK STUDENT REGISTRATION
+    const userRef = doc(db, "users", user.uid);
+
+    let userSnapshot;
+
+    try {
+        userSnapshot = await getDoc(userRef);
+    } catch (error) {
+        console.error("Firestore read failed:", error);
+        showMessage("Unable to verify your registration. Please try again.");
+        throw error;
+    }
+
+    // NEW STUDENT
+    if (!userSnapshot.exists()) {
+        window.location.href = "signup.html";
+        return;
+    }
+
+    const userData = userSnapshot.data();
+
+    // PENDING STUDENT
+    if (
+        userData.status === "pending" &&
+        userData.role === "student"
+    ) {
+        window.location.href = "pending.html";
+        return;
+    }
+
+    // APPROVED STUDENT
+    if (
+        userData.status === "approved" &&
+        userData.role === "student"
+    ) {
+
+        if (intent === "community") {
+            showMessage("Your access is verified. Community is under development.");
+        } else {
+            showMessage("Your account is approved! Student dashboard is under development.");
+        }
+
+        return;
+    }
+
+    // REJECTED STUDENT
+    if (userData.status === "rejected") {
+        showMessage(
+            "Your registration was rejected. Please contact an administrator."
+        );
+        return;
+    }
+
+    // INVALID ACCOUNT
+    showMessage(
+        "Your account does not have access. Please contact an administrator."
+    );
+}
+
+
+
+        // GOOGLE SIGN IN
+
+        async function googleSignIn(intent = "signin") {
+
+            try {
+
+                showMessage("Connecting to Google...");
+
+                setButtonsDisabled(true);
+
+                let user = currentUser;
+
+                // Open Google login if not already authenticated.
+
+                if (!user) {
+
+                    const result = await signInWithPopup(
+                        auth,
+                        provider
+                    );
+                await result.user.getIdToken(true);
+                    user = result.user;
+
+                }
+
+                showMessage("Checking your account...");
+
+                await routeUser(user, intent);
+
+            }
+
+            catch (error) {
+
+                console.error(error);
+
+                if (error.code === "auth/popup-closed-by-user") {
+
+                    showMessage("Google sign-in was cancelled.");
+
+                }
+
+                else {
+
+                    showMessage(
+                        error.message || "Something went wrong. Please try again."
+                    );
+
+                }
+
+                setButtonsDisabled(false);
+
+            }
+
+        }
+
+
+        // BUTTON CONTROL
+
+        function setButtonsDisabled(disabled) {
+
+            document.querySelectorAll("button").forEach(button => {
+
+                button.disabled = disabled;
+
+            });
+
+        }
+
+
+        // BUTTON EVENT LISTENERS
+
+        document.getElementById("signupBtn")
+            .addEventListener("click", () => {
+
+                googleSignIn("signup");
+
+            });
+
+
+        document.getElementById("signinBtn")
+            .addEventListener("click", () => {
+
+                googleSignIn("signin");
+
+            });
+
+
+        document.getElementById("heroSigninBtn")
+            .addEventListener("click", () => {
+
+                googleSignIn("signin");
+
+            });
+
+
+        document.getElementById("joinBtn")
+            .addEventListener("click", () => {
+
+                googleSignIn("signup");
+
+            });
+
+
+        // COMMUNITY ACCESS
+
+        document.getElementById("communityLink")
+            .addEventListener("click", async (event) => {
+
+                event.preventDefault();
+
+                await googleSignIn("community");
+
+            });
+
+    </script>
+
+</body>
+</html>
