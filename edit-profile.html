@@ -1,0 +1,472 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile | AD ASTRA BIT</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: #080b14;
+            color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px 15px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 520px;
+            padding: 32px;
+            background: #111827;
+            border: 1px solid #263247;
+            border-radius: 18px;
+        }
+
+        h1 { margin: 0 0 8px; font-size: 27px; }
+        .subtitle { color: #9ca3af; margin-bottom: 28px; }
+
+        .photo-section {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+
+        #photoPreview, .placeholder {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #64748b;
+        }
+
+        .placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #263247;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .photo-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .photo-actions button, .photo-actions label {
+            cursor: pointer;
+            color: #dbeafe;
+            font-size: 13px;
+        }
+
+        .photo-actions label {
+            background: #263247;
+            padding: 9px 12px;
+            border-radius: 7px;
+            width: fit-content;
+        }
+
+        #photoInput { display: none; }
+
+        .field { margin-bottom: 18px; }
+
+        label.field-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #cbd5e1;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            background: #0b1220;
+            color: white;
+            outline: none;
+            font-size: 14px;
+        }
+
+        input:focus { border-color: #60a5fa; }
+        input:disabled { opacity: 0.65; cursor: not-allowed; }
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        button {
+            border: none;
+            border-radius: 8px;
+            padding: 13px 18px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #saveBtn {
+            flex: 1;
+            background: #60a5fa;
+            color: #07111f;
+        }
+
+        #cancelBtn {
+            background: #263247;
+            color: white;
+        }
+
+        button:disabled { opacity: 0.6; cursor: wait; }
+
+        #message {
+            margin-top: 18px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .success { color: #4ade80; }
+        .error { color: #f87171; }
+        .info { color: #93c5fd; }
+
+        @media(max-width: 480px) {
+            .container { padding: 23px; }
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <h1>Edit Profile</h1>
+    <p class="subtitle">Update your AD ASTRA BIT account details.</p>
+
+    <div class="photo-section">
+        <div id="photoPlaceholder" class="placeholder">A</div>
+        <img id="photoPreview" alt="Profile picture" style="display:none;">
+
+        <div class="photo-actions">
+            <label for="photoInput">Choose profile picture</label>
+            <input type="file" id="photoInput" accept="image/jpeg,image/png,image/webp">
+            <button type="button" id="removePhotoBtn">Remove picture</button>
+            <small style="color:#9ca3af;">JPG, PNG or WebP · Max 5 MB</small>
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="field-label" for="name">Full Name</label>
+        <input id="name" type="text" maxlength="100" required>
+    </div>
+
+    <div class="field">
+        <label class="field-label" for="email">Email Address</label>
+        <input id="email" type="email" disabled>
+    </div>
+
+    <div class="field">
+        <label class="field-label" for="usn">USN</label>
+        <input id="usn" type="text" maxlength="30" required>
+    </div>
+
+    <div class="field">
+        <label class="field-label" for="branch">Branch</label>
+        <input id="branch" type="text" required>
+    </div>
+
+    <div class="field">
+        <label class="field-label" for="academicYear">Academic Year</label>
+        <input id="academicYear" type="text" required>
+    </div>
+
+    <div class="buttons">
+        <button id="cancelBtn" type="button">Cancel</button>
+        <button id="saveBtn" type="button">Save Changes</button>
+    </div>
+
+    <div id="message"></div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import {
+        getAuth,
+        onAuthStateChanged,
+        signOut
+    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+    import {
+        getFirestore,
+        doc,
+        getDoc,
+        updateDoc
+    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyB9BQOlOO-tfuFzxjK0KEA7YcV3O11_WjM",
+        authDomain: "ad-astra-bit.firebaseapp.com",
+        projectId: "ad-astra-bit",
+        storageBucket: "ad-astra-bit.firebasestorage.app",
+        messagingSenderId: "104444066688",
+        appId: "1:104444066688:web:d84478465cd3084f315f65"
+    };
+
+    const ADMIN_EMAILS = [
+        "rachnf99@gmail.com",
+        "vedujames99@gmail.com"
+    ];
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const $ = id => document.getElementById(id);
+
+    let currentUser = null;
+    let currentProfile = null;
+    let selectedPhoto = null;
+    let removePhoto = false;
+
+    function showMessage(message, type = "info") {
+        $("message").textContent = message;
+        $("message").className = type;
+    }
+
+    function setPhoto(photoURL, name = "A") {
+        if (photoURL) {
+            $("photoPreview").src = photoURL;
+            $("photoPreview").style.display = "block";
+            $("photoPlaceholder").style.display = "none";
+        } else {
+            $("photoPreview").removeAttribute("src");
+            $("photoPreview").style.display = "none";
+            $("photoPlaceholder").style.display = "flex";
+            $("photoPlaceholder").textContent =
+                name.trim().charAt(0).toUpperCase() || "A";
+        }
+    }
+
+    function getDashboard() {
+        return currentProfile?.role === "admin"
+            ? "admin-dashboard.html"
+            : "student-dashboard.html";
+    }
+
+    async function compressImage(file) {
+        if (!file.type.match(/^image\/(jpeg|png|webp)$/)) {
+            throw new Error("Please choose a JPG, PNG or WebP image.");
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+            throw new Error("Image must be smaller than 5 MB.");
+        }
+
+        const image = await createImageBitmap(file);
+
+        let width = image.width;
+        let height = image.height;
+        const maxDimension = 256;
+
+        if (width > maxDimension || height > maxDimension) {
+            const scale = maxDimension / Math.max(width, height);
+            width = Math.round(width * scale);
+            height = Math.round(height * scale);
+        }
+
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+
+        canvas.width = width;
+        canvas.height = height;
+        context.drawImage(image, 0, 0, width, height);
+        image.close();
+
+        let quality = 0.82;
+        let result = canvas.toDataURL("image/jpeg", quality);
+
+        while (result.length > 120000 && quality > 0.4) {
+            quality -= 0.08;
+            result = canvas.toDataURL("image/jpeg", quality);
+        }
+
+        if (result.length > 140000) {
+            throw new Error("Image is too large after compression. Try another image.");
+        }
+
+        return result;
+    }
+
+    async function loadProfile(user) {
+        const email = (user.email || "").toLowerCase();
+        const isAllowlistedAdmin = ADMIN_EMAILS.includes(email);
+
+        if (!user.emailVerified) {
+            await signOut(auth);
+            location.replace("index.html");
+            return;
+        }
+
+        const profileRef = doc(db, "users", user.uid);
+        const snapshot = await getDoc(profileRef);
+
+        if (!snapshot.exists()) {
+            showMessage("Your profile could not be found.", "error");
+            return;
+        }
+
+        currentProfile = snapshot.data();
+
+        if (isAllowlistedAdmin) {
+            if (currentProfile.role !== "admin" ||
+                currentProfile.status !== "approved") {
+                showMessage("Admin profile is not approved.", "error");
+                return;
+            }
+        } else {
+            if (currentProfile.role !== "student") {
+                showMessage("This account does not have student access.", "error");
+                return;
+            }
+
+            if (currentProfile.status === "pending") {
+                location.replace("pending.html");
+                return;
+            }
+
+            if (currentProfile.status !== "approved") {
+                await signOut(auth);
+                location.replace("index.html");
+                return;
+            }
+        }
+
+        $("name").value = currentProfile.name || "";
+        $("email").value = user.email || "";
+        $("usn").value = currentProfile.usn || "";
+        $("branch").value = currentProfile.branch || "";
+        $("academicYear").value = currentProfile.academicYear || "";
+
+        setPhoto(currentProfile.photoURL || "", currentProfile.name || "A");
+    }
+
+    onAuthStateChanged(auth, async user => {
+        if (!user) {
+            location.replace("index.html");
+            return;
+        }
+
+        currentUser = user;
+
+        try {
+            await loadProfile(user);
+        } catch (error) {
+            console.error(error);
+            showMessage("Unable to load your profile. Please refresh.", "error");
+        }
+    });
+
+    $("photoInput").addEventListener("change", event => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        selectedPhoto = file;
+        removePhoto = false;
+
+        const previewURL = URL.createObjectURL(file);
+        $("photoPreview").src = previewURL;
+        $("photoPreview").style.display = "block";
+        $("photoPlaceholder").style.display = "none";
+
+        showMessage("Picture selected. It will be compressed when saved.");
+    });
+
+    $("removePhotoBtn").addEventListener("click", () => {
+        selectedPhoto = null;
+        removePhoto = true;
+        $("photoInput").value = "";
+        setPhoto("", $("name").value || "A");
+        showMessage("Profile picture will be removed when you save.");
+    });
+
+    $("name").addEventListener("input", () => {
+        if (!selectedPhoto && !currentProfile?.photoURL && !removePhoto) {
+            setPhoto("", $("name").value || "A");
+        }
+    });
+
+    $("cancelBtn").addEventListener("click", () => {
+        if (currentProfile) location.href = getDashboard();
+    });
+
+    $("saveBtn").addEventListener("click", async () => {
+        if (!currentUser || !currentProfile) return;
+
+        const name = $("name").value.trim();
+        const usn = $("usn").value.trim();
+        const branch = $("branch").value.trim();
+        const academicYear = $("academicYear").value.trim();
+
+        if (!name || !usn || !branch || !academicYear) {
+            showMessage("Please fill in all profile fields.", "error");
+            return;
+        }
+
+        const saveBtn = $("saveBtn");
+        saveBtn.disabled = true;
+        saveBtn.textContent = "Saving...";
+
+        try {
+            let photoURL = currentProfile.photoURL || "";
+
+            if (selectedPhoto) {
+                showMessage("Compressing profile picture...", "info");
+                photoURL = await compressImage(selectedPhoto);
+            } else if (removePhoto) {
+                photoURL = "";
+            }
+
+            if (photoURL.length > 150000) {
+                throw new Error("Compressed picture exceeds the allowed size.");
+            }
+
+            await updateDoc(doc(db, "users", currentUser.uid), {
+                name,
+                usn,
+                branch,
+                academicYear,
+                photoURL
+            });
+
+            currentProfile = {
+                ...currentProfile,
+                name,
+                usn,
+                branch,
+                academicYear,
+                photoURL
+            };
+
+            showMessage("Profile updated successfully! Redirecting...", "success");
+
+            setTimeout(() => {
+                location.href = getDashboard();
+            }, 1200);
+
+        } catch (error) {
+            console.error(error);
+            showMessage(error.message || "Could not save your profile.", "error");
+        } finally {
+            saveBtn.disabled = false;
+            saveBtn.textContent = "Save Changes";
+        }
+    });
+</script>
+</body>
+</html>

@@ -164,8 +164,6 @@
 
 <body>
 
-    <!-- Navigation -->
-
     <header>
 
         <div class="logo">
@@ -192,8 +190,6 @@
 
     </header>
 
-
-    <!-- Homepage -->
 
     <main>
 
@@ -226,7 +222,6 @@
         </section>
 
         <section id="about">
-            <!-- About section will be developed later -->
         </section>
 
     </main>
@@ -236,8 +231,6 @@
         © 2026 AD ASTRA BIT. All Rights Reserved.
     </footer>
 
-
-    <!-- Firebase Authentication -->
 
     <script type="module">
 
@@ -249,8 +242,7 @@
             getAuth,
             GoogleAuthProvider,
             signInWithPopup,
-            onAuthStateChanged,
-            signOut
+            onAuthStateChanged
         } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
         import {
@@ -263,23 +255,19 @@
         // FIREBASE CONFIGURATION
 
         const firebaseConfig = {
-
             apiKey: "AIzaSyB9BQOlOO-tfuFzxjK0KEA7YcV3O11_WjM",
             authDomain: "ad-astra-bit.firebaseapp.com",
             projectId: "ad-astra-bit",
             storageBucket: "ad-astra-bit.firebasestorage.app",
             messagingSenderId: "104444066688",
             appId: "1:104444066688:web:d84478465cd3084f315f65"
-
         };
 
 
         // INITIALIZE FIREBASE
 
         const app = initializeApp(firebaseConfig);
-
         const auth = getAuth(app);
-
         const db = getFirestore(app);
 
         const provider = new GoogleAuthProvider();
@@ -292,117 +280,219 @@
         // ADMIN EMAIL ALLOWLIST
 
         const ADMIN_EMAILS = [
-            "rachnf99@gmail.com"
-
-            // Add more admin emails here later.
+            "rachnf99@gmail.com",
+            "vedujames99@gmail.com"
         ];
 
 
         let currentUser = null;
+        let authReady = false;
+        let routingInProgress = false;
+
+
+        // DISPLAY MESSAGE
+
+        function showMessage(text) {
+            document.getElementById("authMessage").textContent = text;
+        }
+
+
+        // BUTTON CONTROL
+
+        function setButtonsDisabled(disabled) {
+            document.querySelectorAll("button").forEach(button => {
+                button.disabled = disabled;
+            });
+        }
+
+
+        // ROUTE USER
+
+        async function routeUser(user, intent = "signin") {
+
+            if (!user || !user.email || !user.emailVerified) {
+                throw new Error("Please use a verified Google account.");
+            }
+
+            if (routingInProgress) return;
+
+            routingInProgress = true;
+
+            showMessage("Checking your account...");
+
+            try {
+
+                const email = user.email.toLowerCase();
+
+                const isAdmin = ADMIN_EMAILS.includes(email);
+
+                // CHECK FIRESTORE PROFILE FIRST
+
+                const userRef = doc(db, "users", user.uid);
+                const userSnapshot = await getDoc(userRef);
+
+
+                // =================================
+                // ADMIN ROUTING
+                // =================================
+
+                if (isAdmin) {
+
+                    // Admin has no Firestore profile
+
+                    if (!userSnapshot.exists()) {
+
+                        showMessage("Admin profile not found. Redirecting to registration...");
+
+                        window.location.replace("signup.html");
+                        return;
+
+                    }
+
+                    const userData = userSnapshot.data();
+
+                    // Existing admin
+
+                    if (
+                        userData.role === "admin" &&
+                        userData.status === "approved"
+                    ) {
+
+                        if (intent === "community") {
+
+                            showMessage("Community is currently under development.");
+                            routingInProgress = false;
+                            return;
+
+                        }
+
+                        window.location.replace("admin-dashboard.html");
+                        return;
+
+                    }
+
+                    // Admin email linked to a student profile
+
+                    showMessage(
+                        "This email is allowlisted for administration, but its existing profile is not an admin profile. Contact the administrator."
+                    );
+
+                    routingInProgress = false;
+                    return;
+
+                }
+
+
+                // =================================
+                // STUDENT ROUTING
+                // =================================
+
+                // New student
+
+                if (!userSnapshot.exists()) {
+
+                    window.location.replace("signup.html");
+                    return;
+
+                }
+
+                const userData = userSnapshot.data();
+
+
+                // Pending student
+
+                if (
+                    userData.role === "student" &&
+                    userData.status === "pending"
+                ) {
+
+                    window.location.replace("pending.html");
+                    return;
+
+                }
+
+
+                // Approved student
+
+                if (
+                    userData.role === "student" &&
+                    userData.status === "approved"
+                ) {
+
+                    if (intent === "community") {
+
+                        showMessage(
+                            "Your access is verified. Community is under development."
+                        );
+
+                        routingInProgress = false;
+                        return;
+
+                    }
+
+                    window.location.replace("student-dashboard.html");
+                    return;
+
+                }
+
+
+                // Rejected student
+
+                if (
+                    userData.role === "student" &&
+                    userData.status === "rejected"
+                ) {
+
+                    showMessage(
+                        "Your registration was rejected. Please contact an administrator."
+                    );
+
+                    routingInProgress = false;
+                    return;
+
+                }
+
+
+                // Invalid profile
+
+                showMessage(
+                    "Your account does not have access. Please contact an administrator."
+                );
+
+                routingInProgress = false;
+
+            } catch (error) {
+
+                console.error("ACCOUNT ROUTING ERROR:", error);
+
+                showMessage(
+                    "Unable to verify your account: " + error.message
+                );
+
+                routingInProgress = false;
+
+                throw error;
+
+            }
+
+        }
 
 
         // AUTHENTICATION STATE
 
-onAuthStateChanged(auth, user => {
-    currentUser = user;
-});
+        onAuthStateChanged(auth, user => {
 
-        // DISPLAY STATUS
+            currentUser = user;
+            authReady = true;
 
-        function showMessage(text) {
-
-            document.getElementById("authMessage").textContent = text;
-
-        }
-
-
-        // DETERMINE USER DESTINATION
-
-
-async function routeUser(user, intent = "signin") {
-
-    if (!user || !user.email || !user.emailVerified) {
-        throw new Error("Please use a verified Google account.");
-    }
-
-    const email = user.email.toLowerCase();
-
-    // ADMIN CHECK
-if (ADMIN_EMAILS.includes(email)) {
-
-    if (intent === "community") {
-        showMessage("Community is currently under development.");
-        return;
-    }
-
-    window.location.replace("admin-dashboard.html");
-    return;
-}
-
-    // CHECK STUDENT REGISTRATION
-    const userRef = doc(db, "users", user.uid);
-
-    let userSnapshot;
-
-    try {
-        userSnapshot = await getDoc(userRef);
-    } catch (error) {
-        console.error("Firestore read failed:", error);
-        showMessage("Unable to verify your registration. Please try again.");
-        throw error;
-    }
-
-    // NEW STUDENT
-    if (!userSnapshot.exists()) {
-        window.location.href = "signup.html";
-        return;
-    }
-
-    const userData = userSnapshot.data();
-
-    // PENDING STUDENT
-    if (
-        userData.status === "pending" &&
-        userData.role === "student"
-    ) {
-        window.location.href = "pending.html";
-        return;
-    }
-
-    // APPROVED STUDENT
-    if (
-        userData.status === "approved" &&
-        userData.role === "student"
-    ) {
-
-        if (intent === "community") {
-            showMessage("Your access is verified. Community is under development.");
-        } else {
-            showMessage("Your account is approved! Student dashboard is under development.");
-        }
-
-        return;
-    }
-
-    // REJECTED STUDENT
-    if (userData.status === "rejected") {
-        showMessage(
-            "Your registration was rejected. Please contact an administrator."
-        );
-        return;
-    }
-
-    // INVALID ACCOUNT
-    showMessage(
-        "Your account does not have access. Please contact an administrator."
-    );
-}
-
+        });
 
 
         // GOOGLE SIGN IN
 
         async function googleSignIn(intent = "signin") {
+
+            if (routingInProgress) return;
 
             try {
 
@@ -412,36 +502,29 @@ if (ADMIN_EMAILS.includes(email)) {
 
                 let user = currentUser;
 
-                // Open Google login if not already authenticated.
-
                 if (!user) {
 
-                    const result = await signInWithPopup(
-                        auth,
-                        provider
-                    );
-                await result.user.getIdToken(true);
+                    const result = await signInWithPopup(auth, provider);
+
+                    await result.user.getIdToken(true);
+
                     user = result.user;
+
+                    currentUser = user;
 
                 }
 
-                showMessage("Checking your account...");
-
                 await routeUser(user, intent);
 
-            }
+            } catch (error) {
 
-            catch (error) {
-
-                console.error(error);
+                console.error("GOOGLE SIGN IN ERROR:", error);
 
                 if (error.code === "auth/popup-closed-by-user") {
 
                     showMessage("Google sign-in was cancelled.");
 
-                }
-
-                else {
+                } else {
 
                     showMessage(
                         error.message || "Something went wrong. Please try again."
@@ -449,22 +532,10 @@ if (ADMIN_EMAILS.includes(email)) {
 
                 }
 
+                routingInProgress = false;
                 setButtonsDisabled(false);
 
             }
-
-        }
-
-
-        // BUTTON CONTROL
-
-        function setButtonsDisabled(disabled) {
-
-            document.querySelectorAll("button").forEach(button => {
-
-                button.disabled = disabled;
-
-            });
 
         }
 
@@ -473,46 +544,36 @@ if (ADMIN_EMAILS.includes(email)) {
 
         document.getElementById("signupBtn")
             .addEventListener("click", () => {
-
                 googleSignIn("signup");
-
             });
-
 
         document.getElementById("signinBtn")
             .addEventListener("click", () => {
-
                 googleSignIn("signin");
-
             });
-
 
         document.getElementById("heroSigninBtn")
             .addEventListener("click", () => {
-
                 googleSignIn("signin");
-
             });
-
 
         document.getElementById("joinBtn")
             .addEventListener("click", () => {
-
                 googleSignIn("signup");
-
             });
 
 
         // COMMUNITY ACCESS
 
         document.getElementById("communityLink")
-            .addEventListener("click", async (event) => {
+            .addEventListener("click", async event => {
 
                 event.preventDefault();
 
                 await googleSignIn("community");
 
             });
+
 
     </script>
 
