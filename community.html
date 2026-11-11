@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +17,6 @@
             --text: #f4f6fb;
             --accent: #91a2ff;
             --accent-dark: #17234b;
-            --green: #78dfad;
             --red: #ff9292;
         }
 
@@ -211,20 +209,6 @@
         .primary-btn:hover { filter: brightness(1.08); }
         .primary-btn:disabled { opacity: .55; cursor: wait; }
 
-        .secondary-btn {
-            background: transparent;
-            color: var(--text);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 9px 12px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-
-        .secondary-btn:hover { border-color: var(--accent); }
-
-        .feed { display: grid; gap: 14px; }
-
         .announcement, .event {
             padding: 18px 0;
             border-top: 1px solid var(--border);
@@ -254,11 +238,21 @@
             margin-top: 5px;
         }
 
+        .event-meta {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
         .event-date {
             color: var(--accent);
             font-size: 12px;
             font-weight: 650;
         }
+
+        .event.past h3,
+        .event.past .event-date { opacity: .65; }
 
         .tag {
             display: inline-flex;
@@ -271,6 +265,11 @@
             text-transform: uppercase;
             letter-spacing: .7px;
             height: fit-content;
+        }
+
+        .tag.past-tag {
+            color: var(--muted);
+            background: #1a2231;
         }
 
         .event-open {
@@ -369,6 +368,28 @@
             border-radius: 10px;
         }
 
+        .checkin-code-panel {
+            margin-top: 14px;
+            padding: 13px;
+            border: 1px solid #344477;
+            border-radius: 10px;
+            background: rgba(145, 162, 255, .07);
+        }
+        .checkin-code-label {
+            color: var(--accent);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        .checkin-code-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .checkin-code-value { font-size: 20px; letter-spacing: 3px; }
+        .copy-code-btn {
+            border: 1px solid var(--border); border-radius: 7px; padding: 7px 10px;
+            background: #18233a; color: var(--text); cursor: pointer; font-size: 11px;
+        }
+        .checkin-code-help { margin-top: 8px; color: var(--muted); font-size: 11px; line-height: 1.5; }
+
         .admin-tools { display: none; }
 
         .notice {
@@ -441,14 +462,14 @@
 <body>
 
 <header>
-    <a class="brand" href="student-dashboard.html">
+    <a class="brand" id="brandLink" href="student-dashboard.html">
         AD ASTRA <span>BIT</span>
     </a>
 
     <div class="header-right">
         <span class="identity" id="userIdentity">Checking access...</span>
         <a class="header-link" id="dashboardLink" href="student-dashboard.html">Dashboard</a>
-        <button class="logout-btn" id="logoutBtn">Logout</button>
+        <button class="logout-btn" id="logoutBtn" type="button">Logout</button>
     </div>
 </header>
 
@@ -462,11 +483,11 @@
         </p>
     </section>
 
-    <div id="pageNotice" class="notice"></div>
+    <div id="pageNotice" class="notice" role="status" aria-live="polite"></div>
 
     <nav class="tabs" aria-label="Community sections">
-        <button class="tab active" data-tab="announcements">Announcements</button>
-        <button class="tab" data-tab="events">Events</button>
+        <button class="tab active" type="button" data-tab="announcements">Announcements</button>
+        <button class="tab" type="button" data-tab="events">Events</button>
     </nav>
 
     <!-- ANNOUNCEMENTS -->
@@ -531,7 +552,7 @@
             <div class="main-column">
                 <section class="panel">
                     <div class="panel-heading">
-                        <h2>Upcoming events</h2>
+                        <h2>Events</h2>
                         <span class="tag">What's happening</span>
                     </div>
 
@@ -575,13 +596,15 @@
                 </section>
 
                 <section class="panel">
-                    <h2>Event details</h2>
-                    <p class="muted">
-                        Click an event to open its dedicated page.
-                        Event details and the public event chatbot will
-                        be available there, separately from this community.
-                    </p>
-                </section>
+    <h2>Event discussion</h2>
+    <p class="muted">
+        Open an event to view its complete details and join
+        its dedicated public discussion room. Students and
+        administrators can discuss the event in real time.
+        Administrators can moderate messages and pin
+        important updates for a custom duration.
+    </p>
+</section>
 
             </aside>
         </div>
@@ -606,6 +629,9 @@
         collection,
         addDoc,
         setDoc,
+        getDocs,
+        where,
+        writeBatch,
         updateDoc,
         deleteDoc,
         onSnapshot,
@@ -616,13 +642,14 @@
     } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
     const firebaseConfig = {
-        apiKey: "AIzaSyB9BQOlOO-tfuFzxJk0KEA7YcV3O11_WjM",
-        authDomain: "ad-astra-bit.firebaseapp.com",
-        projectId: "ad-astra-bit",
-        storageBucket: "ad-astra-bit.firebasestorage.app",
-        messagingSenderId: "104444066688",
-        appId: "1:104444066688:web:d84478465cd3084f315f65"
-    };
+  apiKey: "AIzaSyB9BQOlOO-tfuFzxjK0KEA7YcV3O11_WjM",
+  authDomain: "ad-astra-bit.firebaseapp.com",
+  projectId: "ad-astra-bit",
+  storageBucket: "ad-astra-bit.firebasestorage.app",
+  messagingSenderId: "104444066688",
+  appId: "1:104444066688:web:d84478465cd3084f315f65",
+  measurementId: "G-JJLDJF02K0"
+};
 
     const ADMIN_EMAILS = [
         "rachnf99@gmail.com",
@@ -638,6 +665,9 @@
     let currentUser = null;
     let currentProfile = null;
     let isAdmin = false;
+    let initializedUid = null;   // prevents duplicate setup if the auth callback fires again
+    let signingOut = false;
+    let noticeTimer = null;
 
     let unsubscribeAnnouncements = null;
     let unsubscribeEvents = null;
@@ -649,8 +679,15 @@
     const notice = $("pageNotice");
 
     function showNotice(message, type = "info") {
+        clearTimeout(noticeTimer);
+
         notice.textContent = message;
         notice.className = `notice ${type}`;
+
+        // Success messages fade away; errors stay visible.
+        if (type === "info") {
+            noticeTimer = setTimeout(clearNotice, 5000);
+        }
     }
 
     function clearNotice() {
@@ -761,7 +798,7 @@
                         counts[reaction.emoji]++;
                     }
 
-                    if (reactionDoc.id === currentUser.uid) {
+                    if (currentUser && reactionDoc.id === currentUser.uid) {
                         myReaction = reaction.emoji;
                     }
                 });
@@ -772,6 +809,7 @@
                     const button = document.createElement("button");
                     button.type = "button";
                     button.className = "reaction-button";
+                    button.setAttribute("aria-pressed", String(myReaction === emoji));
 
                     if (myReaction === emoji) {
                         button.classList.add("selected");
@@ -787,7 +825,7 @@
                         : `React with ${emoji}`;
 
                     button.addEventListener("click", async () => {
-                        await setReaction(type, itemId, emoji, button);
+                        await setReaction(type, itemId, emoji, button, myReaction);
                     });
 
                     container.append(button);
@@ -802,7 +840,8 @@
         reactionListeners.set(listenerKey, unsubscribe);
     }
 
-    async function setReaction(type, itemId, emoji, button) {
+    // previousReaction comes from the live snapshot, so no extra read is needed.
+    async function setReaction(type, itemId, emoji, button, previousReaction) {
         if (!currentUser) return;
 
         button.disabled = true;
@@ -816,9 +855,7 @@
                 currentUser.uid
             );
 
-            const existing = await getDoc(reactionRef);
-
-            if (existing.exists() && existing.data().emoji === emoji) {
+            if (previousReaction === emoji) {
                 await deleteDoc(reactionRef);
             } else {
                 await setDoc(reactionRef, {
@@ -997,8 +1034,17 @@
         button.disabled = true;
 
         try {
-            await deleteDoc(doc(db, "communityEvents", eventId));
-            showNotice("Event deleted successfully.", "info");
+            const codeSnapshot = await getDocs(query(
+                collection(db, "eventCheckinCodes"),
+                where("eventId", "==", eventId)
+            ));
+
+            const batch = writeBatch(db);
+            batch.delete(doc(db, "communityEvents", eventId));
+            codeSnapshot.forEach(codeDoc => batch.delete(codeDoc.ref));
+            await batch.commit();
+
+            showNotice("Event and its check-in code deleted successfully.", "info");
         } catch (error) {
             console.error("Event deletion error:", error);
             showNotice("Could not delete event. Check Firestore Rules.", "error");
@@ -1071,6 +1117,76 @@
     }
 
     // --------------------------------------------------
+    // EVENT CHECK-IN CODES
+    // Format: AB0CD0F (letters at positions 1,2,4,5,7; digits at 3,6).
+    // --------------------------------------------------
+
+    function generateCheckinCode() {
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const digits = "0123456789";
+        const random = new Uint32Array(7);
+        crypto.getRandomValues(random);
+
+        return [
+            letters[random[0] % letters.length],
+            letters[random[1] % letters.length],
+            digits[random[2] % digits.length],
+            letters[random[3] % letters.length],
+            letters[random[4] % letters.length],
+            digits[random[5] % digits.length],
+            letters[random[6] % letters.length]
+        ].join("");
+    }
+
+    async function showEventCheckinCode(eventId, eventTitle, container) {
+        if (!isAdmin) return;
+
+        container.replaceChildren(safeText("div", "empty", "Loading check-in code..."));
+
+        try {
+            const codeQuery = query(
+                collection(db, "eventCheckinCodes"),
+                where("eventId", "==", eventId)
+            );
+            const codeSnapshot = await getDocs(codeQuery);
+            const activeCode = codeSnapshot.docs.find(item => item.data().active === true);
+
+            container.replaceChildren();
+            const label = safeText("div", "checkin-code-label", "ADMIN · EVENT CHECK-IN CODE");
+            container.append(label);
+
+            if (!activeCode) {
+                container.append(safeText("p", "muted", "No active check-in code found."));
+                return;
+            }
+
+            const code = activeCode.id;
+            const codeRow = document.createElement("div");
+            codeRow.className = "checkin-code-row";
+            codeRow.append(safeText("strong", "checkin-code-value", code));
+
+            const copyButton = safeText("button", "copy-code-btn", "Copy code");
+            copyButton.type = "button";
+            copyButton.addEventListener("click", async () => {
+                try {
+                    await navigator.clipboard.writeText(code);
+                    copyButton.textContent = "Copied!";
+                    setTimeout(() => copyButton.textContent = "Copy code", 1800);
+                } catch (error) {
+                    console.error("Copy code error:", error);
+                    window.prompt("Copy this event check-in code:", code);
+                }
+            });
+            codeRow.append(copyButton);
+            container.append(codeRow);
+            container.append(safeText("p", "checkin-code-help", "Share this code with students attending the event. Students enter it on checkin.html."));
+        } catch (error) {
+            console.error("Check-in code loading error:", error);
+            container.replaceChildren(safeText("p", "muted", "Could not load the check-in code. Check Firestore Rules."));
+        }
+    }
+
+    // --------------------------------------------------
     // RENDER EVENTS
     // --------------------------------------------------
 
@@ -1086,6 +1202,8 @@
 
         list.replaceChildren();
 
+        const now = Date.now();
+
         snapshot.forEach(itemDoc => {
             const item = itemDoc.data();
 
@@ -1093,10 +1211,15 @@
             article.className = "event";
 
             const date = item.eventDate ? new Date(item.eventDate) : null;
-
             const validDate = date && !Number.isNaN(date.getTime());
+            const isPast = validDate && date.getTime() < now;
 
-            article.append(
+            if (isPast) article.classList.add("past");
+
+            const meta = document.createElement("div");
+            meta.className = "event-meta";
+
+            meta.append(
                 safeText(
                     "div",
                     "event-date",
@@ -1106,7 +1229,15 @@
                             timeStyle: "short"
                         })
                         : "Date to be announced"
-                ),
+                )
+            );
+
+            if (isPast) {
+                meta.append(safeText("span", "tag past-tag", "Past"));
+            }
+
+            article.append(
+                meta,
                 safeText("h3", "", item.title || "Event"),
                 safeText(
                     "p",
@@ -1119,7 +1250,7 @@
             const openLink = safeText(
                 "a",
                 "event-open",
-                "View event details and chatbot →"
+                "View event details and join discussion →"
             );
 
             openLink.href = `event-details.html?id=${encodeURIComponent(itemDoc.id)}`;
@@ -1129,6 +1260,13 @@
             const reactionArea = document.createElement("div");
             reactionArea.className = "reaction-area";
             article.append(reactionArea);
+
+            if (isAdmin) {
+                const codePanel = document.createElement("div");
+                codePanel.className = "checkin-code-panel";
+                article.append(codePanel);
+                showEventCheckinCode(itemDoc.id, item.title || "Event", codePanel);
+            }
 
             if (isAdmin) {
                 const actions = document.createElement("div");
@@ -1245,8 +1383,31 @@
         button.disabled = true;
 
         try {
-            await addDoc(collection(db, "communityEvents"), {
-                title: $("eventTitle").value.trim(),
+            const eventRef = doc(collection(db, "communityEvents"));
+            let checkinCode = null;
+            let codeRef = null;
+
+            // Check for collisions before committing the event and code together.
+            for (let attempt = 0; attempt < 12; attempt++) {
+                const candidate = generateCheckinCode();
+                const candidateRef = doc(db, "eventCheckinCodes", candidate);
+                const existing = await getDoc(candidateRef);
+                if (!existing.exists()) {
+                    checkinCode = candidate;
+                    codeRef = candidateRef;
+                    break;
+                }
+            }
+
+            if (!checkinCode || !codeRef) {
+                throw new Error("Could not generate a unique check-in code. Please try again.");
+            }
+
+            const title = $("eventTitle").value.trim();
+            const batch = writeBatch(db);
+
+            batch.set(eventRef, {
+                title,
                 eventDate: $("eventDate").value,
                 location: $("eventLocation").value.trim(),
                 description: $("eventDescription").value.trim(),
@@ -1254,11 +1415,21 @@
                 createdAt: serverTimestamp()
             });
 
+            batch.set(codeRef, {
+                eventId: eventRef.id,
+                eventTitle: title,
+                active: true,
+                createdBy: currentUser.uid,
+                createdAt: serverTimestamp()
+            });
+
+            await batch.commit();
+
             event.target.reset();
-            showNotice("Event published.", "info");
+            showNotice(`Event published. Check-in code: ${checkinCode}`, "info");
         } catch (error) {
             console.error("Event publish error:", error);
-            showNotice("Could not publish event. Check Firestore Rules.", "error");
+            showNotice(`Could not publish event: ${error.message || "Check Firestore Rules."}`, "error");
         } finally {
             button.disabled = false;
         }
@@ -1270,160 +1441,164 @@
 
     $("logoutBtn").addEventListener("click", async () => {
         try {
+            signingOut = true;
             stopListeners();
             await signOut(auth);
             window.location.replace("index.html");
         } catch (error) {
+            signingOut = false;
             console.error("Logout error:", error);
             showNotice("Logout failed. Please try again.", "error");
         }
     });
 
-    
+    // --------------------------------------------------
+    // AUTHENTICATION AND ACCESS CONTROL
+    // --------------------------------------------------
 
-// --------------------------------------------------
-// AUTHENTICATION AND ACCESS CONTROL
-// --------------------------------------------------
+    onAuthStateChanged(auth, async user => {
 
-onAuthStateChanged(auth, async user => {
+        if (!user) {
+            // Signed out (here, in another tab, or never signed in).
+            stopListeners();
+            currentUser = null;
+            currentProfile = null;
+            isAdmin = false;
+            initializedUid = null;
 
-    console.log("Community: Auth state changed.", {
-        callbackUser: user ? user.email : null,
-        currentUser: auth.currentUser
-            ? auth.currentUser.email
-            : null
+            if (signingOut) return;
+
+            showNotice(
+                "You are not signed in. Redirecting to the homepage...",
+                "error"
+            );
+
+            setTimeout(() => {
+                window.location.replace("index.html?intent=community");
+            }, 2500);
+
+            return;
+        }
+
+        // Already set up for this user; ignore repeat callbacks.
+        if (initializedUid === user.uid) return;
+
+        try {
+            // Refresh emailVerified and account state. A network hiccup
+            // must not lock a valid user out, so only fatal errors stop us.
+            try {
+                await user.reload();
+            } catch (reloadError) {
+                if (reloadError.code === "auth/network-request-failed") {
+                    console.warn("Community: reload skipped (offline).", reloadError);
+                } else {
+                    throw reloadError;
+                }
+            }
+
+            const refreshedUser = auth.currentUser;
+
+            if (!refreshedUser) {
+                throw new Error("Your session has ended. Please sign in again.");
+            }
+
+            if (!refreshedUser.emailVerified) {
+                showNotice(
+                    "Your email is not verified. Please verify it and sign in again.",
+                    "error"
+                );
+
+                return;
+            }
+
+            currentUser = refreshedUser;
+
+            $("userIdentity").textContent =
+                refreshedUser.email || "Signed in";
+
+            // Load Firestore profile.
+            const profileSnapshot = await getDoc(
+                doc(db, "users", refreshedUser.uid)
+            );
+
+            if (!profileSnapshot.exists()) {
+                showNotice(
+                    "Your account exists, but its Firestore profile was not found. Contact an administrator.",
+                    "error"
+                );
+
+                return;
+            }
+
+            currentProfile = profileSnapshot.data();
+
+            const email = (refreshedUser.email || "").toLowerCase();
+
+            // Check admin access.
+            isAdmin =
+                ADMIN_EMAILS.includes(email) &&
+                currentProfile.role === "admin" &&
+                currentProfile.status === "approved";
+
+            if (isAdmin) {
+
+                $("dashboardLink").href = "admin-dashboard.html";
+                $("brandLink").href = "admin-dashboard.html";
+
+                $("announcementAdmin").style.display = "block";
+                $("eventAdmin").style.display = "block";
+
+            } else {
+
+                if (currentProfile.role !== "student") {
+                    showNotice(
+                        `Your account role is "${currentProfile.role}". It is not recognised as an approved student or administrator.`,
+                        "error"
+                    );
+
+                    return;
+                }
+
+                if (currentProfile.status === "pending") {
+                    window.location.replace("pending.html");
+                    return;
+                }
+
+                if (currentProfile.status === "rejected") {
+                    showNotice(
+                        "Your student application was rejected. Please contact the administration.",
+                        "error"
+                    );
+
+                    return;
+                }
+
+                if (currentProfile.status !== "approved") {
+                    showNotice(
+                        `Your student account status is "${currentProfile.status}". Community access is unavailable.`,
+                        "error"
+                    );
+
+                    return;
+                }
+
+                $("dashboardLink").href = "student-dashboard.html";
+                $("brandLink").href = "student-dashboard.html";
+            }
+
+            initializedUid = refreshedUser.uid;
+            startListeners();
+
+        } catch (error) {
+
+            console.error("Community authentication error:", error);
+
+            showNotice(
+                `Could not verify community access: ${error.message}`,
+                "error"
+            );
+        }
     });
-
-    if (!user) {
-        console.error("Community: No authenticated Firebase user.");
-
-        showNotice(
-            "You are not signed in. Please sign in through the homepage.",
-            "error"
-        );
-
-        setTimeout(() => {
-            window.location.replace("index.html?intent=community");
-        }, 2500);
-
-        return;
-    }
-
-    try {
-        await user.reload();
-
-        const refreshedUser = auth.currentUser;
-
-        if (!refreshedUser) {
-            throw new Error("Firebase authentication session expired.");
-        }
-
-        if (!refreshedUser.emailVerified) {
-            showNotice(
-                "Your email is not verified. Please verify it and sign in again.",
-                "error"
-            );
-
-            return;
-        }
-
-        currentUser = refreshedUser;
-
-        $("userIdentity").textContent =
-            refreshedUser.email || "Signed in";
-
-        console.log("Community: Authenticated user:", {
-            uid: refreshedUser.uid,
-            email: refreshedUser.email,
-            emailVerified: refreshedUser.emailVerified
-        });
-
-        // Load Firestore profile.
-        const profileRef = doc(db, "users", refreshedUser.uid);
-        const profileSnapshot = await getDoc(profileRef);
-
-        if (!profileSnapshot.exists()) {
-            showNotice(
-                "Your account exists, but its Firestore profile was not found. Contact an administrator.",
-                "error"
-            );
-
-            return;
-        }
-
-        currentProfile = profileSnapshot.data();
-
-        const email = (refreshedUser.email || "").toLowerCase();
-
-        // Check admin access.
-        isAdmin =
-            ADMIN_EMAILS.includes(email) &&
-            currentProfile.role === "admin" &&
-            currentProfile.status === "approved";
-
-        if (isAdmin) {
-
-            $("dashboardLink").href = "admin-dashboard.html";
-
-            $("announcementAdmin").style.display = "block";
-            $("eventAdmin").style.display = "block";
-
-            console.log("Community: Admin access granted.");
-
-        } else {
-
-            if (currentProfile.role !== "student") {
-                showNotice(
-                    `Your account role is "${currentProfile.role}". It is not recognised as an approved student or administrator.`,
-                    "error"
-                );
-
-                return;
-            }
-
-            if (currentProfile.status === "pending") {
-                window.location.replace("pending.html");
-                return;
-            }
-
-            if (currentProfile.status === "rejected") {
-                showNotice(
-                    "Your student application was rejected. Please contact the administration.",
-                    "error"
-                );
-
-                return;
-            }
-
-            if (currentProfile.status !== "approved") {
-                showNotice(
-                    `Your student account status is "${currentProfile.status}". Community access is unavailable.`,
-                    "error"
-                );
-
-                return;
-            }
-
-            $("dashboardLink").href = "student-dashboard.html";
-
-            console.log("Community: Student access granted.");
-        }
-
-        startListeners();
-
-        console.log("Community: Successfully initialized.");
-
-    } catch (error) {
-
-        console.error("Community authentication error:", error);
-
-        showNotice(
-            `Could not verify community access: ${error.message}`,
-            "error"
-        );
-    }
-});
-
 </script>
 
 </body>

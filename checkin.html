@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080b12">
+<title>Event Check-in | AD ASTRA BIT</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0} :root{--bg:#080b12;--panel:#111722;--border:#263143;--muted:#96a1b4;--text:#f4f6fb;--accent:#91a2ff;--green:#8de0b2;--red:#ff9292}
+body{min-height:100vh;background:var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif;display:flex;flex-direction:column}
+a{color:inherit;text-decoration:none}button,input{font:inherit}
+header{min-height:72px;padding:15px 7%;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:#0c111b}
+.brand{font-size:19px;font-weight:850;letter-spacing:2px}.brand span{color:var(--accent)}
+.nav-actions{display:flex;gap:10px;align-items:center}.nav-link,.logout-btn{border:1px solid var(--border);border-radius:8px;background:var(--panel);color:var(--text);padding:9px 13px;font-size:12px;cursor:pointer}.logout-btn{color:var(--red)}
+main{width:min(520px,92%);margin:70px auto;flex:1}.eyebrow{color:var(--accent);font-size:11px;letter-spacing:3px;text-transform:uppercase;margin-bottom:12px}
+h1{font-size:clamp(30px,6vw,42px);margin-bottom:12px}.sub{color:var(--muted);line-height:1.7;font-size:14px;margin-bottom:28px}
+.card{padding:28px;background:var(--panel);border:1px solid var(--border);border-radius:18px;box-shadow:0 20px 70px #0003}
+label{display:block;font-size:12px;color:var(--muted);margin-bottom:9px}input{width:100%;padding:16px;border-radius:10px;border:1px solid var(--border);background:#080d17;color:var(--text);font-size:20px;letter-spacing:5px;text-transform:uppercase;outline:none}input:focus{border-color:var(--accent)}
+.submit{width:100%;margin-top:15px;padding:14px;border:0;border-radius:10px;background:var(--accent);color:#080b12;font-weight:800;cursor:pointer}.submit:disabled{opacity:.55;cursor:not-allowed}
+.notice{display:none;margin-top:18px;padding:13px;border-radius:9px;font-size:13px;line-height:1.6}.notice.show{display:block}.notice.error{color:var(--red);background:#30191e;border:1px solid #63313a}.notice.success{color:var(--green);background:#102a22;border:1px solid #285c49}.notice.info{color:#c6d0ff;background:#172044;border:1px solid #303f7a}
+.userline{font-size:12px;color:var(--muted);margin-bottom:20px}.event-result{margin-top:18px;padding:16px;border:1px solid var(--border);border-radius:10px;background:#0b111b}.event-result h2{font-size:18px;margin-bottom:7px}.event-result p{font-size:12px;color:var(--muted);line-height:1.7}
+footer{text-align:center;padding:24px;border-top:1px solid var(--border);color:#667085;font-size:11px}
+@media(max-width:520px){header{padding:14px 4%;}.brand{font-size:15px}.nav-link,.logout-btn{padding:8px;font-size:10px}main{margin:42px auto}.card{padding:20px}}
+</style>
+</head>
+<body>
+<header>
+<a class="brand" href="student-dashboard.html">AD <span>ASTRA</span> BIT</a>
+<div class="nav-actions"><a class="nav-link" href="community.html">Community</a><button class="logout-btn" id="logoutBtn" type="button">Logout</button></div>
+</header>
+<main>
+<div class="eyebrow">AD ASTRA BIT · Attendance</div>
+<h1>Event Check-in.</h1>
+<p class="sub">Enter the unique code shared by the event administrator to register your attendance.</p>
+<section class="card">
+<div class="userline" id="userLine">Checking your signed-in account...</div>
+<form id="checkinForm">
+<label for="codeInput">EVENT CHECK-IN CODE</label>
+<input id="codeInput" name="code" maxlength="7" minlength="7" pattern="[A-Za-z]{2}[0-9][A-Za-z]{2}[0-9][A-Za-z]" placeholder="AB0CD0F" autocomplete="off" required>
+<button class="submit" id="submitBtn" type="submit" disabled>Check in</button>
+</form>
+<div id="notice" class="notice" role="status" aria-live="polite"></div>
+<div id="eventResult"></div>
+</section>
+</main>
+<footer>AD ASTRA BIT · Connect. Collaborate. Create.</footer>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import {getAuth,onAuthStateChanged,signOut,browserLocalPersistence,setPersistence} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+import {getFirestore,doc,getDoc,runTransaction,serverTimestamp} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyB9BQOlOO-tfuFzxjK0KEA7YcV3O11_WjM",
+  authDomain: "ad-astra-bit.firebaseapp.com",
+  projectId: "ad-astra-bit",
+  storageBucket: "ad-astra-bit.firebasestorage.app",
+  messagingSenderId: "104444066688",
+  appId: "1:104444066688:web:d84478465cd3084f315f65",
+  measurementId: "G-JJLDJF02K0"
+};
+const ADMIN_EMAILS=["rachnf99@gmail.com","vedujames99@gmail.com"];
+const app=initializeApp(firebaseConfig);const auth=getAuth(app);const db=getFirestore(app);const $=id=>document.getElementById(id);
+let currentUser=null,currentProfile=null,ready=false,signingOut=false;
+function notice(message,type="error"){const el=$("notice");el.textContent=message;el.className=`notice show ${type}`;}
+function escapeHTML(value=""){return String(value).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"})[c]);}
+async function initialiseAuth(){try{await setPersistence(auth,browserLocalPersistence);}catch(error){console.error("Auth persistence error:",error);notice("Could not restore your saved login session. Please refresh.");return;}
+onAuthStateChanged(auth,async user=>{if(!user){currentUser=null;currentProfile=null;ready=false;$("submitBtn").disabled=true;$("userLine").textContent="You are signed out. Sign in through the AD ASTRA BIT homepage to continue.";if(!signingOut)setTimeout(()=>{if(!auth.currentUser)window.location.replace("index.html");},2200);return;}
+try{try{await user.reload();}catch(e){if(e.code!=="auth/network-request-failed")throw e;}
+const refreshed=auth.currentUser;if(!refreshed)throw new Error("Your login session has ended.");if(!refreshed.emailVerified)throw new Error("Verify your email before checking in.");const snap=await getDoc(doc(db,"users",refreshed.uid));if(!snap.exists())throw new Error("Your student profile was not found.");const profile=snap.data();const email=(refreshed.email||"").toLowerCase();const admin=ADMIN_EMAILS.includes(email)&&profile.role==="admin"&&profile.status==="approved";if(!admin&&(profile.role!=="student"||profile.status!=="approved")){throw new Error(profile.status==="pending"?"Your account is awaiting administrator approval.":profile.status==="rejected"?"Your student application was rejected.":"Only approved student accounts can check in.");}
+if(admin)throw new Error("Event check-in is intended for student accounts. Administrators can view attendance from event details.");currentUser=refreshed;currentProfile=profile;ready=true;$("userLine").textContent=`Signed in as ${profile.name||refreshed.email} · ${profile.usn||"Student"}`;$("submitBtn").disabled=false;
+}catch(error){console.error("Check-in authentication error:",error);$("userLine").textContent="Account verification failed.";notice(error.message||"Unable to verify your account.");}});}
+$("codeInput").addEventListener("input",()=>{$("codeInput").value=$("codeInput").value.toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,7);});
+$("checkinForm").addEventListener("submit",async e=>{e.preventDefault();if(!ready||!currentUser||!currentProfile){notice("Your account is not ready. Refresh and try again.");return;}const code=$("codeInput").value.trim().toUpperCase();if(!/^[A-Z]{2}[0-9][A-Z]{2}[0-9][A-Z]$/.test(code)){notice("Enter a valid 7-character event code, such as AB0CD0F.");return;}
+const btn=$("submitBtn");btn.disabled=true;btn.textContent="Checking in...";$("eventResult").replaceChildren();
+try{const codeRef=doc(db,"eventCheckinCodes",code);const codeSnap=await getDoc(codeRef);if(!codeSnap.exists()||codeSnap.data().active!==true)throw new Error("This check-in code is invalid or no longer active.");const mapping=codeSnap.data();const eventRef=doc(db,"communityEvents",mapping.eventId);const eventSnap=await getDoc(eventRef);if(!eventSnap.exists())throw new Error("The event linked to this code could not be found.");const eventData=eventSnap.data();const attendeeRef=doc(db,"communityEvents",mapping.eventId,"attendees",currentUser.uid);
+await runTransaction(db,async tx=>{const existing=await tx.get(attendeeRef);if(existing.exists())throw new Error("ALREADY_CHECKED_IN");tx.set(attendeeRef,{uid:currentUser.uid,name:currentProfile.name||currentUser.displayName||currentUser.email.split("@")[0],email:currentUser.email,usn:currentProfile.usn||"",branch:currentProfile.branch||"",academicYear:currentProfile.academicYear||"",checkedInAt:serverTimestamp(),checkinCode:code});});
+notice("Your attendance has been recorded successfully.","success");const box=document.createElement("div");box.className="event-result";box.innerHTML=`<h2>${escapeHTML(eventData.title||mapping.eventTitle||"Event")}</h2><p>You're checked in. Your attendance is now recorded for this event.</p>`;$("eventResult").append(box);$("checkinForm").reset();
+}catch(error){console.error("Check-in error:",error);if(error.message==="ALREADY_CHECKED_IN"){notice("You're already checked in for this event.","info");}else{notice(error.message||"Check-in failed. Please verify the code and try again.");}}finally{btn.disabled=false;btn.textContent="Check in";}});
+$("logoutBtn").addEventListener("click",async()=>{try{signingOut=true;await signOut(auth);window.location.replace("index.html");}catch(error){signingOut=false;console.error(error);notice("Unable to log out. Please try again.");}});
+initialiseAuth();
+</script>
+</body>
+</html>
