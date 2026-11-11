@@ -7,7 +7,9 @@
     <title>Edit Profile | AD ASTRA BIT</title>
 
     <style>
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+        }
 
         body {
             margin: 0;
@@ -30,8 +32,15 @@
             border-radius: 18px;
         }
 
-        h1 { margin: 0 0 8px; font-size: 27px; }
-        .subtitle { color: #9ca3af; margin-bottom: 28px; }
+        h1 {
+            margin: 0 0 8px;
+            font-size: 27px;
+        }
+
+        .subtitle {
+            color: #9ca3af;
+            margin-bottom: 28px;
+        }
 
         .photo-section {
             display: flex;
@@ -63,7 +72,8 @@
             gap: 9px;
         }
 
-        .photo-actions button, .photo-actions label {
+        .photo-actions button,
+        .photo-actions label {
             cursor: pointer;
             color: #dbeafe;
             font-size: 13px;
@@ -76,18 +86,22 @@
             width: fit-content;
         }
 
-        #photoInput { display: none; }
+        #photoInput {
+            display: none;
+        }
 
-        .field { margin-bottom: 18px; }
+        .field {
+            margin-bottom: 18px;
+        }
 
-        label.field-label {
+        .field-label {
             display: block;
             margin-bottom: 8px;
             font-size: 13px;
             color: #cbd5e1;
         }
 
-        input {
+        input, select {
             width: 100%;
             padding: 13px;
             border: 1px solid #374151;
@@ -98,8 +112,23 @@
             font-size: 14px;
         }
 
-        input:focus { border-color: #60a5fa; }
-        input:disabled { opacity: 0.65; cursor: not-allowed; }
+        input:focus, select:focus {
+            border-color: #60a5fa;
+        }
+
+        input:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        select option {
+            background: #111827;
+            color: white;
+        }
 
         .buttons {
             display: flex;
@@ -126,7 +155,10 @@
             color: white;
         }
 
-        button:disabled { opacity: 0.6; cursor: wait; }
+        button:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
 
         #message {
             margin-top: 18px;
@@ -134,68 +166,229 @@
             line-height: 1.5;
         }
 
-        .success { color: #4ade80; }
-        .error { color: #f87171; }
-        .info { color: #93c5fd; }
+        .success {
+            color: #4ade80;
+        }
+
+        .error {
+            color: #f87171;
+        }
+
+        .info {
+            color: #93c5fd;
+        }
 
         @media(max-width: 480px) {
-            .container { padding: 23px; }
+            .container {
+                padding: 23px;
+            }
         }
     </style>
 </head>
 
 <body>
+
 <div class="container">
+
     <h1>Edit Profile</h1>
-    <p class="subtitle">Update your AD ASTRA BIT account details.</p>
+    <p class="subtitle">
+        Update your AD ASTRA BIT account details.
+    </p>
+
+    <!-- PROFILE PICTURE -->
 
     <div class="photo-section">
+
         <div id="photoPlaceholder" class="placeholder">A</div>
-        <img id="photoPreview" alt="Profile picture" style="display:none;">
+
+        <img
+            id="photoPreview"
+            alt="Profile picture"
+            style="display:none;"
+        >
 
         <div class="photo-actions">
-            <label for="photoInput">Choose profile picture</label>
-            <input type="file" id="photoInput" accept="image/jpeg,image/png,image/webp">
-            <button type="button" id="removePhotoBtn">Remove picture</button>
-            <small style="color:#9ca3af;">JPG, PNG or WebP · Max 5 MB</small>
+
+            <label for="photoInput">
+                Choose profile picture
+            </label>
+
+            <input
+                type="file"
+                id="photoInput"
+                accept="image/jpeg,image/png,image/webp"
+            >
+
+            <button type="button" id="removePhotoBtn">
+                Remove picture
+            </button>
+
+            <small style="color:#9ca3af;">
+                JPG, PNG or WebP · Max 5 MB
+            </small>
+
         </div>
+
     </div>
 
-    <div class="field">
-        <label class="field-label" for="name">Full Name</label>
-        <input id="name" type="text" maxlength="100" required>
-    </div>
+
+    <!-- FULL NAME -->
 
     <div class="field">
-        <label class="field-label" for="email">Email Address</label>
-        <input id="email" type="email" disabled>
+
+        <label class="field-label" for="name">
+            Full Name
+        </label>
+
+        <input
+            id="name"
+            type="text"
+            maxlength="100"
+            required
+        >
+
     </div>
 
-    <div class="field">
-        <label class="field-label" for="usn">USN</label>
-        <input id="usn" type="text" maxlength="30" required>
-    </div>
+
+    <!-- EMAIL -->
 
     <div class="field">
-        <label class="field-label" for="branch">Branch</label>
-        <input id="branch" type="text" required>
+
+        <label class="field-label" for="email">
+            Email Address
+        </label>
+
+        <input
+            id="email"
+            type="email"
+            disabled
+        >
+
     </div>
 
+
+    <!-- USN -->
+
     <div class="field">
-        <label class="field-label" for="academicYear">Academic Year</label>
-        <input id="academicYear" type="text" required>
+
+        <label class="field-label" for="usn">
+            USN
+        </label>
+
+        <input
+            id="usn"
+            type="text"
+            maxlength="30"
+            required
+        >
+
     </div>
+
+
+    <!-- BRANCH DROPDOWN -->
+
+    <div class="field">
+
+        <label class="field-label" for="branch">
+            Branch
+        </label>
+
+        <select id="branch" required>
+
+            <option value="" disabled>
+                Select your branch
+            </option>
+
+            <option value="Computer Science and Engineering">
+                Computer Science and Engineering (CSE)
+            </option>
+
+            <option value="Information Science and Engineering">
+                Information Science and Engineering (ISE)
+            </option>
+
+            <option value="Electronics and Communication Engineering">
+                Electronics and Communication Engineering (ECE)
+            </option>
+
+            <option value="Electrical and Electronics Engineering">
+                Electrical and Electronics Engineering (EEE)
+            </option>
+
+            <option value="Mechanical Engineering">
+                Mechanical Engineering
+            </option>
+
+            <option value="Civil Engineering">
+                Civil Engineering
+            </option>
+
+            <option value="Artificial Intelligence and Machine Learning">
+                Artificial Intelligence and Machine Learning (AI & ML)
+            </option>
+
+            <option value="Artificial Intelligence and Data Science">
+                Artificial Intelligence and Data Science (AI & DS)
+            </option>
+
+            <option value="Other">
+                Other
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <!-- ACADEMIC YEAR DROPDOWN -->
+
+    <div class="field">
+
+        <label class="field-label" for="academicYear">
+            Academic Year
+        </label>
+
+        <select id="academicYear" required>
+
+            <option value="" disabled>
+                Select your academic year
+            </option>
+
+            <option value="1st Year">1st Year</option>
+            <option value="2nd Year">2nd Year</option>
+            <option value="3rd Year">3rd Year</option>
+            <option value="4th Year">4th Year</option>
+
+        </select>
+
+    </div>
+
+
+    <!-- BUTTONS -->
 
     <div class="buttons">
-        <button id="cancelBtn" type="button">Cancel</button>
-        <button id="saveBtn" type="button">Save Changes</button>
+
+        <button id="cancelBtn" type="button">
+            Cancel
+        </button>
+
+        <button id="saveBtn" type="button">
+            Save Changes
+        </button>
+
     </div>
 
     <div id="message"></div>
+
 </div>
 
+
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+
+    import {
+        initializeApp
+    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+
     import {
         getAuth,
         onAuthStateChanged,
@@ -209,6 +402,9 @@
         updateDoc
     } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
+
+    // FIREBASE CONFIGURATION
+
     const firebaseConfig = {
         apiKey: "AIzaSyB9BQOlOO-tfuFzxjK0KEA7YcV3O11_WjM",
         authDomain: "ad-astra-bit.firebaseapp.com",
@@ -218,48 +414,98 @@
         appId: "1:104444066688:web:d84478465cd3084f315f65"
     };
 
+
     const ADMIN_EMAILS = [
         "rachnf99@gmail.com",
         "vedujames99@gmail.com"
     ];
 
+
+    // VALID OPTIONS
+
+    const ALLOWED_BRANCHES = [
+        "Computer Science and Engineering",
+        "Information Science and Engineering",
+        "Electronics and Communication Engineering",
+        "Electrical and Electronics Engineering",
+        "Mechanical Engineering",
+        "Civil Engineering",
+        "Artificial Intelligence and Machine Learning",
+        "Artificial Intelligence and Data Science",
+        "Other"
+    ];
+
+    const ALLOWED_YEARS = [
+        "1st Year",
+        "2nd Year",
+        "3rd Year",
+        "4th Year"
+    ];
+
+
+    // INITIALIZE FIREBASE
+
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
+
     const $ = id => document.getElementById(id);
+
 
     let currentUser = null;
     let currentProfile = null;
     let selectedPhoto = null;
     let removePhoto = false;
 
+
+    // MESSAGE
+
     function showMessage(message, type = "info") {
         $("message").textContent = message;
         $("message").className = type;
     }
 
+
+    // PROFILE PICTURE
+
     function setPhoto(photoURL, name = "A") {
+
         if (photoURL) {
+
             $("photoPreview").src = photoURL;
             $("photoPreview").style.display = "block";
             $("photoPlaceholder").style.display = "none";
+
         } else {
+
             $("photoPreview").removeAttribute("src");
             $("photoPreview").style.display = "none";
             $("photoPlaceholder").style.display = "flex";
+
             $("photoPlaceholder").textContent =
                 name.trim().charAt(0).toUpperCase() || "A";
+
         }
+
     }
 
+
+    // DASHBOARD REDIRECT
+
     function getDashboard() {
+
         return currentProfile?.role === "admin"
             ? "admin-dashboard.html"
             : "student-dashboard.html";
+
     }
 
+
+    // IMAGE COMPRESSION
+
     async function compressImage(file) {
+
         if (!file.type.match(/^image\/(jpeg|png|webp)$/)) {
             throw new Error("Please choose a JPG, PNG or WebP image.");
         }
@@ -272,12 +518,16 @@
 
         let width = image.width;
         let height = image.height;
+
         const maxDimension = 256;
 
         if (width > maxDimension || height > maxDimension) {
+
             const scale = maxDimension / Math.max(width, height);
+
             width = Math.round(width * scale);
             height = Math.round(height * scale);
+
         }
 
         const canvas = document.createElement("canvas");
@@ -285,164 +535,391 @@
 
         canvas.width = width;
         canvas.height = height;
+
         context.drawImage(image, 0, 0, width, height);
+
         image.close();
 
         let quality = 0.82;
         let result = canvas.toDataURL("image/jpeg", quality);
 
         while (result.length > 120000 && quality > 0.4) {
+
             quality -= 0.08;
+
             result = canvas.toDataURL("image/jpeg", quality);
+
         }
 
         if (result.length > 140000) {
-            throw new Error("Image is too large after compression. Try another image.");
+            throw new Error(
+                "Image is too large after compression. Try another image."
+            );
         }
 
         return result;
+
     }
 
+
+    // LOAD PROFILE
+
     async function loadProfile(user) {
+
         const email = (user.email || "").toLowerCase();
+
         const isAllowlistedAdmin = ADMIN_EMAILS.includes(email);
 
         if (!user.emailVerified) {
+
             await signOut(auth);
+
             location.replace("index.html");
+
             return;
+
         }
+
 
         const profileRef = doc(db, "users", user.uid);
+
         const snapshot = await getDoc(profileRef);
 
+
         if (!snapshot.exists()) {
-            showMessage("Your profile could not be found.", "error");
+
+            showMessage(
+                "Your profile could not be found.",
+                "error"
+            );
+
             return;
+
         }
+
 
         currentProfile = snapshot.data();
 
+
         if (isAllowlistedAdmin) {
-            if (currentProfile.role !== "admin" ||
-                currentProfile.status !== "approved") {
-                showMessage("Admin profile is not approved.", "error");
+
+            if (
+                currentProfile.role !== "admin" ||
+                currentProfile.status !== "approved"
+            ) {
+
+                showMessage(
+                    "Admin profile is not approved.",
+                    "error"
+                );
+
                 return;
+
             }
+
         } else {
+
             if (currentProfile.role !== "student") {
-                showMessage("This account does not have student access.", "error");
+
+                showMessage(
+                    "This account does not have student access.",
+                    "error"
+                );
+
                 return;
+
             }
+
 
             if (currentProfile.status === "pending") {
+
                 location.replace("pending.html");
+
                 return;
+
             }
+
 
             if (currentProfile.status !== "approved") {
+
                 await signOut(auth);
+
                 location.replace("index.html");
+
                 return;
+
             }
+
         }
 
-        $("name").value = currentProfile.name || "";
-        $("email").value = user.email || "";
-        $("usn").value = currentProfile.usn || "";
-        $("branch").value = currentProfile.branch || "";
-        $("academicYear").value = currentProfile.academicYear || "";
 
-        setPhoto(currentProfile.photoURL || "", currentProfile.name || "A");
+        // POPULATE FORM
+
+        $("name").value = currentProfile.name || "";
+
+        $("email").value = user.email || "";
+
+        $("usn").value = currentProfile.usn || "";
+
+
+        // RESTORE EXISTING BRANCH
+
+        const savedBranch = currentProfile.branch || "";
+
+        if (
+            [...$("branch").options].some(
+                option => option.value === savedBranch
+            )
+        ) {
+
+            $("branch").value = savedBranch;
+
+        } else {
+
+            // Keep legacy/custom branch visible without accepting new free text.
+            $("branch").value = "Other";
+
+        }
+
+
+        // RESTORE EXISTING ACADEMIC YEAR
+
+        const savedYear = currentProfile.academicYear || "";
+
+        if (ALLOWED_YEARS.includes(savedYear)) {
+
+            $("academicYear").value = savedYear;
+
+        } else {
+
+            $("academicYear").value = "";
+
+            if (savedYear) {
+                showMessage(
+                    "Your saved academic year is not in the current options. Please select the correct year.",
+                    "info"
+                );
+            }
+
+        }
+
+
+        setPhoto(
+            currentProfile.photoURL || "",
+            currentProfile.name || "A"
+        );
+
     }
 
+
+    // AUTHENTICATION
+
     onAuthStateChanged(auth, async user => {
+
         if (!user) {
+
             location.replace("index.html");
+
             return;
+
         }
 
         currentUser = user;
 
         try {
+
             await loadProfile(user);
+
         } catch (error) {
+
             console.error(error);
-            showMessage("Unable to load your profile. Please refresh.", "error");
+
+            showMessage(
+                "Unable to load your profile. Please refresh.",
+                "error"
+            );
+
         }
+
     });
 
+
+    // PHOTO SELECTION
+
     $("photoInput").addEventListener("change", event => {
+
         const file = event.target.files[0];
+
         if (!file) return;
 
         selectedPhoto = file;
+
         removePhoto = false;
 
         const previewURL = URL.createObjectURL(file);
+
         $("photoPreview").src = previewURL;
+
         $("photoPreview").style.display = "block";
+
         $("photoPlaceholder").style.display = "none";
 
-        showMessage("Picture selected. It will be compressed when saved.");
+        showMessage(
+            "Picture selected. It will be compressed when saved."
+        );
+
     });
+
+
+    // REMOVE PHOTO
 
     $("removePhotoBtn").addEventListener("click", () => {
+
         selectedPhoto = null;
+
         removePhoto = true;
+
         $("photoInput").value = "";
+
         setPhoto("", $("name").value || "A");
-        showMessage("Profile picture will be removed when you save.");
+
+        showMessage(
+            "Profile picture will be removed when you save."
+        );
+
     });
+
+
+    // NAME INITIAL
 
     $("name").addEventListener("input", () => {
-        if (!selectedPhoto && !currentProfile?.photoURL && !removePhoto) {
+
+        if (
+            !selectedPhoto &&
+            !currentProfile?.photoURL &&
+            !removePhoto
+        ) {
+
             setPhoto("", $("name").value || "A");
+
         }
+
     });
+
+
+    // CANCEL
 
     $("cancelBtn").addEventListener("click", () => {
-        if (currentProfile) location.href = getDashboard();
-    });
 
-    $("saveBtn").addEventListener("click", async () => {
-        if (!currentUser || !currentProfile) return;
-
-        const name = $("name").value.trim();
-        const usn = $("usn").value.trim();
-        const branch = $("branch").value.trim();
-        const academicYear = $("academicYear").value.trim();
-
-        if (!name || !usn || !branch || !academicYear) {
-            showMessage("Please fill in all profile fields.", "error");
-            return;
+        if (currentProfile) {
+            location.href = getDashboard();
         }
 
+    });
+
+
+    // SAVE PROFILE
+
+    $("saveBtn").addEventListener("click", async () => {
+
+        if (!currentUser || !currentProfile) return;
+
+
+        const name = $("name").value.trim();
+
+        const usn = $("usn").value.trim();
+
+        const branch = $("branch").value;
+
+        const academicYear = $("academicYear").value;
+
+
+        if (!name || !usn || !branch || !academicYear) {
+
+            showMessage(
+                "Please fill in all profile fields.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        // VALIDATE DROPDOWN VALUES
+
+        if (!ALLOWED_BRANCHES.includes(branch)) {
+
+            showMessage(
+                "Please select a valid branch.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        if (!ALLOWED_YEARS.includes(academicYear)) {
+
+            showMessage(
+                "Please select a valid academic year.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
         const saveBtn = $("saveBtn");
+
         saveBtn.disabled = true;
+
         saveBtn.textContent = "Saving...";
 
+
         try {
+
             let photoURL = currentProfile.photoURL || "";
 
+
             if (selectedPhoto) {
-                showMessage("Compressing profile picture...", "info");
+
+                showMessage(
+                    "Compressing profile picture...",
+                    "info"
+                );
+
                 photoURL = await compressImage(selectedPhoto);
+
             } else if (removePhoto) {
+
                 photoURL = "";
+
             }
+
 
             if (photoURL.length > 150000) {
-                throw new Error("Compressed picture exceeds the allowed size.");
+
+                throw new Error(
+                    "Compressed picture exceeds the allowed size."
+                );
+
             }
 
-            await updateDoc(doc(db, "users", currentUser.uid), {
-                name,
-                usn,
-                branch,
-                academicYear,
-                photoURL
-            });
+
+            await updateDoc(
+                doc(db, "users", currentUser.uid),
+                {
+                    name,
+                    usn,
+                    branch,
+                    academicYear,
+                    photoURL
+                }
+            );
+
 
             currentProfile = {
                 ...currentProfile,
@@ -453,20 +930,40 @@
                 photoURL
             };
 
-            showMessage("Profile updated successfully! Redirecting...", "success");
+
+            showMessage(
+                "Profile updated successfully! Redirecting...",
+                "success"
+            );
+
 
             setTimeout(() => {
+
                 location.href = getDashboard();
+
             }, 1200);
 
+
         } catch (error) {
+
             console.error(error);
-            showMessage(error.message || "Could not save your profile.", "error");
+
+            showMessage(
+                error.message || "Could not save your profile.",
+                "error"
+            );
+
         } finally {
+
             saveBtn.disabled = false;
+
             saveBtn.textContent = "Save Changes";
+
         }
+
     });
+
 </script>
+
 </body>
 </html>

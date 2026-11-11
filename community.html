@@ -13,7 +13,6 @@
         :root {
             --bg: #080b12;
             --panel: #111722;
-            --panel-2: #151d2a;
             --border: #263143;
             --muted: #96a1b4;
             --text: #f4f6fb;
@@ -30,7 +29,7 @@
             font-family: Inter, Arial, sans-serif;
         }
 
-        button, input, textarea, select { font: inherit; }
+        button, input, textarea { font: inherit; }
         button, a { -webkit-tap-highlight-color: transparent; }
 
         header {
@@ -63,7 +62,10 @@
             gap: 16px;
         }
 
-        .identity { color: var(--muted); font-size: 13px; }
+        .identity {
+            color: var(--muted);
+            font-size: 13px;
+        }
 
         .header-link, .logout-btn {
             color: var(--text);
@@ -76,7 +78,9 @@
             font-size: 13px;
         }
 
-        .header-link:hover, .logout-btn:hover { border-color: var(--accent); }
+        .header-link:hover, .logout-btn:hover {
+            border-color: var(--accent);
+        }
 
         main {
             width: min(1180px, 90%);
@@ -108,7 +112,6 @@
         .tabs {
             display: flex;
             gap: 8px;
-            flex-wrap: wrap;
             border-bottom: 1px solid var(--border);
             margin-bottom: 24px;
         }
@@ -135,7 +138,10 @@
             align-items: start;
         }
 
-        .main-column, .side-column { display: grid; gap: 18px; }
+        .main-column, .side-column {
+            display: grid;
+            gap: 18px;
+        }
 
         .panel {
             background: var(--panel);
@@ -144,7 +150,10 @@
             padding: 22px;
         }
 
-        .panel h2 { font-size: 17px; margin-bottom: 16px; }
+        .panel h2 {
+            font-size: 17px;
+            margin-bottom: 16px;
+        }
 
         .panel-heading {
             display: flex;
@@ -162,7 +171,18 @@
             line-height: 1.65;
         }
 
-        .composer textarea, .field input, .field textarea, .field select {
+        .field {
+            display: grid;
+            gap: 7px;
+            margin-bottom: 12px;
+        }
+
+        .field label {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .field input, .field textarea {
             width: 100%;
             background: #0b111b;
             color: var(--text);
@@ -173,25 +193,9 @@
             resize: vertical;
         }
 
-        .composer textarea { min-height: 105px; }
-
-        .composer textarea:focus,
-        .field input:focus,
-        .field textarea:focus,
-        .field select:focus {
+        .field input:focus, .field textarea:focus {
             border-color: var(--accent);
         }
-
-        .composer-bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            margin-top: 12px;
-        }
-
-        .field { display: grid; gap: 7px; margin-bottom: 12px; }
-        .field label { color: var(--muted); font-size: 12px; }
 
         .primary-btn {
             background: var(--accent);
@@ -221,26 +225,39 @@
 
         .feed { display: grid; gap: 14px; }
 
-        .post, .item-card {
-            background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: 13px;
-            padding: 19px;
+        .announcement, .event {
+            padding: 18px 0;
+            border-top: 1px solid var(--border);
         }
 
-        .post-top {
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            margin-bottom: 13px;
+        .announcement:first-child, .event:first-child {
+            border-top: 0;
+            padding-top: 0;
         }
 
-        .author { font-size: 13px; font-weight: 700; }
+        .announcement h3, .event h3 {
+            font-size: 17px;
+            margin: 9px 0 7px;
+        }
+
+        .announcement p, .event p {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
 
         .post-date {
             color: var(--muted);
             font-size: 11px;
             margin-top: 5px;
+        }
+
+        .event-date {
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 650;
         }
 
         .tag {
@@ -256,98 +273,16 @@
             height: fit-content;
         }
 
-        .post-content {
-            white-space: pre-wrap;
-            overflow-wrap: anywhere;
-            color: #e2e7f0;
-            font-size: 14px;
-            line-height: 1.75;
-        }
-
-        .comments {
-            border-top: 1px solid var(--border);
-            margin-top: 15px;
-            padding-top: 13px;
-        }
-
-        .comments-toggle {
-            background: none;
-            border: 0;
+        .event-open {
+            display: inline-block;
+            margin-top: 13px;
             color: var(--accent);
-            cursor: pointer;
             font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
         }
 
-        .comment-list {
-            display: grid;
-            gap: 9px;
-            margin: 12px 0;
-        }
-
-        .comment {
-            background: #0c121d;
-            padding: 10px 12px;
-            border-radius: 8px;
-        }
-
-        .comment strong { font-size: 11px; }
-
-        .comment p {
-            color: #c5ccda;
-            font-size: 12px;
-            line-height: 1.55;
-            margin-top: 4px;
-            white-space: pre-wrap;
-            overflow-wrap: anywhere;
-        }
-
-        .comment-form { display: flex; gap: 8px; }
-
-        .comment-form input {
-            min-width: 0;
-            flex: 1;
-            background: #0b111b;
-            border: 1px solid var(--border);
-            color: var(--text);
-            border-radius: 8px;
-            padding: 10px;
-        }
-
-        .empty {
-            text-align: center;
-            padding: 28px 12px;
-            color: var(--muted);
-            font-size: 13px;
-            border: 1px dashed var(--border);
-            border-radius: 10px;
-        }
-
-        .announcement, .event {
-            padding: 15px 0;
-            border-top: 1px solid var(--border);
-        }
-
-        .announcement:first-of-type, .event:first-of-type {
-            border-top: 0;
-            padding-top: 0;
-        }
-
-        .announcement h3, .event h3 {
-            font-size: 14px;
-            margin: 8px 0 6px;
-        }
-
-        .announcement p, .event p {
-            color: var(--muted);
-            font-size: 12px;
-            line-height: 1.65;
-            white-space: pre-wrap;
-            overflow-wrap: anywhere;
-        }
-
-        .event-date { color: var(--accent); font-size: 11px; }
-
-        .admin-tools { display: none; }
+        .event-open:hover { text-decoration: underline; }
 
         .item-actions {
             display: flex;
@@ -370,28 +305,71 @@
             border: 1px solid #303f7a;
         }
 
-        .edit-btn:hover { background: #202e5c; }
-
-        .delete-btn, .delete-post-btn {
+        .delete-btn {
             background: #351c25;
             color: #ff9999;
             border: 1px solid #63313a;
-            border-radius: 7px;
-            padding: 7px 11px;
-            cursor: pointer;
-            font-size: 11px;
-            font-weight: 650;
         }
 
-        .delete-btn:hover, .delete-post-btn:hover { background: #54232f; }
+        .edit-btn:hover { background: #202e5c; }
+        .delete-btn:hover { background: #54232f; }
 
-        .delete-post-btn { padding: 6px 10px; }
-
-        .edit-btn:disabled, .delete-btn:disabled,
-        .delete-post-btn:disabled {
+        .edit-btn:disabled, .delete-btn:disabled {
             opacity: .5;
             cursor: not-allowed;
         }
+
+        /* REACTIONS */
+
+        .reaction-area {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 17px;
+            padding-top: 13px;
+            border-top: 1px solid var(--border);
+        }
+
+        .reaction-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 10px;
+            border-radius: 20px;
+            background: #0b111b;
+            color: var(--text);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            font-size: 13px;
+            transition: .15s ease;
+        }
+
+        .reaction-button:hover {
+            border-color: var(--accent);
+            transform: translateY(-1px);
+        }
+
+        .reaction-button.selected {
+            background: var(--accent-dark);
+            border-color: var(--accent);
+        }
+
+        .reaction-count {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 28px 12px;
+            color: var(--muted);
+            font-size: 13px;
+            border: 1px dashed var(--border);
+            border-radius: 10px;
+        }
+
+        .admin-tools { display: none; }
 
         .notice {
             display: none;
@@ -429,7 +407,9 @@
 
         @media (max-width: 850px) {
             .layout { grid-template-columns: 1fr; }
-            .side-column { grid-template-columns: repeat(2, minmax(0,1fr)); }
+            .side-column {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
         }
 
         @media (max-width: 600px) {
@@ -454,22 +434,20 @@
             main { width: 92%; margin-top: 28px; }
             .panel { padding: 17px; }
             .side-column { grid-template-columns: 1fr; }
-
-            .composer-bottom {
-                align-items: flex-start;
-                flex-direction: column;
-            }
         }
     </style>
 </head>
 
 <body>
+
 <header>
-    <a class="brand" href="student-dashboard.html">AD ASTRA <span>BIT</span></a>
+    <a class="brand" href="student-dashboard.html">
+        AD ASTRA <span>BIT</span>
+    </a>
 
     <div class="header-right">
         <span class="identity" id="userIdentity">Checking access...</span>
-        <a class="header-link" href="student-dashboard.html">Dashboard</a>
+        <a class="header-link" id="dashboardLink" href="student-dashboard.html">Dashboard</a>
         <button class="logout-btn" id="logoutBtn">Logout</button>
     </div>
 </header>
@@ -478,70 +456,24 @@
     <section class="intro">
         <div class="eyebrow">AD ASTRA BIT · Student Network</div>
         <h1>The Community.</h1>
-        <p>A shared space for BIT students to exchange ideas, ask questions, discover events and stay connected.</p>
+        <p>
+            Stay updated with official announcements, discover upcoming events,
+            and connect with the AD ASTRA BIT community.
+        </p>
     </section>
 
     <div id="pageNotice" class="notice"></div>
 
     <nav class="tabs" aria-label="Community sections">
-        <button class="tab active" data-tab="discussions">Discussions</button>
-        <button class="tab" data-tab="announcements">Announcements</button>
+        <button class="tab active" data-tab="announcements">Announcements</button>
         <button class="tab" data-tab="events">Events</button>
     </nav>
 
-    <!-- DISCUSSIONS -->
-    <section id="discussions" class="section-view active">
-        <div class="layout">
-            <div class="main-column">
-                <section class="panel composer">
-                    <h2>Start a discussion</h2>
-
-                    <form id="postForm">
-                        <textarea id="postText" maxlength="2000" required
-                            placeholder="Share an idea, ask a question, or start a conversation..."></textarea>
-
-                        <div class="composer-bottom">
-                            <span class="muted">Be respectful. Do not share private information.</span>
-                            <button class="primary-btn" type="submit" id="postSubmit">Publish post</button>
-                        </div>
-                    </form>
-                </section>
-
-                <div class="panel-heading">
-                    <h2>Recent discussions</h2>
-                    <span class="muted" id="postCount">0 posts</span>
-                </div>
-
-                <div id="postsFeed" class="feed">
-                    <div class="empty">Loading discussions...</div>
-                </div>
-            </div>
-
-            <aside class="side-column">
-                <section class="panel">
-                    <h2>Community guidelines</h2>
-                    <p class="muted">
-                        • Be respectful to every student.<br><br>
-                        • Keep discussions relevant and constructive.<br><br>
-                        • Do not post spam, abusive content or personal information.<br><br>
-                        • Share accurate information and help others learn.
-                    </p>
-                </section>
-
-                <section class="panel">
-                    <h2>About this space</h2>
-                    <p class="muted">
-                        This community is for approved AD ASTRA BIT students.
-                        Announcements and event information are managed by portal administrators.
-                    </p>
-                </section>
-            </aside>
-        </div>
-    </section>
-
     <!-- ANNOUNCEMENTS -->
-    <section id="announcements" class="section-view">
+
+    <section id="announcements" class="section-view active">
         <div class="layout">
+
             <div class="main-column">
                 <section class="panel">
                     <div class="panel-heading">
@@ -556,6 +488,7 @@
             </div>
 
             <aside class="side-column">
+
                 <section class="panel admin-tools" id="announcementAdmin">
                     <h2>Publish announcement</h2>
 
@@ -567,24 +500,34 @@
 
                         <div class="field">
                             <label for="announcementBody">Message</label>
-                            <textarea id="announcementBody" rows="5" maxlength="3000" required></textarea>
+                            <textarea id="announcementBody" rows="5"
+                                maxlength="3000" required></textarea>
                         </div>
 
-                        <button class="primary-btn" type="submit">Publish announcement</button>
+                        <button class="primary-btn" type="submit">
+                            Publish announcement
+                        </button>
                     </form>
                 </section>
 
                 <section class="panel">
                     <h2>Stay informed</h2>
-                    <p class="muted">Check this section regularly for important updates from AD ASTRA BIT.</p>
+                    <p class="muted">
+                        Check this section regularly for important updates
+                        from AD ASTRA BIT. You can react to every announcement
+                        using the five reaction options.
+                    </p>
                 </section>
+
             </aside>
         </div>
     </section>
 
     <!-- EVENTS -->
+
     <section id="events" class="section-view">
         <div class="layout">
+
             <div class="main-column">
                 <section class="panel">
                     <div class="panel-heading">
@@ -599,6 +542,7 @@
             </div>
 
             <aside class="side-column">
+
                 <section class="panel admin-tools" id="eventAdmin">
                     <h2>Add an event</h2>
 
@@ -620,19 +564,25 @@
 
                         <div class="field">
                             <label for="eventDescription">Description</label>
-                            <textarea id="eventDescription" rows="4" maxlength="2000" required></textarea>
+                            <textarea id="eventDescription" rows="4"
+                                maxlength="2000" required></textarea>
                         </div>
 
-                        <button class="primary-btn" type="submit">Publish event</button>
+                        <button class="primary-btn" type="submit">
+                            Publish event
+                        </button>
                     </form>
                 </section>
 
                 <section class="panel">
-                    <h2>Have an idea?</h2>
+                    <h2>Event details</h2>
                     <p class="muted">
-                        Share event suggestions in the Discussions section so other students can contribute.
+                        Click an event to open its dedicated page.
+                        Event details and the public event chatbot will
+                        be available there, separately from this community.
                     </p>
                 </section>
+
             </aside>
         </div>
     </section>
@@ -655,19 +605,18 @@
         getDoc,
         collection,
         addDoc,
+        setDoc,
         updateDoc,
         deleteDoc,
         onSnapshot,
         query,
         orderBy,
         limit,
-        serverTimestamp,
-        getDocs,
-        writeBatch
+        serverTimestamp
     } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
     const firebaseConfig = {
-        apiKey: "AIzaSyB9BQOlOO-tfuFzxjK0KEA7YcV3O11_WjM",
+        apiKey: "AIzaSyB9BQOlOO-tfuFzxJk0KEA7YcV3O11_WjM",
         authDomain: "ad-astra-bit.firebaseapp.com",
         projectId: "ad-astra-bit",
         storageBucket: "ad-astra-bit.firebasestorage.app",
@@ -675,7 +624,12 @@
         appId: "1:104444066688:web:d84478465cd3084f315f65"
     };
 
-    const ADMIN_EMAILS = ["rachnf99@gmail.com","vedujames99@gmail.com"];
+    const ADMIN_EMAILS = [
+        "rachnf99@gmail.com",
+        "vedujames99@gmail.com"
+    ];
+
+    const REACTIONS = ["👍", "❤️", "😂", "😮", "😢"];
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
@@ -685,9 +639,11 @@
     let currentProfile = null;
     let isAdmin = false;
 
-    let unsubscribePosts = null;
     let unsubscribeAnnouncements = null;
     let unsubscribeEvents = null;
+
+    // Stores reaction listeners so they can be cleaned up.
+    const reactionListeners = new Map();
 
     const $ = id => document.getElementById(id);
     const notice = $("pageNotice");
@@ -728,80 +684,171 @@
 
     function switchTab(tabName) {
         document.querySelectorAll(".tab").forEach(button => {
-            button.classList.toggle("active", button.dataset.tab === tabName);
+            button.classList.toggle(
+                "active",
+                button.dataset.tab === tabName
+            );
         });
 
         document.querySelectorAll(".section-view").forEach(section => {
-            section.classList.toggle("active", section.id === tabName);
+            section.classList.toggle(
+                "active",
+                section.id === tabName
+            );
         });
     }
 
     document.querySelectorAll(".tab").forEach(button => {
-        button.addEventListener("click", () => switchTab(button.dataset.tab));
+        button.addEventListener("click", () => {
+            switchTab(button.dataset.tab);
+        });
     });
 
     function stopListeners() {
-        if (unsubscribePosts) unsubscribePosts();
         if (unsubscribeAnnouncements) unsubscribeAnnouncements();
         if (unsubscribeEvents) unsubscribeEvents();
 
-        unsubscribePosts = null;
         unsubscribeAnnouncements = null;
         unsubscribeEvents = null;
+
+        reactionListeners.forEach(unsubscribe => unsubscribe());
+        reactionListeners.clear();
     }
 
-    // ADMIN: DELETE A DISCUSSION AND ITS COMMENTS
+    function clearReactionListeners(type) {
+        for (const [key, unsubscribe] of reactionListeners.entries()) {
+            if (key.startsWith(type + "-")) {
+                unsubscribe();
+                reactionListeners.delete(key);
+            }
+        }
+    }
 
-    async function deleteCommunityPost(postId, button) {
-        if (!isAdmin) return;
+    // --------------------------------------------------
+    // REACTIONS
+    // One reaction document per user per post.
+    // --------------------------------------------------
 
-        const confirmed = window.confirm(
-            "Delete this post and all its comments? This cannot be undone."
+    function attachReactions(type, itemId, container) {
+        const listenerKey = `${type}-${itemId}`;
+
+        if (reactionListeners.has(listenerKey)) {
+            reactionListeners.get(listenerKey)();
+            reactionListeners.delete(listenerKey);
+        }
+
+        const reactionsRef = collection(
+            db,
+            type,
+            itemId,
+            "reactions"
         );
 
-        if (!confirmed) return;
+        const unsubscribe = onSnapshot(
+            reactionsRef,
+            snapshot => {
+                const counts = {};
+                let myReaction = null;
+
+                REACTIONS.forEach(emoji => {
+                    counts[emoji] = 0;
+                });
+
+                snapshot.forEach(reactionDoc => {
+                    const reaction = reactionDoc.data();
+
+                    if (REACTIONS.includes(reaction.emoji)) {
+                        counts[reaction.emoji]++;
+                    }
+
+                    if (reactionDoc.id === currentUser.uid) {
+                        myReaction = reaction.emoji;
+                    }
+                });
+
+                container.replaceChildren();
+
+                REACTIONS.forEach(emoji => {
+                    const button = document.createElement("button");
+                    button.type = "button";
+                    button.className = "reaction-button";
+
+                    if (myReaction === emoji) {
+                        button.classList.add("selected");
+                    }
+
+                    button.append(
+                        safeText("span", "", emoji),
+                        safeText("span", "reaction-count", counts[emoji])
+                    );
+
+                    button.title = myReaction === emoji
+                        ? "Remove your reaction"
+                        : `React with ${emoji}`;
+
+                    button.addEventListener("click", async () => {
+                        await setReaction(type, itemId, emoji, button);
+                    });
+
+                    container.append(button);
+                });
+            },
+            error => {
+                console.error("Reaction loading error:", error);
+                container.textContent = "Reactions unavailable.";
+            }
+        );
+
+        reactionListeners.set(listenerKey, unsubscribe);
+    }
+
+    async function setReaction(type, itemId, emoji, button) {
+        if (!currentUser) return;
 
         button.disabled = true;
 
         try {
-            const commentsRef = collection(
+            const reactionRef = doc(
                 db,
-                "communityPosts",
-                postId,
-                "comments"
+                type,
+                itemId,
+                "reactions",
+                currentUser.uid
             );
 
-            const commentsSnapshot = await getDocs(commentsRef);
-            const commentDocs = commentsSnapshot.docs;
+            const existing = await getDoc(reactionRef);
 
-            // Firestore batches are limited to 500 writes.
-            for (let i = 0; i < commentDocs.length; i += 450) {
-                const batch = writeBatch(db);
-
-                commentDocs.slice(i, i + 450).forEach(commentDoc => {
-                    batch.delete(commentDoc.ref);
+            if (existing.exists() && existing.data().emoji === emoji) {
+                await deleteDoc(reactionRef);
+            } else {
+                await setDoc(reactionRef, {
+                    uid: currentUser.uid,
+                    emoji,
+                    updatedAt: serverTimestamp()
                 });
-
-                await batch.commit();
             }
-
-            await deleteDoc(doc(db, "communityPosts", postId));
-
-            showNotice("Discussion and its comments deleted successfully.", "info");
-
         } catch (error) {
-            console.error("Post deletion error:", error);
-            showNotice("Could not delete the discussion. Check Firestore permissions.", "error");
+            console.error("Reaction update error:", error);
+            showNotice(
+                "Could not save your reaction. Check Firestore Rules.",
+                "error"
+            );
+        } finally {
             button.disabled = false;
         }
     }
 
-    // ADMIN: EDIT OR DELETE ANNOUNCEMENTS
+    // --------------------------------------------------
+    // ANNOUNCEMENT ADMIN ACTIONS
+    // --------------------------------------------------
 
     async function editAnnouncement(announcementId, item, button) {
         if (!isAdmin) return;
 
-        const newTitle = window.prompt("Edit announcement title:", item.title || "");
+        const newTitle = window.prompt(
+            "Edit announcement title:",
+            item.title || ""
+        );
 
         if (newTitle === null) return;
 
@@ -812,7 +859,10 @@
             return;
         }
 
-        const newBody = window.prompt("Edit announcement message:", item.body || "");
+        const newBody = window.prompt(
+            "Edit announcement message:",
+            item.body || ""
+        );
 
         if (newBody === null) return;
 
@@ -826,16 +876,15 @@
         button.disabled = true;
 
         try {
-            await updateDoc(doc(db, "communityAnnouncements", announcementId), {
-                title,
-                body
-            });
+            await updateDoc(
+                doc(db, "communityAnnouncements", announcementId),
+                { title, body }
+            );
 
             showNotice("Announcement updated successfully.", "info");
-
         } catch (error) {
             console.error("Announcement update error:", error);
-            showNotice("Could not update announcement. Check Firestore rules.", "error");
+            showNotice("Could not update announcement. Check Firestore Rules.", "error");
         } finally {
             button.disabled = false;
         }
@@ -851,20 +900,24 @@
         try {
             await deleteDoc(doc(db, "communityAnnouncements", announcementId));
             showNotice("Announcement deleted successfully.", "info");
-
         } catch (error) {
             console.error("Announcement deletion error:", error);
-            showNotice("Could not delete announcement. Check Firestore rules.", "error");
+            showNotice("Could not delete announcement. Check Firestore Rules.", "error");
             button.disabled = false;
         }
     }
 
-    // ADMIN: EDIT OR DELETE EVENTS
+    // --------------------------------------------------
+    // EVENT ADMIN ACTIONS
+    // --------------------------------------------------
 
     async function editEvent(eventId, item, button) {
         if (!isAdmin) return;
 
-        const newTitle = window.prompt("Edit event name:", item.title || "");
+        const newTitle = window.prompt(
+            "Edit event name:",
+            item.title || ""
+        );
 
         if (newTitle === null) return;
 
@@ -889,14 +942,17 @@
             return;
         }
 
-        const newLocation = window.prompt("Edit venue / platform:", item.location || "");
+        const newLocation = window.prompt(
+            "Edit venue / platform:",
+            item.location || ""
+        );
 
         if (newLocation === null) return;
 
         const location = newLocation.trim();
 
-        if (location.length > 150) {
-            showNotice("Venue must not exceed 150 characters.", "error");
+        if (!location || location.length > 150) {
+            showNotice("Enter a valid venue (maximum 150 characters).", "error");
             return;
         }
 
@@ -925,10 +981,9 @@
             });
 
             showNotice("Event updated successfully.", "info");
-
         } catch (error) {
             console.error("Event update error:", error);
-            showNotice("Could not update event. Check Firestore rules.", "error");
+            showNotice("Could not update event. Check Firestore Rules.", "error");
         } finally {
             button.disabled = false;
         }
@@ -944,184 +999,21 @@
         try {
             await deleteDoc(doc(db, "communityEvents", eventId));
             showNotice("Event deleted successfully.", "info");
-
         } catch (error) {
             console.error("Event deletion error:", error);
-            showNotice("Could not delete event. Check Firestore rules.", "error");
+            showNotice("Could not delete event. Check Firestore Rules.", "error");
             button.disabled = false;
         }
     }
 
-    // RENDER DISCUSSIONS
-
-    function renderPosts(snapshot) {
-        const feed = $("postsFeed");
-
-        $("postCount").textContent =
-            `${snapshot.size} ${snapshot.size === 1 ? "post" : "posts"}`;
-
-        if (snapshot.empty) {
-            showEmpty(feed, "No discussions yet. Start the first conversation!");
-            return;
-        }
-
-        feed.replaceChildren();
-
-        snapshot.forEach(postDoc => {
-            const post = postDoc.data();
-
-            const card = document.createElement("article");
-            card.className = "post";
-
-            const top = document.createElement("div");
-            top.className = "post-top";
-
-            const authorWrap = document.createElement("div");
-
-            authorWrap.append(
-                safeText("div", "author", post.authorName || "Student"),
-                safeText("div", "post-date", formatDate(post.createdAt))
-            );
-
-            const postControls = document.createElement("div");
-            postControls.style.display = "flex";
-            postControls.style.alignItems = "center";
-            postControls.style.gap = "8px";
-
-            postControls.appendChild(safeText("span", "tag", "Discussion"));
-
-            if (isAdmin) {
-                const deleteButton = safeText("button", "delete-post-btn", "Delete");
-                deleteButton.type = "button";
-
-                deleteButton.addEventListener("click", async () => {
-                    await deleteCommunityPost(postDoc.id, deleteButton);
-                });
-
-                postControls.appendChild(deleteButton);
-            }
-
-            top.append(authorWrap, postControls);
-
-            card.append(
-                top,
-                safeText("p", "post-content", post.text || "")
-            );
-
-            const comments = document.createElement("div");
-            comments.className = "comments";
-
-            const toggle = safeText(
-                "button",
-                "comments-toggle",
-                "View / hide comments"
-            );
-
-            toggle.type = "button";
-
-            const commentArea = document.createElement("div");
-            commentArea.hidden = true;
-
-            const commentList = document.createElement("div");
-            commentList.className = "comment-list";
-
-            const commentForm = document.createElement("form");
-            commentForm.className = "comment-form";
-
-            const commentInput = document.createElement("input");
-            commentInput.type = "text";
-            commentInput.maxLength = 500;
-            commentInput.required = true;
-            commentInput.placeholder = "Write a comment...";
-
-            const commentButton = safeText("button", "primary-btn", "Send");
-            commentButton.type = "submit";
-
-            commentForm.append(commentInput, commentButton);
-            commentArea.append(commentList, commentForm);
-            comments.append(toggle, commentArea);
-            card.append(comments);
-            feed.append(card);
-
-            toggle.addEventListener("click", () => {
-                commentArea.hidden = !commentArea.hidden;
-            });
-
-            const commentsQuery = query(
-                collection(db, "communityPosts", postDoc.id, "comments"),
-                orderBy("createdAt", "asc"),
-                limit(50)
-            );
-
-            onSnapshot(
-                commentsQuery,
-                commentSnapshot => {
-                    commentList.replaceChildren();
-
-                    if (commentSnapshot.empty) {
-                        commentList.append(
-                            safeText("p", "muted", "No comments yet.")
-                        );
-                    }
-
-                    commentSnapshot.forEach(commentDoc => {
-                        const comment = commentDoc.data();
-                        const item = document.createElement("div");
-
-                        item.className = "comment";
-
-                        item.append(
-                            safeText("strong", "", comment.authorName || "Student"),
-                            safeText("p", "", comment.text || "")
-                        );
-
-                        commentList.append(item);
-                    });
-                },
-                error => {
-                    console.error("Comment loading error:", error);
-
-                    commentList.replaceChildren(
-                        safeText("p", "muted", "Comments are unavailable.")
-                    );
-                }
-            );
-
-            commentForm.addEventListener("submit", async event => {
-                event.preventDefault();
-
-                const text = commentInput.value.trim();
-                if (!text) return;
-
-                commentButton.disabled = true;
-
-                try {
-                    await addDoc(
-                        collection(db, "communityPosts", postDoc.id, "comments"),
-                        {
-                            text,
-                            authorUid: currentUser.uid,
-                            authorName: currentProfile.name || currentUser.displayName || "Student",
-                            createdAt: serverTimestamp()
-                        }
-                    );
-
-                    commentInput.value = "";
-
-                } catch (error) {
-                    console.error("Comment publish error:", error);
-                    showNotice("Could not publish comment. Check Firestore permissions.", "error");
-                } finally {
-                    commentButton.disabled = false;
-                }
-            });
-        });
-    }
-
+    // --------------------------------------------------
     // RENDER ANNOUNCEMENTS
+    // --------------------------------------------------
 
     function renderAnnouncements(snapshot) {
         const list = $("announcementsList");
+
+        clearReactionListeners("communityAnnouncements");
 
         if (snapshot.empty) {
             showEmpty(list, "No announcements have been published yet.");
@@ -1141,6 +1033,10 @@
                 safeText("h3", "", item.title || "Announcement"),
                 safeText("p", "", item.body || "")
             );
+
+            const reactionArea = document.createElement("div");
+            reactionArea.className = "reaction-area";
+            article.append(reactionArea);
 
             if (isAdmin) {
                 const actions = document.createElement("div");
@@ -1165,13 +1061,23 @@
             }
 
             list.append(article);
+
+            attachReactions(
+                "communityAnnouncements",
+                itemDoc.id,
+                reactionArea
+            );
         });
     }
 
+    // --------------------------------------------------
     // RENDER EVENTS
+    // --------------------------------------------------
 
     function renderEvents(snapshot) {
         const list = $("eventsList");
+
+        clearReactionListeners("communityEvents");
 
         if (snapshot.empty) {
             showEmpty(list, "No events have been added yet. Check back soon.");
@@ -1188,11 +1094,13 @@
 
             const date = item.eventDate ? new Date(item.eventDate) : null;
 
+            const validDate = date && !Number.isNaN(date.getTime());
+
             article.append(
                 safeText(
                     "div",
                     "event-date",
-                    date && !Number.isNaN(date.getTime())
+                    validDate
                         ? date.toLocaleString("en-IN", {
                             dateStyle: "full",
                             timeStyle: "short"
@@ -1207,6 +1115,20 @@
                 ),
                 safeText("p", "", item.description || "")
             );
+
+            const openLink = safeText(
+                "a",
+                "event-open",
+                "View event details and chatbot →"
+            );
+
+            openLink.href = `event-details.html?id=${encodeURIComponent(itemDoc.id)}`;
+
+            article.append(openLink);
+
+            const reactionArea = document.createElement("div");
+            reactionArea.className = "reaction-area";
+            article.append(reactionArea);
 
             if (isAdmin) {
                 const actions = document.createElement("div");
@@ -1231,29 +1153,21 @@
             }
 
             list.append(article);
+
+            attachReactions(
+                "communityEvents",
+                itemDoc.id,
+                reactionArea
+            );
         });
     }
 
+    // --------------------------------------------------
     // FIRESTORE REALTIME LISTENERS
+    // --------------------------------------------------
 
     function startListeners() {
         stopListeners();
-
-        unsubscribePosts = onSnapshot(
-            query(
-                collection(db, "communityPosts"),
-                orderBy("createdAt", "desc"),
-                limit(50)
-            ),
-            renderPosts,
-            error => {
-                console.error("Posts loading error:", error);
-                showEmpty(
-                    $("postsFeed"),
-                    "Discussions could not load. Check Firestore rules and indexes."
-                );
-            }
-        );
 
         unsubscribeAnnouncements = onSnapshot(
             query(
@@ -1288,38 +1202,9 @@
         );
     }
 
-    // CREATE DISCUSSION
-
-    $("postForm").addEventListener("submit", async event => {
-        event.preventDefault();
-
-        const text = $("postText").value.trim();
-
-        if (!text || !currentUser) return;
-
-        const button = $("postSubmit");
-        button.disabled = true;
-
-        try {
-            await addDoc(collection(db, "communityPosts"), {
-                text,
-                authorUid: currentUser.uid,
-                authorName: currentProfile.name || currentUser.displayName || "Student",
-                createdAt: serverTimestamp()
-            });
-
-            $("postText").value = "";
-            clearNotice();
-
-        } catch (error) {
-            console.error("Post publish error:", error);
-            showNotice("Could not publish your post. Check Firestore permissions.", "error");
-        } finally {
-            button.disabled = false;
-        }
-    });
-
+    // --------------------------------------------------
     // CREATE ANNOUNCEMENT
+    // --------------------------------------------------
 
     $("announcementForm").addEventListener("submit", async event => {
         event.preventDefault();
@@ -1339,16 +1224,17 @@
 
             event.target.reset();
             showNotice("Announcement published.", "info");
-
         } catch (error) {
             console.error("Announcement publish error:", error);
-            showNotice("Could not publish announcement. Check Firestore rules.", "error");
+            showNotice("Could not publish announcement. Check Firestore Rules.", "error");
         } finally {
             button.disabled = false;
         }
     });
 
+    // --------------------------------------------------
     // CREATE EVENT
+    // --------------------------------------------------
 
     $("eventForm").addEventListener("submit", async event => {
         event.preventDefault();
@@ -1370,115 +1256,175 @@
 
             event.target.reset();
             showNotice("Event published.", "info");
-
         } catch (error) {
             console.error("Event publish error:", error);
-            showNotice("Could not publish event. Check Firestore rules.", "error");
+            showNotice("Could not publish event. Check Firestore Rules.", "error");
         } finally {
             button.disabled = false;
         }
     });
 
+    // --------------------------------------------------
     // LOGOUT
+    // --------------------------------------------------
 
     $("logoutBtn").addEventListener("click", async () => {
         try {
             stopListeners();
             await signOut(auth);
             window.location.replace("index.html");
-
         } catch (error) {
             console.error("Logout error:", error);
             showNotice("Logout failed. Please try again.", "error");
         }
     });
 
-    // AUTHENTICATION AND ACCESS CONTROL
+    
 
-    onAuthStateChanged(auth, async user => {
-        if (!user) {
-            window.location.replace("index.html");
-            return;
-        }
+// --------------------------------------------------
+// AUTHENTICATION AND ACCESS CONTROL
+// --------------------------------------------------
 
-        if (!user.emailVerified) {
-            await signOut(auth);
-            window.location.replace("index.html");
-            return;
-        }
+onAuthStateChanged(auth, async user => {
 
-        currentUser = user;
+    console.log("Community: Auth state changed.", {
+        callbackUser: user ? user.email : null,
+        currentUser: auth.currentUser
+            ? auth.currentUser.email
+            : null
+    });
 
-        isAdmin = ADMIN_EMAILS.includes(
-            (user.email || "").toLowerCase()
+    if (!user) {
+        console.error("Community: No authenticated Firebase user.");
+
+        showNotice(
+            "You are not signed in. Please sign in through the homepage.",
+            "error"
         );
 
-        $("userIdentity").textContent = user.email || "Signed in";
+        setTimeout(() => {
+            window.location.replace("index.html?intent=community");
+        }, 2500);
 
-        try {
-            if (isAdmin) {
-                currentProfile = {
-                    name: user.displayName || "Administrator"
-                };
+        return;
+    }
 
-                $("announcementAdmin").style.display = "block";
-                $("eventAdmin").style.display = "block";
+    try {
+        await user.reload();
 
-            } else {
-                const profileSnapshot = await getDoc(
-                    doc(db, "users", user.uid)
-                );
+        const refreshedUser = auth.currentUser;
 
-                if (!profileSnapshot.exists()) {
-                    window.location.replace("signup.html");
-                    return;
-                }
+        if (!refreshedUser) {
+            throw new Error("Firebase authentication session expired.");
+        }
 
-                currentProfile = profileSnapshot.data();
-
-                if (currentProfile.role !== "student") {
-                    await signOut(auth);
-                    window.location.replace("index.html");
-                    return;
-                }
-
-                if (currentProfile.status === "pending") {
-                    window.location.replace("pending.html");
-                    return;
-                }
-
-                if (currentProfile.status === "rejected") {
-                    showNotice(
-                        "Your student application was rejected. Please contact the administration.",
-                        "error"
-                    );
-
-                    await signOut(auth);
-                    return;
-                }
-
-                if (currentProfile.status !== "approved") {
-                    showNotice(
-                        "Your account does not have community access.",
-                        "error"
-                    );
-
-                    await signOut(auth);
-                    return;
-                }
-            }
-
-            startListeners();
-
-        } catch (error) {
-            console.error("Community access check failed:", error);
-
+        if (!refreshedUser.emailVerified) {
             showNotice(
-                "We could not verify your access. Please refresh or contact an administrator.",
+                "Your email is not verified. Please verify it and sign in again.",
                 "error"
             );
+
+            return;
         }
-    });
+
+        currentUser = refreshedUser;
+
+        $("userIdentity").textContent =
+            refreshedUser.email || "Signed in";
+
+        console.log("Community: Authenticated user:", {
+            uid: refreshedUser.uid,
+            email: refreshedUser.email,
+            emailVerified: refreshedUser.emailVerified
+        });
+
+        // Load Firestore profile.
+        const profileRef = doc(db, "users", refreshedUser.uid);
+        const profileSnapshot = await getDoc(profileRef);
+
+        if (!profileSnapshot.exists()) {
+            showNotice(
+                "Your account exists, but its Firestore profile was not found. Contact an administrator.",
+                "error"
+            );
+
+            return;
+        }
+
+        currentProfile = profileSnapshot.data();
+
+        const email = (refreshedUser.email || "").toLowerCase();
+
+        // Check admin access.
+        isAdmin =
+            ADMIN_EMAILS.includes(email) &&
+            currentProfile.role === "admin" &&
+            currentProfile.status === "approved";
+
+        if (isAdmin) {
+
+            $("dashboardLink").href = "admin-dashboard.html";
+
+            $("announcementAdmin").style.display = "block";
+            $("eventAdmin").style.display = "block";
+
+            console.log("Community: Admin access granted.");
+
+        } else {
+
+            if (currentProfile.role !== "student") {
+                showNotice(
+                    `Your account role is "${currentProfile.role}". It is not recognised as an approved student or administrator.`,
+                    "error"
+                );
+
+                return;
+            }
+
+            if (currentProfile.status === "pending") {
+                window.location.replace("pending.html");
+                return;
+            }
+
+            if (currentProfile.status === "rejected") {
+                showNotice(
+                    "Your student application was rejected. Please contact the administration.",
+                    "error"
+                );
+
+                return;
+            }
+
+            if (currentProfile.status !== "approved") {
+                showNotice(
+                    `Your student account status is "${currentProfile.status}". Community access is unavailable.`,
+                    "error"
+                );
+
+                return;
+            }
+
+            $("dashboardLink").href = "student-dashboard.html";
+
+            console.log("Community: Student access granted.");
+        }
+
+        startListeners();
+
+        console.log("Community: Successfully initialized.");
+
+    } catch (error) {
+
+        console.error("Community authentication error:", error);
+
+        showNotice(
+            `Could not verify community access: ${error.message}`,
+            "error"
+        );
+    }
+});
+
 </script>
+
 </body>
 </html>

@@ -239,11 +239,13 @@
         } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
 
         import {
-            getAuth,
-            GoogleAuthProvider,
-            signInWithPopup,
-            onAuthStateChanged
-        } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    onAuthStateChanged,
+    setPersistence,
+    browserLocalPersistence
+} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
         import {
             getFirestore,
@@ -360,8 +362,7 @@
 
                         if (intent === "community") {
 
-                            showMessage("Community is currently under development.");
-                            routingInProgress = false;
+                            window.location.replace("community.html");
                             return;
 
                         }
@@ -421,11 +422,7 @@
 
                     if (intent === "community") {
 
-                        showMessage(
-                            "Your access is verified. Community is under development."
-                        );
-
-                        routingInProgress = false;
+                        window.location.replace("community.html");
                         return;
 
                     }
@@ -485,6 +482,20 @@
             currentUser = user;
             authReady = true;
 
+            if (user) {
+                return;
+            }
+
+            const intentParam = new URLSearchParams(window.location.search).get("intent");
+            if (intentParam === "community") {
+                showMessage("Please sign in to continue to the community.");
+                setTimeout(() => {
+                    if (!routingInProgress) {
+                        googleSignIn("community");
+                    }
+                }, 300);
+            }
+
         });
 
 
@@ -503,6 +514,8 @@
                 let user = currentUser;
 
                 if (!user) {
+
+                    await setPersistence(auth, browserLocalPersistence);
 
                     const result = await signInWithPopup(auth, provider);
 
