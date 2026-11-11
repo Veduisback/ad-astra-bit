@@ -62,19 +62,33 @@
             cursor: not-allowed;
         }
 
-        .community-btn {
+        .community-btn,
+        .email-btn {
             display: inline-block;
-            background: white;
-            color: #111;
             text-decoration: none;
             border-radius: 6px;
             padding: 11px 17px;
             font-size: 13px;
             font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .community-btn {
+            background: white;
+            color: #111;
         }
 
         .community-btn:hover {
             background: #c8c8ff;
+        }
+
+        .email-btn {
+            background: #a5a5ff;
+            color: #111;
+        }
+
+        .email-btn:hover {
+            background: #c1c1ff;
         }
 
         .logout-btn {
@@ -337,6 +351,10 @@
                 Community Management
             </a>
 
+            <a href="send-email.html" class="email-btn" id="sendEmailBtn">
+                Send Email
+            </a>
+
             <div class="settings">
                 <button class="settings-btn" id="settingsBtn" type="button">
                     Settings &#9662;
@@ -465,13 +483,14 @@
         // FIREBASE CONFIGURATION
 
         const firebaseConfig = {
-            apiKey: "AIzaSyB9BQOlOO-tfuFzxjK0KEA7YcV3O11_WjM",
-            authDomain: "ad-astra-bit.firebaseapp.com",
-            projectId: "ad-astra-bit",
-            storageBucket: "ad-astra-bit.firebasestorage.app",
-            messagingSenderId: "104444066688",
-            appId: "1:104444066688:web:d84478465cd3084f315f65"
-        };
+  apiKey: "AIzaSyB9BQOlOO-tfuFzxjK0KEA7YcV3O11_WjM",
+  authDomain: "ad-astra-bit.firebaseapp.com",
+  projectId: "ad-astra-bit",
+  storageBucket: "ad-astra-bit.firebasestorage.app",
+  messagingSenderId: "104444066688",
+  appId: "1:104444066688:web:d84478465cd3084f315f65",
+  measurementId: "G-JJLDJF02K0"
+};
 
 
         // INITIALIZE FIREBASE
