@@ -1,617 +1,524 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Registration | AD ASTRA BIT</title>
-
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: Arial, sans-serif;
-            background: #0b0b14;
-            color: white;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 30px 15px;
+            font-family: Arial, sans-serif; background: #0b0b14; color: white;
+            min-height: 100vh; display: flex; justify-content: center;
+            align-items: center; padding: 30px 15px;
         }
-
         .container {
-            width: 100%;
-            max-width: 500px;
-            background: #151522;
-            border: 1px solid #29293b;
-            border-radius: 12px;
-            padding: 35px;
+            width: 100%; max-width: 500px; background: #151522;
+            border: 1px solid #29293b; border-radius: 12px; padding: 35px;
         }
-
-        h1 {
-            font-size: 27px;
-            margin-bottom: 10px;
-        }
-
+        h1 { font-size: 27px; margin-bottom: 10px; }
         .subtitle {
-            color: #9999ad;
-            font-size: 14px;
-            margin-bottom: 30px;
-            line-height: 1.6;
+            color: #9999ad; font-size: 14px; margin-bottom: 30px; line-height: 1.6;
         }
-
-        .form-group {
-            margin-bottom: 20px;
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 9px; font-size: 14px; }
+        input, select {
+            width: 100%; padding: 13px; background: #0b0b14;
+            border: 1px solid #343448; border-radius: 6px; color: white;
+            font-size: 14px; outline: none;
         }
-
-        label {
-            display: block;
-            margin-bottom: 9px;
-            font-size: 14px;
-        }
-
-        input,
-        select {
-            width: 100%;
-            padding: 13px;
-            background: #0b0b14;
-            border: 1px solid #343448;
-            border-radius: 6px;
-            color: white;
-            font-size: 14px;
-            outline: none;
-        }
-
-        input:focus,
-        select:focus {
-            border-color: #a5a5ff;
-        }
-
-        input:disabled {
-            opacity: 0.65;
-        }
-
-        select option {
-            background: #151522;
-        }
-
+        input:focus, select:focus { border-color: #a5a5ff; }
+        input:disabled { opacity: .65; }
+        select option { background: #151522; }
         button {
-            width: 100%;
-            padding: 14px;
-            background: white;
-            color: #111;
-            border: none;
-            border-radius: 6px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
+            width: 100%; padding: 14px; background: white; color: #111;
+            border: none; border-radius: 6px; font-size: 15px;
+            font-weight: bold; cursor: pointer;
         }
-
-        button:hover {
-            opacity: 0.85;
-        }
-
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
+        button:hover { opacity: .85; }
+        button:disabled { opacity: .5; cursor: not-allowed; }
         .back {
-            display: block;
-            text-align: center;
-            margin-top: 22px;
-            color: #aaaabb;
-            text-decoration: none;
-            font-size: 13px;
+            display: block; text-align: center; margin-top: 22px;
+            color: #aaaabb; text-decoration: none; font-size: 13px;
         }
-
-        .back:hover {
-            color: white;
-        }
-
+        .back:hover { color: white; }
         #message {
-            margin-top: 18px;
-            font-size: 14px;
-            line-height: 1.5;
-            text-align: center;
-            color: #ff9999;
+            margin-top: 18px; font-size: 14px; line-height: 1.5;
+            text-align: center; color: #ff9999;
         }
-
-        .note {
-            font-size: 12px;
-            color: #888899;
-            margin-top: 8px;
-        }
-
+        .note { font-size: 12px; color: #888899; margin-top: 8px; line-height: 1.5; }
         .admin-note {
-            display: none;
-            padding: 12px;
-            margin-bottom: 20px;
-            border: 1px solid #55558a;
-            border-radius: 7px;
-            background: #202039;
-            color: #c9c9ff;
-            font-size: 13px;
-            line-height: 1.5;
+            display: none; padding: 12px; margin-bottom: 20px;
+            border: 1px solid #55558a; border-radius: 7px;
+            background: #202039; color: #c9c9ff; font-size: 13px; line-height: 1.5;
         }
-
-        @media (max-width: 500px) {
-            .container {
-                padding: 25px 20px;
-            }
-        }
+        @media (max-width: 500px) { .container { padding: 25px 20px; } }
     </style>
 </head>
-
 <body>
+<div class="container">
+    <h1 id="pageTitle">Registration</h1>
+    <p class="subtitle" id="pageSubtitle">
+        Welcome to AD ASTRA BIT. Complete your registration to become part of our community.
+    </p>
 
-    <div class="container">
-
-        <h1 id="pageTitle">Student Registration</h1>
-
-        <p class="subtitle" id="pageSubtitle">
-            Welcome to AD ASTRA BIT.
-            Complete your registration to become part
-            of our student community.
-        </p>
-
-        <div class="admin-note" id="adminNote">
-            You are registering as an authorised AD ASTRA BIT administrator.
-            Your admin account will be activated automatically.
-        </div>
-
-        <form id="signupForm">
-
-            <div class="form-group">
-                <label for="name">Full Name</label>
-                <input
-                    type="text"
-                    id="name"
-                    placeholder="Your full name"
-                    required
-                    maxlength="100">
-            </div>
-
-            <div class="form-group">
-                <label for="email">Google Email</label>
-                <input
-                    type="email"
-                    id="email"
-                    disabled>
-
-                <p class="note">
-                    Automatically retrieved from your Google account.
-                </p>
-            </div>
-
-            <div class="form-group">
-                <label for="usn">University Seat Number (USN)</label>
-                <input
-                    type="text"
-                    id="usn"
-                    placeholder="Enter your USN"
-                    required
-                    maxlength="30">
-            </div>
-
-            <div class="form-group">
-                <label for="branch">Branch</label>
-
-                <select id="branch" required>
-                    <option value="">Select your branch</option>
-                    <option value="CSE">Computer Science and Engineering</option>
-                    <option value="ISE">Information Science and Engineering</option>
-                    <option value="AIML">AI and Machine Learning</option>
-                    <option value="ECE">Electronics and Communication</option>
-                    <option value="EEE">Electrical and Electronics</option>
-                    <option value="ME">Mechanical Engineering</option>
-                    <option value="Civil">Civil Engineering</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="year">Academic Year</label>
-
-                <select id="year" required>
-                    <option value="">Select academic year</option>
-                    <option value="1">1st Year</option>
-                    <option value="2">2nd Year</option>
-                    <option value="3">3rd Year</option>
-                    <option value="4">4th Year</option>
-                </select>
-            </div>
-
-            <button type="submit" id="submitBtn" disabled>
-                Submit Registration
-            </button>
-
-            <p id="message">Checking Google sign-in...</p>
-
-        </form>
-
-        <a href="index.html" class="back">
-            ← Back to Homepage
-        </a>
-
+    <div class="admin-note" id="adminNote">
+        You are registering as an authorised AD ASTRA BIT administrator.
+        Your admin account will be activated automatically.
     </div>
 
-    <script type="module">
+    <form id="signupForm">
+        <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" placeholder="Your full name" required maxlength="100">
+            <p class="note">Your full name will appear in community chats and event discussions.</p>
+        </div>
 
-        import { initializeApp }
-            from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input
+                type="text"
+                id="username"
+                placeholder="e.g. vedang-jaiswal"
+                required
+                minlength="3"
+                maxlength="24"
+                pattern="[a-z0-9][a-z0-9-]{1,22}[a-z0-9]"
+                autocapitalize="none"
+                autocomplete="username"
+                spellcheck="false"
+            >
+            <p class="note">
+                Your unique public profile URL will use this username.
+                Use 3–24 lowercase letters, numbers or hyphens.
+                Usernames cannot be changed after registration.
+            </p>
+        </div>
 
-        import {
-            getAuth,
-            onAuthStateChanged
-        } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+        <div class="form-group">
+            <label for="email">Google Email</label>
+            <input type="email" id="email" disabled>
+            <p class="note">Automatically retrieved from your Google account.</p>
+        </div>
 
-        import {
-            getFirestore,
-            doc,
-            getDoc,
-            setDoc,
-            serverTimestamp
-        } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+        <div class="form-group">
+            <label for="usn">University Seat Number (USN)</label>
+            <input type="text" id="usn" placeholder="Enter your USN" required maxlength="30">
+        </div>
 
+        <div class="form-group">
+            <label for="branch">Branch</label>
+            <select id="branch" required>
+                <option value="">Select your branch</option>
+                <option value="CSE">Computer Science and Engineering</option>
+                <option value="ISE">Information Science and Engineering</option>
+                <option value="AIML">AI and Machine Learning</option>
+                <option value="ECE">Electronics and Communication</option>
+                <option value="EEE">Electrical and Electronics</option>
+                <option value="ME">Mechanical Engineering</option>
+                <option value="Civil">Civil Engineering</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
 
-        // FIREBASE CONFIGURATION
+        <div class="form-group">
+            <label for="year">Academic Year</label>
+            <select id="year" required>
+                <option value="">Select academic year</option>
+                <option value="1">1st Year</option>
+                <option value="2">2nd Year</option>
+                <option value="3">3rd Year</option>
+                <option value="4">4th Year</option>
+            </select>
+        </div>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyB9BQOlOO-tfuFzxjK0KEA7YcV3O11_WjM",
-            authDomain: "ad-astra-bit.firebaseapp.com",
-            projectId: "ad-astra-bit",
-            storageBucket: "ad-astra-bit.firebasestorage.app",
-            messagingSenderId: "104444066688",
-            appId: "1:104444066688:web:d84478465cd3084f315f65"
+        <button type="submit" id="submitBtn" disabled>Submit Registration</button>
+        <p id="message">Checking Google sign-in...</p>
+    </form>
+
+    <a href="index.html" class="back">← Back to Homepage</a>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+
+    import {
+        getAuth,
+        onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+    import {
+        getFirestore,
+        doc,
+        getDoc,
+        writeBatch,
+        serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyB9BQOlOO-tfuFzxjK0KEA7YcV3O11_WjM",
+        authDomain: "ad-astra-bit.firebaseapp.com",
+        projectId: "ad-astra-bit",
+        storageBucket: "ad-astra-bit.firebasestorage.app",
+        messagingSenderId: "104444066688",
+        appId: "1:104444066688:web:d84478465cd3084f315f65",
+        measurementId: "G-JJLDJF02K0"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const ADMIN_EMAILS = [
+        "rachnf99@gmail.com",
+        "vedujames99@gmail.com"
+    ];
+
+    const RESERVED_USERNAMES = [
+        "admin",
+        "administrator",
+        "community",
+        "signup",
+        "login",
+        "logout",
+        "profile",
+        "profiles",
+        "dashboard",
+        "settings",
+        "events",
+        "event",
+        "api",
+        "assets",
+        "index",
+        "support",
+        "help",
+        "about",
+        "contact"
+    ];
+
+    const $ = id => document.getElementById(id);
+
+    const form = $("signupForm");
+    const submitBtn = $("submitBtn");
+    const message = $("message");
+    const pageTitle = $("pageTitle");
+    const pageSubtitle = $("pageSubtitle");
+    const adminNote = $("adminNote");
+
+    const nameInput = $("name");
+    const usernameInput = $("username");
+    const emailInput = $("email");
+    const usnInput = $("usn");
+    const branchInput = $("branch");
+    const yearInput = $("year");
+
+    let currentUser = null;
+    let authReady = false;
+    let registrationAllowed = false;
+
+    function setMessage(text, color = "#ff9999") {
+        message.textContent = text;
+        message.style.color = color;
+    }
+
+    function normalizeUsername(value) {
+        return value.trim().toLowerCase();
+    }
+
+    function validateUsername(username) {
+        if (username.length < 3 || username.length > 24) {
+            return "Username must contain between 3 and 24 characters.";
+        }
+
+        if (!/^[a-z0-9](?:[a-z0-9-]{1,22}[a-z0-9])$/.test(username)) {
+            return "Use lowercase letters, numbers and hyphens. Do not start or end with a hyphen.";
+        }
+
+        if (RESERVED_USERNAMES.includes(username)) {
+            return "This username is reserved. Please choose another one.";
+        }
+
+        return null;
+    }
+
+    function getPublicBranch(branch) {
+        const branches = {
+            CSE: "Computer Science and Engineering",
+            ISE: "Information Science and Engineering",
+            AIML: "Artificial Intelligence and Machine Learning",
+            ECE: "Electronics and Communication Engineering",
+            EEE: "Electrical and Electronics Engineering",
+            ME: "Mechanical Engineering",
+            Civil: "Civil Engineering",
+            Other: "Other"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+        return branches[branch] || branch || "Not specified";
+    }
 
+    function getPublicYear(year) {
+        const years = {
+            "1": "1st Year",
+            "2": "2nd Year",
+            "3": "3rd Year",
+            "4": "4th Year"
+        };
 
-        // ADMIN CONFIGURATION
+        return years[year] || year || "Not specified";
+    }
 
-        const ADMIN_EMAILS = [
-            "rachnf99@gmail.com", "vedujames99@gmail.com"
-        ];
-
-
-        // DOM ELEMENTS
-
-        const form = document.getElementById("signupForm");
-        const submitBtn = document.getElementById("submitBtn");
-        const message = document.getElementById("message");
-
-        const pageTitle = document.getElementById("pageTitle");
-        const pageSubtitle = document.getElementById("pageSubtitle");
-        const adminNote = document.getElementById("adminNote");
-
-        const nameInput = document.getElementById("name");
-        const emailInput = document.getElementById("email");
-        const usnInput = document.getElementById("usn");
-        const branchInput = document.getElementById("branch");
-        const yearInput = document.getElementById("year");
-
-
-        // APPLICATION STATE
-
-        let currentUser = null;
-        let isAdmin = false;
-        let authReady = false;
-        let registrationAllowed = false;
-
-
-        function setMessage(text, color = "#ff9999") {
-            message.textContent = text;
-            message.style.color = color;
+    function showRegistrationForm(adminMode) {
+        if (adminMode) {
+            pageTitle.textContent = "Admin Registration";
+            pageSubtitle.textContent =
+                "Complete your administrator profile for AD ASTRA BIT.";
+            adminNote.style.display = "block";
+            submitBtn.textContent = "Create Admin Profile";
+        } else {
+            pageTitle.textContent = "Community Registration";
+            pageSubtitle.textContent =
+                "Welcome to AD ASTRA BIT. Complete your registration to access the community.";
+            adminNote.style.display = "none";
+            submitBtn.textContent = "Create Account";
         }
 
+        registrationAllowed = true;
+        submitBtn.disabled = false;
+        setMessage("Complete your profile details.", "#b8b8ff");
+    }
 
-        function showRegistrationForm(adminMode) {
+    async function checkUserProfile(user) {
+        const userRef = doc(db, "users", user.uid);
+        const userSnapshot = await getDoc(userRef);
 
-            isAdmin = adminMode;
+        const userEmail = (user.email || "").toLowerCase();
+        const isAllowlistedAdmin = ADMIN_EMAILS.includes(userEmail);
 
-            if (adminMode) {
+        if (!userSnapshot.exists()) {
+            showRegistrationForm(isAllowlistedAdmin);
+            return;
+        }
 
-                pageTitle.textContent = "Admin Registration";
+        const data = userSnapshot.data();
 
-                pageSubtitle.textContent =
-                    "Complete your administrator profile for AD ASTRA BIT.";
-
-                adminNote.style.display = "block";
-
-                submitBtn.textContent = "Create Admin Profile";
-
-            } else {
-
-                pageTitle.textContent = "Student Registration";
-
-                pageSubtitle.textContent =
-                    "Welcome to AD ASTRA BIT. Complete your registration to become part of our student community.";
-
-                adminNote.style.display = "none";
-
-                submitBtn.textContent = "Submit Registration";
-
+        if (data.role === "admin") {
+            if (!isAllowlistedAdmin) {
+                setMessage("This account does not have administrator access. Contact the administrator.");
+                return;
             }
 
-            registrationAllowed = true;
-            submitBtn.disabled = false;
+            if (data.status !== "approved") {
+                setMessage("Your administrator profile is not approved.");
+                return;
+            }
 
-            setMessage("Complete your profile details.", "#b8b8ff");
+            setMessage("Admin profile found. Redirecting...", "#a5ffa5");
+            window.location.replace("admin-dashboard.html");
+            return;
         }
 
+        if (isAllowlistedAdmin && data.role !== "admin") {
+            setMessage("An existing non-admin profile is linked to this account. Contact the administrator before changing its role.");
+            return;
+        }
 
-        // CHECK EXISTING USER PROFILE
+        if (data.role === "guest" || data.role === "clubMember") {
+            if (data.status === "approved") {
+                setMessage("Welcome back! Redirecting...", "#a5ffa5");
+                window.location.replace("student-dashboard.html");
+                return;
+            }
 
-        async function checkUserProfile(user) {
+            setMessage("Your account is not active. Contact an administrator.");
+            return;
+        }
 
-            const userRef = doc(db, "users", user.uid);
+        if (data.role === "student") {
+            if (data.status === "approved") {
+                setMessage("Your account is approved. Redirecting...", "#a5ffa5");
+                window.location.replace("student-dashboard.html");
+                return;
+            }
+
+            if (data.status === "pending") {
+                window.location.replace("pending.html");
+                return;
+            }
+
+            if (data.status === "rejected") {
+                setMessage("Your previous application was rejected. Please contact an administrator.");
+                return;
+            }
+        }
+
+        setMessage("Your account profile could not be recognised. Please contact an administrator.");
+    }
+
+    // Keep the username lowercase while typing.
+    usernameInput.addEventListener("input", () => {
+        const cursorPosition = usernameInput.selectionStart;
+        const normalized = normalizeUsername(usernameInput.value);
+
+        if (usernameInput.value !== normalized) {
+            usernameInput.value = normalized;
+            usernameInput.setSelectionRange(cursorPosition, cursorPosition);
+        }
+    });
+
+    onAuthStateChanged(auth, async user => {
+        authReady = true;
+        currentUser = user;
+        registrationAllowed = false;
+        submitBtn.disabled = true;
+
+        if (!user) {
+            setMessage("No Google account found. Return to the homepage and sign in.");
+            return;
+        }
+
+        if (!user.emailVerified) {
+            setMessage("Please verify your Google account before continuing.");
+            return;
+        }
+
+        emailInput.value = user.email || "";
+        nameInput.value = user.displayName || "";
+
+        try {
+            await checkUserProfile(user);
+        } catch (error) {
+            console.error("SIGNUP AUTH CHECK FAILED:", error);
+            setMessage("Unable to check your profile: " + error.message);
+        }
+    });
+
+    form.addEventListener("submit", async event => {
+        event.preventDefault();
+
+        if (!authReady || !currentUser || !registrationAllowed) {
+            setMessage("Registration is currently unavailable. Please check your sign-in status.");
+            return;
+        }
+
+        const fullName = nameInput.value.trim();
+        const username = normalizeUsername(usernameInput.value);
+        const usn = usnInput.value.trim().toUpperCase();
+        const branch = branchInput.value;
+        const academicYear = yearInput.value;
+
+        if (!fullName || !username || !usn || !branch || !academicYear) {
+            setMessage("Please complete all fields.");
+            return;
+        }
+
+        if (fullName.length > 100 || usn.length > 30) {
+            setMessage("Please check the length of your details.");
+            return;
+        }
+
+        const usernameError = validateUsername(username);
+
+        if (usernameError) {
+            setMessage(usernameError);
+            usernameInput.focus();
+            return;
+        }
+
+        submitBtn.disabled = true;
+        setMessage("Checking username availability...", "#b8b8ff");
+
+        try {
+            const userRef = doc(db, "users", currentUser.uid);
+            const publicProfileRef = doc(db, "publicProfiles", currentUser.uid);
+            const usernameRef = doc(db, "publicProfileSlugs", username);
+
+            // Make sure this account has not already been registered.
             const userSnapshot = await getDoc(userRef);
 
-            const adminEmail = (user.email || "").toLowerCase();
-
-            isAdmin = ADMIN_EMAILS.includes(adminEmail);
-
-            if (!userSnapshot.exists()) {
-
-                showRegistrationForm(isAdmin);
+            if (userSnapshot.exists()) {
+                setMessage("A profile already exists for this account. Please sign in again.");
                 return;
-
             }
 
-            const data = userSnapshot.data();
+            // Friendly availability check.
+            // Firestore rules and the atomic batch below enforce actual uniqueness.
+            const usernameSnapshot = await getDoc(usernameRef);
 
-            // EXISTING ADMIN
-
-            if (data.role === "admin") {
-
-                if (!isAdmin) {
-                    setMessage(
-                        "This account does not have administrator access. Contact the administrator."
-                    );
-                    return;
-                }
-
-                setMessage("Admin profile found. Redirecting...", "#a5ffa5");
-
-                window.location.replace("admin-dashboard.html");
+            if (usernameSnapshot.exists()) {
+                setMessage("That username is already taken. Please choose another one.");
+                usernameInput.focus();
                 return;
-
             }
 
-            // PREVENT ADMIN/STUDENT ROLE CONFLICT
+            const adminEmail = (currentUser.email || "").toLowerCase();
+            const verifiedAdmin = ADMIN_EMAILS.includes(adminEmail);
+            const role = verifiedAdmin ? "admin" : "guest";
 
-            if (isAdmin && data.role !== "admin") {
+            const userData = {
+                uid: currentUser.uid,
+                name: fullName,
+                username,
+                email: currentUser.email,
+                usn,
+                branch,
+                academicYear,
+                role,
+                status: "approved",
+                createdAt: serverTimestamp()
+            };
 
-                setMessage(
-                    "An existing non-admin profile is linked to this account. Contact the administrator before changing its role."
-                );
+            const publicProfileData = {
+                uid: currentUser.uid,
+                name: fullName,
+                username,
+                role,
+                branch: getPublicBranch(branch),
+                academicYear: getPublicYear(academicYear),
+                photoURL: "",
+                bio: "",
+                badges: [],
+                participatedEvents: [],
+                updatedAt: serverTimestamp()
+            };
 
-                return;
+            // All three documents are created atomically.
+            // If any write fails, none of them will be created.
+            const batch = writeBatch(db);
 
-            }
+            batch.set(userRef, userData);
 
-            // EXISTING STUDENT
+            batch.set(publicProfileRef, publicProfileData);
 
-            if (data.role === "student") {
+            batch.set(usernameRef, {
+                uid: currentUser.uid
+            });
 
-                if (data.status === "approved") {
+            setMessage("Creating your account and reserving your username...", "#b8b8ff");
 
-                    setMessage("Your account is approved. Redirecting...", "#a5ffa5");
+            await batch.commit();
 
-                    window.location.replace("student-dashboard.html");
-                    return;
+            setMessage("Account created successfully! Redirecting...", "#a5ffa5");
 
-                }
-
-                if (data.status === "pending") {
-
-                    window.location.replace("pending.html");
-                    return;
-
-                }
-
-                if (data.status === "rejected") {
-
-                    setMessage(
-                        "Your previous application was rejected. Please contact an administrator."
-                    );
-
-                    return;
-
-                }
-
-            }
-
-            setMessage(
-                "Your account profile could not be recognised. Please contact an administrator."
+            window.location.replace(
+                verifiedAdmin ? "admin-dashboard.html" : "student-dashboard.html"
             );
 
+        } catch (error) {
+            console.error("REGISTRATION ERROR:", error);
+
+            if (error.code === "permission-denied") {
+                setMessage(
+                    "Registration was blocked by Firestore security rules. Please make sure the updated rules are published."
+                );
+            } else if (error.code === "already-exists") {
+                setMessage("That username or account is already registered. Please choose another username.");
+            } else {
+                setMessage("Registration failed: " + error.message);
+            }
+
+            submitBtn.disabled = false;
         }
-
-
-        // AUTHENTICATION CHECK
-
-        onAuthStateChanged(auth, async (user) => {
-
-            authReady = true;
-            currentUser = user;
-
-            registrationAllowed = false;
-            submitBtn.disabled = true;
-
-            if (!user) {
-
-                setMessage(
-                    "No Google account found. Return to the homepage and sign in."
-                );
-
-                return;
-
-            }
-
-            if (!user.emailVerified) {
-
-                setMessage(
-                    "Please verify your Google account before continuing."
-                );
-
-                return;
-
-            }
-
-            emailInput.value = user.email || "";
-            nameInput.value = user.displayName || "";
-
-            try {
-
-                await checkUserProfile(user);
-
-            } catch (error) {
-
-                console.error("SIGNUP AUTH CHECK FAILED:", error);
-
-                setMessage(
-                    "Unable to check your profile: " + error.message
-                );
-
-            }
-
-        });
-
-
-        // SUBMIT REGISTRATION
-
-        form.addEventListener("submit", async (event) => {
-
-            event.preventDefault();
-
-            if (!authReady || !currentUser || !registrationAllowed) {
-
-                setMessage(
-                    "Registration is currently unavailable. Please check your sign-in status."
-                );
-
-                return;
-
-            }
-
-            const fullName = nameInput.value.trim();
-            const usn = usnInput.value.trim().toUpperCase();
-            const branch = branchInput.value;
-            const academicYear = yearInput.value;
-
-            if (!fullName || !usn || !branch || !academicYear) {
-
-                setMessage("Please complete all fields.");
-                return;
-
-            }
-
-            if (fullName.length > 100 || usn.length > 30) {
-
-                setMessage("Please check the length of your details.");
-                return;
-
-            }
-
-            submitBtn.disabled = true;
-
-            setMessage("Submitting your registration...", "#b8b8ff");
-
-            try {
-
-                const userRef = doc(db, "users", currentUser.uid);
-
-                // RECHECK PROFILE BEFORE WRITING
-
-                const userSnapshot = await getDoc(userRef);
-
-                if (userSnapshot.exists()) {
-
-                    setMessage(
-                        "A profile already exists for this account. Please sign in again."
-                    );
-
-                    return;
-
-                }
-
-                // VERIFY ADMIN STATUS AGAIN
-
-                const adminEmail = (currentUser.email || "").toLowerCase();
-
-                const verifiedAdmin = ADMIN_EMAILS.includes(adminEmail);
-
-                const userData = {
-
-                    uid: currentUser.uid,
-
-                    name: fullName,
-
-                    email: currentUser.email,
-
-                    usn: usn,
-
-                    branch: branch,
-
-                    academicYear: academicYear,
-
-                    role: verifiedAdmin ? "admin" : "student",
-
-                    status: verifiedAdmin ? "approved" : "pending",
-
-                    createdAt: serverTimestamp()
-
-                };
-
-                await setDoc(userRef, userData);
-
-                if (verifiedAdmin) {
-
-                    setMessage(
-                        "Admin profile created successfully. Redirecting...",
-                        "#a5ffa5"
-                    );
-
-                    window.location.replace("admin-dashboard.html");
-
-                } else {
-
-                    setMessage(
-                        "Registration submitted successfully. Redirecting...",
-                        "#a5ffa5"
-                    );
-
-                    window.location.replace("pending.html");
-
-                }
-
-            } catch (error) {
-
-                console.error("REGISTRATION ERROR:", error);
-
-                setMessage(
-                    "Registration failed: " + error.message
-                );
-
-                submitBtn.disabled = false;
-
-            }
-
-        });
-
-    </script>
-
+    });
+</script>
 </body>
 </html>

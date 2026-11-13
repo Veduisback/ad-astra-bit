@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -318,8 +319,6 @@
             cursor: not-allowed;
         }
 
-        /* REACTIONS */
-
         .reaction-area {
             display: flex;
             align-items: center;
@@ -375,6 +374,7 @@
             border-radius: 10px;
             background: rgba(145, 162, 255, .07);
         }
+
         .checkin-code-label {
             color: var(--accent);
             font-size: 10px;
@@ -382,13 +382,35 @@
             letter-spacing: 1px;
             margin-bottom: 8px;
         }
-        .checkin-code-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-        .checkin-code-value { font-size: 20px; letter-spacing: 3px; }
-        .copy-code-btn {
-            border: 1px solid var(--border); border-radius: 7px; padding: 7px 10px;
-            background: #18233a; color: var(--text); cursor: pointer; font-size: 11px;
+
+        .checkin-code-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
         }
-        .checkin-code-help { margin-top: 8px; color: var(--muted); font-size: 11px; line-height: 1.5; }
+
+        .checkin-code-value {
+            font-size: 20px;
+            letter-spacing: 3px;
+        }
+
+        .copy-code-btn {
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            padding: 7px 10px;
+            background: #18233a;
+            color: var(--text);
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .checkin-code-help {
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.5;
+        }
 
         .admin-tools { display: none; }
 
@@ -475,10 +497,10 @@
 
 <main>
     <section class="intro">
-        <div class="eyebrow">AD ASTRA BIT · Student Network</div>
+        <div class="eyebrow">AD ASTRA BIT · Community Network</div>
         <h1>The Community.</h1>
         <p>
-            Stay updated with official announcements, discover upcoming events,
+            Stay updated with official announcements, discover upcoming and past events,
             and connect with the AD ASTRA BIT community.
         </p>
     </section>
@@ -490,11 +512,8 @@
         <button class="tab" type="button" data-tab="events">Events</button>
     </nav>
 
-    <!-- ANNOUNCEMENTS -->
-
     <section id="announcements" class="section-view active">
         <div class="layout">
-
             <div class="main-column">
                 <section class="panel">
                     <div class="panel-heading">
@@ -509,7 +528,6 @@
             </div>
 
             <aside class="side-column">
-
                 <section class="panel admin-tools" id="announcementAdmin">
                     <h2>Publish announcement</h2>
 
@@ -521,34 +539,27 @@
 
                         <div class="field">
                             <label for="announcementBody">Message</label>
-                            <textarea id="announcementBody" rows="5"
-                                maxlength="3000" required></textarea>
+                            <textarea id="announcementBody" rows="5" maxlength="3000" required></textarea>
                         </div>
 
-                        <button class="primary-btn" type="submit">
-                            Publish announcement
-                        </button>
+                        <button class="primary-btn" type="submit">Publish announcement</button>
                     </form>
                 </section>
 
                 <section class="panel">
                     <h2>Stay informed</h2>
                     <p class="muted">
-                        Check this section regularly for important updates
-                        from AD ASTRA BIT. You can react to every announcement
-                        using the five reaction options.
+                        Check this section regularly for important updates from AD ASTRA BIT.
+                        You can react to every announcement using the five reaction options.
+                        The newest announcements appear first.
                     </p>
                 </section>
-
             </aside>
         </div>
     </section>
 
-    <!-- EVENTS -->
-
     <section id="events" class="section-view">
         <div class="layout">
-
             <div class="main-column">
                 <section class="panel">
                     <div class="panel-heading">
@@ -563,7 +574,6 @@
             </div>
 
             <aside class="side-column">
-
                 <section class="panel admin-tools" id="eventAdmin">
                     <h2>Add an event</h2>
 
@@ -585,27 +595,22 @@
 
                         <div class="field">
                             <label for="eventDescription">Description</label>
-                            <textarea id="eventDescription" rows="4"
-                                maxlength="2000" required></textarea>
+                            <textarea id="eventDescription" rows="4" maxlength="2000" required></textarea>
                         </div>
 
-                        <button class="primary-btn" type="submit">
-                            Publish event
-                        </button>
+                        <button class="primary-btn" type="submit">Publish event</button>
                     </form>
                 </section>
 
                 <section class="panel">
-    <h2>Event discussion</h2>
-    <p class="muted">
-        Open an event to view its complete details and join
-        its dedicated public discussion room. Students and
-        administrators can discuss the event in real time.
-        Administrators can moderate messages and pin
-        important updates for a custom duration.
-    </p>
-</section>
-
+                    <h2>Event discussion</h2>
+                    <p class="muted">
+                        Open an event to view its complete details and join its dedicated
+                        public discussion room. Guests, club members and administrators
+                        can discuss the event. Administrators can moderate messages and
+                        pin important updates for a custom duration.
+                    </p>
+                </section>
             </aside>
         </div>
     </section>
@@ -642,14 +647,14 @@
     } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
     const firebaseConfig = {
-  apiKey: "AIzaSyB9BQOlOO-tfuFzxjK0KEA7YcV3O11_WjM",
-  authDomain: "ad-astra-bit.firebaseapp.com",
-  projectId: "ad-astra-bit",
-  storageBucket: "ad-astra-bit.firebasestorage.app",
-  messagingSenderId: "104444066688",
-  appId: "1:104444066688:web:d84478465cd3084f315f65",
-  measurementId: "G-JJLDJF02K0"
-};
+        apiKey: "AIzaSyB9BQOlOO-tfuFzxjK0KEA7YcV3O11_WjM",
+        authDomain: "ad-astra-bit.firebaseapp.com",
+        projectId: "ad-astra-bit",
+        storageBucket: "ad-astra-bit.firebasestorage.app",
+        messagingSenderId: "104444066688",
+        appId: "1:104444066688:web:d84478465cd3084f315f65",
+        measurementId: "G-JJLDJF02K0"
+    };
 
     const ADMIN_EMAILS = [
         "rachnf99@gmail.com",
@@ -665,14 +670,13 @@
     let currentUser = null;
     let currentProfile = null;
     let isAdmin = false;
-    let initializedUid = null;   // prevents duplicate setup if the auth callback fires again
+    let initializedUid = null;
     let signingOut = false;
     let noticeTimer = null;
 
     let unsubscribeAnnouncements = null;
     let unsubscribeEvents = null;
 
-    // Stores reaction listeners so they can be cleaned up.
     const reactionListeners = new Map();
 
     const $ = id => document.getElementById(id);
@@ -684,7 +688,6 @@
         notice.textContent = message;
         notice.className = `notice ${type}`;
 
-        // Success messages fade away; errors stay visible.
         if (type === "info") {
             noticeTimer = setTimeout(clearNotice, 5000);
         }
@@ -721,24 +724,16 @@
 
     function switchTab(tabName) {
         document.querySelectorAll(".tab").forEach(button => {
-            button.classList.toggle(
-                "active",
-                button.dataset.tab === tabName
-            );
+            button.classList.toggle("active", button.dataset.tab === tabName);
         });
 
         document.querySelectorAll(".section-view").forEach(section => {
-            section.classList.toggle(
-                "active",
-                section.id === tabName
-            );
+            section.classList.toggle("active", section.id === tabName);
         });
     }
 
     document.querySelectorAll(".tab").forEach(button => {
-        button.addEventListener("click", () => {
-            switchTab(button.dataset.tab);
-        });
+        button.addEventListener("click", () => switchTab(button.dataset.tab));
     });
 
     function stopListeners() {
@@ -763,7 +758,6 @@
 
     // --------------------------------------------------
     // REACTIONS
-    // One reaction document per user per post.
     // --------------------------------------------------
 
     function attachReactions(type, itemId, container) {
@@ -774,12 +768,7 @@
             reactionListeners.delete(listenerKey);
         }
 
-        const reactionsRef = collection(
-            db,
-            type,
-            itemId,
-            "reactions"
-        );
+        const reactionsRef = collection(db, type, itemId, "reactions");
 
         const unsubscribe = onSnapshot(
             reactionsRef,
@@ -787,9 +776,7 @@
                 const counts = {};
                 let myReaction = null;
 
-                REACTIONS.forEach(emoji => {
-                    counts[emoji] = 0;
-                });
+                REACTIONS.forEach(emoji => counts[emoji] = 0);
 
                 snapshot.forEach(reactionDoc => {
                     const reaction = reactionDoc.data();
@@ -811,9 +798,7 @@
                     button.className = "reaction-button";
                     button.setAttribute("aria-pressed", String(myReaction === emoji));
 
-                    if (myReaction === emoji) {
-                        button.classList.add("selected");
-                    }
+                    if (myReaction === emoji) button.classList.add("selected");
 
                     button.append(
                         safeText("span", "", emoji),
@@ -840,20 +825,13 @@
         reactionListeners.set(listenerKey, unsubscribe);
     }
 
-    // previousReaction comes from the live snapshot, so no extra read is needed.
     async function setReaction(type, itemId, emoji, button, previousReaction) {
         if (!currentUser) return;
 
         button.disabled = true;
 
         try {
-            const reactionRef = doc(
-                db,
-                type,
-                itemId,
-                "reactions",
-                currentUser.uid
-            );
+            const reactionRef = doc(db, type, itemId, "reactions", currentUser.uid);
 
             if (previousReaction === emoji) {
                 await deleteDoc(reactionRef);
@@ -866,10 +844,7 @@
             }
         } catch (error) {
             console.error("Reaction update error:", error);
-            showNotice(
-                "Could not save your reaction. Check Firestore Rules.",
-                "error"
-            );
+            showNotice("Could not save your reaction. Check Firestore Rules.", "error");
         } finally {
             button.disabled = false;
         }
@@ -882,11 +857,7 @@
     async function editAnnouncement(announcementId, item, button) {
         if (!isAdmin) return;
 
-        const newTitle = window.prompt(
-            "Edit announcement title:",
-            item.title || ""
-        );
-
+        const newTitle = window.prompt("Edit announcement title:", item.title || "");
         if (newTitle === null) return;
 
         const title = newTitle.trim();
@@ -896,11 +867,7 @@
             return;
         }
 
-        const newBody = window.prompt(
-            "Edit announcement message:",
-            item.body || ""
-        );
-
+        const newBody = window.prompt("Edit announcement message:", item.body || "");
         if (newBody === null) return;
 
         const body = newBody.trim();
@@ -913,10 +880,10 @@
         button.disabled = true;
 
         try {
-            await updateDoc(
-                doc(db, "communityAnnouncements", announcementId),
-                { title, body }
-            );
+            await updateDoc(doc(db, "communityAnnouncements", announcementId), {
+                title,
+                body
+            });
 
             showNotice("Announcement updated successfully.", "info");
         } catch (error) {
@@ -929,7 +896,6 @@
 
     async function deleteAnnouncement(announcementId, button) {
         if (!isAdmin) return;
-
         if (!window.confirm("Delete this announcement permanently?")) return;
 
         button.disabled = true;
@@ -951,11 +917,7 @@
     async function editEvent(eventId, item, button) {
         if (!isAdmin) return;
 
-        const newTitle = window.prompt(
-            "Edit event name:",
-            item.title || ""
-        );
-
+        const newTitle = window.prompt("Edit event name:", item.title || "");
         if (newTitle === null) return;
 
         const title = newTitle.trim();
@@ -979,11 +941,7 @@
             return;
         }
 
-        const newLocation = window.prompt(
-            "Edit venue / platform:",
-            item.location || ""
-        );
-
+        const newLocation = window.prompt("Edit venue / platform:", item.location || "");
         if (newLocation === null) return;
 
         const location = newLocation.trim();
@@ -1028,7 +986,6 @@
 
     async function deleteEvent(eventId, button) {
         if (!isAdmin) return;
-
         if (!window.confirm("Delete this event permanently?")) return;
 
         button.disabled = true;
@@ -1041,7 +998,9 @@
 
             const batch = writeBatch(db);
             batch.delete(doc(db, "communityEvents", eventId));
+
             codeSnapshot.forEach(codeDoc => batch.delete(codeDoc.ref));
+
             await batch.commit();
 
             showNotice("Event and its check-in code deleted successfully.", "info");
@@ -1090,14 +1049,12 @@
 
                 const editButton = safeText("button", "edit-btn", "Edit");
                 editButton.type = "button";
-
                 editButton.addEventListener("click", async () => {
                     await editAnnouncement(itemDoc.id, item, editButton);
                 });
 
                 const deleteButton = safeText("button", "delete-btn", "Delete");
                 deleteButton.type = "button";
-
                 deleteButton.addEventListener("click", async () => {
                     await deleteAnnouncement(itemDoc.id, deleteButton);
                 });
@@ -1108,23 +1065,19 @@
 
             list.append(article);
 
-            attachReactions(
-                "communityAnnouncements",
-                itemDoc.id,
-                reactionArea
-            );
+            attachReactions("communityAnnouncements", itemDoc.id, reactionArea);
         });
     }
 
     // --------------------------------------------------
     // EVENT CHECK-IN CODES
-    // Format: AB0CD0F (letters at positions 1,2,4,5,7; digits at 3,6).
     // --------------------------------------------------
 
     function generateCheckinCode() {
         const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         const digits = "0123456789";
         const random = new Uint32Array(7);
+
         crypto.getRandomValues(random);
 
         return [
@@ -1141,32 +1094,43 @@
     async function showEventCheckinCode(eventId, eventTitle, container) {
         if (!isAdmin) return;
 
-        container.replaceChildren(safeText("div", "empty", "Loading check-in code..."));
+        container.replaceChildren(
+            safeText("div", "empty", "Loading check-in code...")
+        );
 
         try {
             const codeQuery = query(
                 collection(db, "eventCheckinCodes"),
                 where("eventId", "==", eventId)
             );
+
             const codeSnapshot = await getDocs(codeQuery);
-            const activeCode = codeSnapshot.docs.find(item => item.data().active === true);
+            const activeCode = codeSnapshot.docs.find(
+                item => item.data().active === true
+            );
 
             container.replaceChildren();
-            const label = safeText("div", "checkin-code-label", "ADMIN · EVENT CHECK-IN CODE");
-            container.append(label);
+
+            container.append(
+                safeText("div", "checkin-code-label", "ADMIN · EVENT CHECK-IN CODE")
+            );
 
             if (!activeCode) {
-                container.append(safeText("p", "muted", "No active check-in code found."));
+                container.append(
+                    safeText("p", "muted", "No active check-in code found.")
+                );
                 return;
             }
 
             const code = activeCode.id;
             const codeRow = document.createElement("div");
             codeRow.className = "checkin-code-row";
+
             codeRow.append(safeText("strong", "checkin-code-value", code));
 
             const copyButton = safeText("button", "copy-code-btn", "Copy code");
             copyButton.type = "button";
+
             copyButton.addEventListener("click", async () => {
                 try {
                     await navigator.clipboard.writeText(code);
@@ -1177,17 +1141,28 @@
                     window.prompt("Copy this event check-in code:", code);
                 }
             });
+
             codeRow.append(copyButton);
             container.append(codeRow);
-            container.append(safeText("p", "checkin-code-help", "Share this code with students attending the event. Students enter it on checkin.html."));
+
+            container.append(
+                safeText(
+                    "p",
+                    "checkin-code-help",
+                    "Share this code with students attending the event. Students enter it on checkin.html."
+                )
+            );
         } catch (error) {
             console.error("Check-in code loading error:", error);
-            container.replaceChildren(safeText("p", "muted", "Could not load the check-in code. Check Firestore Rules."));
+            container.replaceChildren(
+                safeText("p", "muted", "Could not load the check-in code. Check Firestore Rules.")
+            );
         }
     }
 
     // --------------------------------------------------
     // RENDER EVENTS
+    // Upcoming events first, then past events.
     // --------------------------------------------------
 
     function renderEvents(snapshot) {
@@ -1204,9 +1179,31 @@
 
         const now = Date.now();
 
-        snapshot.forEach(itemDoc => {
-            const item = itemDoc.data();
+        const events = snapshot.docs.map(itemDoc => ({
+            id: itemDoc.id,
+            data: itemDoc.data()
+        }));
 
+        events.sort((a, b) => {
+            const dateA = new Date(a.data.eventDate || "").getTime();
+            const dateB = new Date(b.data.eventDate || "").getTime();
+
+            const validA = Number.isFinite(dateA);
+            const validB = Number.isFinite(dateB);
+
+            if (!validA && !validB) return 0;
+            if (!validA) return 1;
+            if (!validB) return -1;
+
+            const pastA = dateA < now;
+            const pastB = dateB < now;
+
+            if (pastA !== pastB) return pastA ? 1 : -1;
+
+            return pastA ? dateB - dateA : dateA - dateB;
+        });
+
+        events.forEach(({ id, data: item }) => {
             const article = document.createElement("article");
             article.className = "event";
 
@@ -1232,9 +1229,13 @@
                 )
             );
 
-            if (isPast) {
-                meta.append(safeText("span", "tag past-tag", "Past"));
-            }
+            meta.append(
+                safeText(
+                    "span",
+                    isPast ? "tag past-tag" : "tag",
+                    isPast ? "Past Event" : "Upcoming"
+                )
+            );
 
             article.append(
                 meta,
@@ -1253,8 +1254,7 @@
                 "View event details and join discussion →"
             );
 
-            openLink.href = `event-details.html?id=${encodeURIComponent(itemDoc.id)}`;
-
+            openLink.href = `event-details.html?id=${encodeURIComponent(id)}`;
             article.append(openLink);
 
             const reactionArea = document.createElement("div");
@@ -1265,7 +1265,7 @@
                 const codePanel = document.createElement("div");
                 codePanel.className = "checkin-code-panel";
                 article.append(codePanel);
-                showEventCheckinCode(itemDoc.id, item.title || "Event", codePanel);
+                showEventCheckinCode(id, item.title || "Event", codePanel);
             }
 
             if (isAdmin) {
@@ -1274,16 +1274,14 @@
 
                 const editButton = safeText("button", "edit-btn", "Edit");
                 editButton.type = "button";
-
                 editButton.addEventListener("click", async () => {
-                    await editEvent(itemDoc.id, item, editButton);
+                    await editEvent(id, item, editButton);
                 });
 
                 const deleteButton = safeText("button", "delete-btn", "Delete");
                 deleteButton.type = "button";
-
                 deleteButton.addEventListener("click", async () => {
-                    await deleteEvent(itemDoc.id, deleteButton);
+                    await deleteEvent(id, deleteButton);
                 });
 
                 actions.append(editButton, deleteButton);
@@ -1292,11 +1290,7 @@
 
             list.append(article);
 
-            attachReactions(
-                "communityEvents",
-                itemDoc.id,
-                reactionArea
-            );
+            attachReactions("communityEvents", id, reactionArea);
         });
     }
 
@@ -1307,6 +1301,7 @@
     function startListeners() {
         stopListeners();
 
+        // Newest announcements first.
         unsubscribeAnnouncements = onSnapshot(
             query(
                 collection(db, "communityAnnouncements"),
@@ -1323,12 +1318,9 @@
             }
         );
 
+        // Load all events. Sorting is handled in renderEvents().
         unsubscribeEvents = onSnapshot(
-            query(
-                collection(db, "communityEvents"),
-                orderBy("eventDate", "asc"),
-                limit(30)
-            ),
+            collection(db, "communityEvents"),
             renderEvents,
             error => {
                 console.error("Events loading error:", error);
@@ -1353,9 +1345,17 @@
         button.disabled = true;
 
         try {
+            const title = $("announcementTitle").value.trim();
+            const body = $("announcementBody").value.trim();
+
+            if (!title || !body) {
+                showNotice("Enter both a title and message.", "error");
+                return;
+            }
+
             await addDoc(collection(db, "communityAnnouncements"), {
-                title: $("announcementTitle").value.trim(),
-                body: $("announcementBody").value.trim(),
+                title,
+                body,
                 authorUid: currentUser.uid,
                 createdAt: serverTimestamp()
             });
@@ -1387,11 +1387,11 @@
             let checkinCode = null;
             let codeRef = null;
 
-            // Check for collisions before committing the event and code together.
             for (let attempt = 0; attempt < 12; attempt++) {
                 const candidate = generateCheckinCode();
                 const candidateRef = doc(db, "eventCheckinCodes", candidate);
                 const existing = await getDoc(candidateRef);
+
                 if (!existing.exists()) {
                     checkinCode = candidate;
                     codeRef = candidateRef;
@@ -1404,13 +1404,21 @@
             }
 
             const title = $("eventTitle").value.trim();
+            const eventDate = $("eventDate").value;
+            const location = $("eventLocation").value.trim();
+            const description = $("eventDescription").value.trim();
+
+            if (!title || !eventDate || !location || !description) {
+                throw new Error("Please complete every event field.");
+            }
+
             const batch = writeBatch(db);
 
             batch.set(eventRef, {
                 title,
-                eventDate: $("eventDate").value,
-                location: $("eventLocation").value.trim(),
-                description: $("eventDescription").value.trim(),
+                eventDate,
+                location,
+                description,
                 authorUid: currentUser.uid,
                 createdAt: serverTimestamp()
             });
@@ -1457,9 +1465,7 @@
     // --------------------------------------------------
 
     onAuthStateChanged(auth, async user => {
-
         if (!user) {
-            // Signed out (here, in another tab, or never signed in).
             stopListeners();
             currentUser = null;
             currentProfile = null;
@@ -1480,12 +1486,9 @@
             return;
         }
 
-        // Already set up for this user; ignore repeat callbacks.
         if (initializedUid === user.uid) return;
 
         try {
-            // Refresh emailVerified and account state. A network hiccup
-            // must not lock a valid user out, so only fatal errors stop us.
             try {
                 await user.reload();
             } catch (reloadError) {
@@ -1507,7 +1510,6 @@
                     "Your email is not verified. Please verify it and sign in again.",
                     "error"
                 );
-
                 return;
             }
 
@@ -1516,7 +1518,6 @@
             $("userIdentity").textContent =
                 refreshedUser.email || "Signed in";
 
-            // Load Firestore profile.
             const profileSnapshot = await getDoc(
                 doc(db, "users", refreshedUser.uid)
             );
@@ -1526,7 +1527,6 @@
                     "Your account exists, but its Firestore profile was not found. Contact an administrator.",
                     "error"
                 );
-
                 return;
             }
 
@@ -1534,51 +1534,41 @@
 
             const email = (refreshedUser.email || "").toLowerCase();
 
-            // Check admin access.
             isAdmin =
                 ADMIN_EMAILS.includes(email) &&
                 currentProfile.role === "admin" &&
                 currentProfile.status === "approved";
 
             if (isAdmin) {
-
                 $("dashboardLink").href = "admin-dashboard.html";
                 $("brandLink").href = "admin-dashboard.html";
 
                 $("announcementAdmin").style.display = "block";
                 $("eventAdmin").style.display = "block";
-
             } else {
+                const role = currentProfile.role;
+                const status = currentProfile.status;
 
-                if (currentProfile.role !== "student") {
-                    showNotice(
-                        `Your account role is "${currentProfile.role}". It is not recognised as an approved student or administrator.`,
-                        "error"
-                    );
-
-                    return;
-                }
-
-                if (currentProfile.status === "pending") {
+                if (status === "pending") {
                     window.location.replace("pending.html");
                     return;
                 }
 
-                if (currentProfile.status === "rejected") {
+                if (status === "rejected") {
                     showNotice(
-                        "Your student application was rejected. Please contact the administration.",
+                        "Your application was rejected. Please contact the administration.",
                         "error"
                     );
-
                     return;
                 }
 
-                if (currentProfile.status !== "approved") {
+                const allowedRoles = ["guest", "clubMember", "student"];
+
+                if (!allowedRoles.includes(role) || status !== "approved") {
                     showNotice(
-                        `Your student account status is "${currentProfile.status}". Community access is unavailable.`,
+                        "Your account does not have permission to access the community.",
                         "error"
                     );
-
                     return;
                 }
 
@@ -1590,7 +1580,6 @@
             startListeners();
 
         } catch (error) {
-
             console.error("Community authentication error:", error);
 
             showNotice(

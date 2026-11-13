@@ -5,7 +5,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Admin Dashboard | AD ASTRA BIT</title>
 
     <style>
@@ -48,6 +47,10 @@
             font-size: 13px;
         }
 
+        button, select {
+            font-family: inherit;
+        }
+
         button {
             border: none;
             border-radius: 6px;
@@ -63,7 +66,8 @@
         }
 
         .community-btn,
-        .email-btn {
+        .email-btn,
+        .checkin-btn {
             display: inline-block;
             text-decoration: none;
             border-radius: 6px;
@@ -91,6 +95,15 @@
             background: #c1c1ff;
         }
 
+        .checkin-btn {
+            background: #72d6a0;
+            color: #102015;
+        }
+
+        .checkin-btn:hover {
+            background: #9aebbd;
+        }
+
         .logout-btn {
             background: transparent;
             border: 1px solid #777;
@@ -102,7 +115,7 @@
             color: #111;
         }
 
-        /* SETTINGS DROPDOWN */
+        /* SETTINGS */
 
         .settings {
             position: relative;
@@ -123,7 +136,7 @@
             position: absolute;
             top: calc(100% + 9px);
             right: 0;
-            min-width: 170px;
+            min-width: 190px;
             background: #181825;
             border: 1px solid #35354a;
             border-radius: 8px;
@@ -151,7 +164,7 @@
 
         main {
             width: 88%;
-            max-width: 1250px;
+            max-width: 1350px;
             margin: 45px auto;
         }
 
@@ -170,9 +183,11 @@
             line-height: 1.6;
         }
 
+        /* STATISTICS */
+
         .stats {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(5, 1fr);
             gap: 18px;
             margin-bottom: 35px;
         }
@@ -194,11 +209,84 @@
             font-size: 29px;
         }
 
+        /* LATEST UPDATE */
+
+        .latest-card {
+            background: #151522;
+            border: 1px solid #29293b;
+            border-radius: 10px;
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .latest-card > h2 {
+            font-size: 19px;
+            margin-bottom: 9px;
+        }
+
+        .latest-intro {
+            color: #9999ad;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .latest-update {
+            margin-top: 20px;
+            padding: 20px;
+            background: #0e0e19;
+            border: 1px solid #35354a;
+            border-radius: 9px;
+        }
+
+        .update-type {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            background: #24234a;
+            color: #b8b8ff;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 13px;
+        }
+
+        .latest-update h3 {
+            font-size: 17px;
+            margin-bottom: 10px;
+            overflow-wrap: anywhere;
+        }
+
+        .update-meta {
+            color: #88889e;
+            font-size: 12px;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .update-description {
+            color: #c2c2d0;
+            font-size: 13px;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .empty-message {
+            padding: 25px;
+            text-align: center;
+            color: #9999ad;
+            font-size: 13px;
+        }
+
+        /* USER MANAGEMENT */
+
         .applications {
             background: #151522;
             border: 1px solid #29293b;
             border-radius: 10px;
             overflow: hidden;
+            margin-bottom: 30px;
         }
 
         .applications-header {
@@ -214,6 +302,13 @@
             font-size: 19px;
         }
 
+        .section-description {
+            color: #9999ad;
+            font-size: 12px;
+            line-height: 1.6;
+            margin-top: 7px;
+        }
+
         .refresh-btn {
             background: white;
             color: #111;
@@ -226,7 +321,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 850px;
+            min-width: 1050px;
         }
 
         th, td {
@@ -246,12 +341,15 @@
             color: #e5e5ed;
         }
 
-        .status {
+        /* BADGES */
+
+        .status, .role-badge {
             display: inline-block;
             padding: 6px 10px;
             border-radius: 20px;
             font-size: 11px;
             font-weight: bold;
+            white-space: nowrap;
         }
 
         .pending {
@@ -269,9 +367,33 @@
             color: #ff9999;
         }
 
+        .guest-badge {
+            background: #252535;
+            color: #c5c5d8;
+        }
+
+        .club-badge {
+            background: #24234a;
+            color: #b8b8ff;
+        }
+
+        .admin-badge {
+            background: #3a2c18;
+            color: #facc75;
+        }
+
+        .legacy-badge {
+            background: #332b17;
+            color: #facc15;
+        }
+
+        /* ACTIONS */
+
         .actions {
             display: flex;
+            align-items: center;
             gap: 8px;
+            flex-wrap: wrap;
         }
 
         .approve-btn {
@@ -284,11 +406,24 @@
             color: #2a1010;
         }
 
-        .empty-message {
-            padding: 35px;
-            text-align: center;
-            color: #9999ad;
-            font-size: 14px;
+        .role-select {
+            min-width: 135px;
+            padding: 9px 10px;
+            border: 1px solid #414158;
+            border-radius: 6px;
+            background: #0b0b14;
+            color: white;
+            font-size: 12px;
+            outline: none;
+        }
+
+        .role-select:focus {
+            border-color: #a5a5ff;
+        }
+
+        .role-select:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         #message {
@@ -296,6 +431,22 @@
             font-size: 13px;
             margin-top: 18px;
             min-height: 20px;
+            line-height: 1.6;
+        }
+
+        .info-note {
+            padding: 16px 18px;
+            margin-top: 20px;
+            border: 1px solid #35354a;
+            border-radius: 8px;
+            background: #151522;
+            color: #9999ad;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        .info-note strong {
+            color: #c5c5ff;
         }
 
         footer {
@@ -303,6 +454,22 @@
             color: #777788;
             padding: 25px;
             font-size: 12px;
+        }
+
+        @media (max-width: 1100px) {
+            .header-right {
+                flex-wrap: wrap;
+            }
+
+            .stats {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         @media (max-width: 700px) {
@@ -322,10 +489,6 @@
                 margin: 30px auto;
             }
 
-            .stats {
-                grid-template-columns: 1fr;
-            }
-
             .heading h1 {
                 font-size: 26px;
             }
@@ -334,155 +497,237 @@
                 flex-wrap: wrap;
             }
         }
+
+        @media (max-width: 450px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 
 <body>
 
-    <header>
+<header>
 
-        <div class="logo">AD ASTRA BIT</div>
+    <div class="logo">AD ASTRA BIT</div>
 
-        <div class="header-right">
+    <div class="header-right">
 
-            <span id="adminEmail">Checking admin access...</span>
+        <span id="adminEmail">Checking admin access...</span>
 
-            <a href="community.html" class="community-btn">
-                Community Management
-            </a>
+        <a href="community.html" class="community-btn">
+            Community Management
+        </a>
 
-            <a href="send-email.html" class="email-btn" id="sendEmailBtn">
-                Send Email
-            </a>
+        <a href="send-email.html" class="email-btn" id="sendEmailBtn">
+            Send Email
+        </a>
 
-            <div class="settings">
-                <button class="settings-btn" id="settingsBtn" type="button">
-                    Settings &#9662;
-                </button>
+        <a href="checkin.html" class="checkin-btn">
+            Event Check-in
+        </a>
 
-                <div class="settings-menu" id="settingsMenu">
-                    <a href="edit-profile.html">Edit Profile</a>
-                </div>
+        <div class="settings">
+
+            <button class="settings-btn" id="settingsBtn" type="button">
+                Settings &#9662;
+            </button>
+
+            <div class="settings-menu" id="settingsMenu">
+                <a href="#" id="viewProfileLink">View Profile</a>
+                <a href="edit-profile.html">Edit Profile</a>
             </div>
 
-            <button class="logout-btn" id="logoutBtn" disabled>
-                Logout
+        </div>
+
+        <button class="logout-btn" id="logoutBtn" disabled>
+            Logout
+        </button>
+
+    </div>
+
+</header>
+
+
+<main>
+
+    <section class="heading">
+
+        <h1>Admin Dashboard</h1>
+
+        <p>
+            Manage community members, registrations and access levels
+            across AD ASTRA BIT.
+        </p>
+
+    </section>
+
+
+    <!-- STATISTICS -->
+
+    <section class="stats">
+
+        <div class="stat-card">
+            <p>Total Users</p>
+            <h2 id="totalCount">0</h2>
+        </div>
+
+        <div class="stat-card">
+            <p>Pending Applications</p>
+            <h2 id="pendingCount">0</h2>
+        </div>
+
+        <div class="stat-card">
+            <p>Guests</p>
+            <h2 id="guestCount">0</h2>
+        </div>
+
+        <div class="stat-card">
+            <p>Club Members</p>
+            <h2 id="clubCount">0</h2>
+        </div>
+
+        <div class="stat-card">
+            <p>Admins</p>
+            <h2 id="adminCount">0</h2>
+        </div>
+
+    </section>
+
+
+    <!-- LATEST ANNOUNCEMENT OR EVENT -->
+
+    <section class="latest-card">
+
+        <h2>Latest from AD ASTRA</h2>
+
+        <p class="latest-intro">
+            The most recently published announcement or event.
+        </p>
+
+        <div id="latestUpdateContainer">
+            <div class="empty-message">
+                Loading latest community update...
+            </div>
+        </div>
+
+        <a href="community.html" class="community-btn" style="margin-top:18px;">
+            Open Community Management
+        </a>
+
+    </section>
+
+
+    <!-- USER MANAGEMENT -->
+
+    <section class="applications">
+
+        <div class="applications-header">
+
+            <div>
+                <h2>Community User Management</h2>
+
+                <p class="section-description">
+                    View registered users, approve old applications
+                    and manage community access levels.
+                </p>
+            </div>
+
+            <button class="refresh-btn" id="refreshBtn" disabled>
+                Refresh Users
             </button>
 
         </div>
 
-    </header>
 
-    <main>
+        <div class="table-wrapper">
 
-        <section class="heading">
+            <table>
 
-            <h1>Admin Dashboard</h1>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>USN</th>
+                        <th>Branch</th>
+                        <th>Year</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
 
-            <p>
-                Manage student registrations and control access
-                to the AD ASTRA BIT community.
-            </p>
+                <tbody id="applicationsBody">
 
-        </section>
+                    <tr>
+                        <td colspan="8" class="empty-message">
+                            Checking administrator access...
+                        </td>
+                    </tr>
 
-        <section class="stats">
+                </tbody>
 
-            <div class="stat-card">
-                <p>Total Applications</p>
-                <h2 id="totalCount">0</h2>
-            </div>
+            </table>
 
-            <div class="stat-card">
-                <p>Pending Applications</p>
-                <h2 id="pendingCount">0</h2>
-            </div>
+        </div>
 
-            <div class="stat-card">
-                <p>Approved Students</p>
-                <h2 id="approvedCount">0</h2>
-            </div>
-
-        </section>
-
-        <section class="applications">
-
-            <div class="applications-header">
-
-                <h2>Student Applications</h2>
-
-                <button class="refresh-btn" id="refreshBtn" disabled>
-                    Refresh Applications
-                </button>
-
-            </div>
-
-            <div class="table-wrapper">
-
-                <table>
-
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>USN</th>
-                            <th>Branch</th>
-                            <th>Year</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-
-                    <tbody id="applicationsBody">
-
-                        <tr>
-                            <td colspan="7" class="empty-message">
-                                Checking administrator access...
-                            </td>
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </section>
-
-        <p id="message"></p>
-
-    </main>
-
-    <footer>
-        © 2026 AD ASTRA BIT. Admin Portal.
-    </footer>
-
-    <script type="module">
-
-        import {
-            initializeApp
-        } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-
-        import {
-            getAuth,
-            onAuthStateChanged,
-            signOut
-        } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
-
-        import {
-            getFirestore,
-            collection,
-            getDocs,
-            doc,
-            getDoc,
-            updateDoc,
-            serverTimestamp
-        } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+    </section>
 
 
-        // FIREBASE CONFIGURATION
+    <div class="info-note">
 
-        const firebaseConfig = {
+        <strong>Role hierarchy</strong><br>
+
+        Admin → Full administrative access.<br>
+        Club Member → Club member access and privileges.<br>
+        Guest → Standard community access.<br><br>
+
+        Changing a user's role does not change their Google account.
+        Admin privileges are restricted to the authorised admin accounts.
+
+    </div>
+
+
+    <p id="message"></p>
+
+</main>
+
+
+<footer>
+    © 2026 AD ASTRA BIT. Admin Portal.
+</footer>
+
+
+<script type="module">
+
+    import {
+        initializeApp
+    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+
+    import {
+        getAuth,
+        onAuthStateChanged,
+        signOut
+    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+    import {
+        getFirestore,
+        collection,
+        getDocs,
+        doc,
+        getDoc,
+        updateDoc,
+        serverTimestamp,
+        query,
+        orderBy,
+        limit
+    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+
+    // FIREBASE CONFIGURATION
+
+    const firebaseConfig = {
   apiKey: "AIzaSyB9BQOlOO-tfuFzxjK0KEA7YcV3O11_WjM",
   authDomain: "ad-astra-bit.firebaseapp.com",
   projectId: "ad-astra-bit",
@@ -493,437 +738,1066 @@
 };
 
 
-        // INITIALIZE FIREBASE
+    // INITIALIZE FIREBASE
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-
-        // ADMIN EMAIL ALLOWLIST
-
-        const ADMIN_EMAILS = [
-            "rachnf99@gmail.com",
-            "vedujames99@gmail.com"
-        ];
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
 
-        // ELEMENTS
+    // ADMIN EMAIL ALLOWLIST
 
-        const adminEmail = document.getElementById("adminEmail");
-        const applicationsBody = document.getElementById("applicationsBody");
-        const message = document.getElementById("message");
-
-        const totalCount = document.getElementById("totalCount");
-        const pendingCount = document.getElementById("pendingCount");
-        const approvedCount = document.getElementById("approvedCount");
-
-        const refreshBtn = document.getElementById("refreshBtn");
-        const logoutBtn = document.getElementById("logoutBtn");
-
-        const settingsBtn = document.getElementById("settingsBtn");
-        const settingsMenu = document.getElementById("settingsMenu");
+    const ADMIN_EMAILS = [
+        "rachnf99@gmail.com",
+        "vedujames99@gmail.com"
+    ];
 
 
-        let currentAdmin = null;
+    // ELEMENTS
+
+    const adminEmail = document.getElementById("adminEmail");
+    const applicationsBody = document.getElementById("applicationsBody");
+    const message = document.getElementById("message");
+
+    const totalCount = document.getElementById("totalCount");
+    const pendingCount = document.getElementById("pendingCount");
+    const guestCount = document.getElementById("guestCount");
+    const clubCount = document.getElementById("clubCount");
+    const adminCount = document.getElementById("adminCount");
+
+    const refreshBtn = document.getElementById("refreshBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    const settingsBtn = document.getElementById("settingsBtn");
+    const settingsMenu = document.getElementById("settingsMenu");
+
+    const viewProfileLink = document.getElementById("viewProfileLink");
+
+    const latestUpdateContainer =
+        document.getElementById("latestUpdateContainer");
 
 
-        // SETTINGS DROPDOWN
+    let currentAdmin = null;
+    let isLoading = false;
 
-        settingsBtn.addEventListener("click", (event) => {
-            event.stopPropagation();
-            settingsMenu.classList.toggle("show");
-        });
 
-        document.addEventListener("click", (event) => {
-            if (!event.target.closest(".settings")) {
-                settingsMenu.classList.remove("show");
+    // SETTINGS DROPDOWN
+
+    settingsBtn.addEventListener("click", (event) => {
+
+        event.stopPropagation();
+
+        settingsMenu.classList.toggle("show");
+
+    });
+
+
+    document.addEventListener("click", (event) => {
+
+        if (!event.target.closest(".settings")) {
+            settingsMenu.classList.remove("show");
+        }
+
+    });
+
+
+    // SHOW MESSAGE
+
+    function showMessage(text, color = "#a5a5ff") {
+
+        message.textContent = text;
+        message.style.color = color;
+
+    }
+
+
+    // SAFE TABLE CELL
+
+    function createCell(value) {
+
+        const cell = document.createElement("td");
+        cell.textContent = value || "—";
+
+        return cell;
+
+    }
+
+
+    // NORMALISE LEGACY ROLES
+
+    function getEffectiveRole(user) {
+
+        if (user.role === "student" && user.status === "approved") {
+            return "clubMember";
+        }
+
+        return user.role || "unknown";
+
+    }
+
+
+    // ROLE LABEL
+
+    function getRoleLabel(role) {
+
+        if (role === "clubMember") return "Club Member";
+        if (role === "guest") return "Guest";
+        if (role === "admin") return "Admin";
+        if (role === "student") return "Legacy Student";
+
+        return "Unknown";
+
+    }
+
+
+    // ROLE BADGE
+
+    function createRoleBadge(role, isLegacy = false) {
+
+        const badge = document.createElement("span");
+
+        badge.className = "role-badge";
+
+        if (isLegacy) {
+
+            badge.classList.add("legacy-badge");
+            badge.textContent = "LEGACY → CLUB MEMBER";
+
+        } else {
+
+            if (role === "guest") {
+                badge.classList.add("guest-badge");
+            } else if (role === "clubMember") {
+                badge.classList.add("club-badge");
+            } else if (role === "admin") {
+                badge.classList.add("admin-badge");
             }
+
+            badge.textContent = getRoleLabel(role).toUpperCase();
+
+        }
+
+        return badge;
+
+    }
+
+
+    // STATUS BADGE
+
+    function createStatusBadge(status) {
+
+        const badge = document.createElement("span");
+
+        badge.className = "status " + (status || "");
+        badge.textContent = (status || "unknown").toUpperCase();
+
+        return badge;
+
+    }
+
+
+    // LOADING ROW
+
+    function showLoadingRow(text) {
+
+        applicationsBody.replaceChildren();
+
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+
+        cell.colSpan = 8;
+        cell.className = "empty-message";
+        cell.textContent = text;
+
+        row.appendChild(cell);
+        applicationsBody.appendChild(row);
+
+    }
+
+
+    // DATE HELPERS
+
+    function convertDate(value) {
+
+        if (!value) return null;
+
+        if (typeof value.toDate === "function") {
+            return value.toDate();
+        }
+
+        if (value instanceof Date) {
+            return value;
+        }
+
+        const date = new Date(value);
+
+        return Number.isNaN(date.getTime()) ? null : date;
+
+    }
+
+
+    function formatDate(value) {
+
+        const date = convertDate(value);
+
+        if (!date) return "Date not available";
+
+        return date.toLocaleString("en-IN", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+            hour: "numeric",
+            minute: "2-digit"
         });
 
+    }
 
-        // SHOW MESSAGE
 
-        function showMessage(text) {
-            message.textContent = text;
+    // LOAD LATEST ANNOUNCEMENT OR EVENT
+
+    async function loadLatestUpdate() {
+
+        try {
+
+            const announcementsQuery = query(
+                collection(db, "communityAnnouncements"),
+                orderBy("createdAt", "desc"),
+                limit(1)
+            );
+
+            const eventsQuery = query(
+                collection(db, "communityEvents"),
+                orderBy("createdAt", "desc"),
+                limit(1)
+            );
+
+
+            const [announcementSnapshot, eventSnapshot] =
+                await Promise.all([
+                    getDocs(announcementsQuery),
+                    getDocs(eventsQuery)
+                ]);
+
+
+            const updates = [];
+
+
+            // ANNOUNCEMENT
+
+            if (!announcementSnapshot.empty) {
+
+                const announcement =
+                    announcementSnapshot.docs[0].data();
+
+                updates.push({
+                    type: "Announcement",
+                    title: announcement.title || "Announcement",
+                    description: announcement.body || "",
+                    createdAt: announcement.createdAt,
+                    meta: "Published by AD ASTRA BIT"
+                });
+
+            }
+
+
+            // EVENT
+
+            if (!eventSnapshot.empty) {
+
+                const event = eventSnapshot.docs[0].data();
+
+                let meta = "Published by AD ASTRA BIT";
+
+                const eventDate = convertDate(event.eventDate);
+
+                if (eventDate) {
+                    meta += " · Event date: " +
+                        eventDate.toLocaleDateString("en-IN", {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric"
+                        });
+                }
+
+                if (event.location) {
+                    meta += " · " + event.location;
+                }
+
+                updates.push({
+                    type: "Event",
+                    title: event.title || "Community Event",
+                    description: event.description || "",
+                    createdAt: event.createdAt,
+                    meta
+                });
+
+            }
+
+
+            if (updates.length === 0) {
+
+                latestUpdateContainer.replaceChildren();
+
+                const empty = document.createElement("div");
+                empty.className = "empty-message";
+                empty.textContent =
+                    "No announcements or events have been published yet.";
+
+                latestUpdateContainer.appendChild(empty);
+
+                return;
+
+            }
+
+
+            // COMPARE PUBLICATION DATES
+
+            updates.sort((a, b) => {
+
+                const dateA = convertDate(a.createdAt);
+                const dateB = convertDate(b.createdAt);
+
+                return (dateB?.getTime() || 0) -
+                    (dateA?.getTime() || 0);
+
+            });
+
+
+            const latest = updates[0];
+
+
+            // BUILD UPDATE CARD SAFELY
+
+            const card = document.createElement("div");
+            card.className = "latest-update";
+
+            const badge = document.createElement("span");
+            badge.className = "update-type";
+            badge.textContent = latest.type;
+
+            const title = document.createElement("h3");
+            title.textContent = latest.title;
+
+            const meta = document.createElement("div");
+            meta.className = "update-meta";
+            meta.textContent =
+                latest.meta + " · " + formatDate(latest.createdAt);
+
+            const description = document.createElement("div");
+            description.className = "update-description";
+            description.textContent =
+                latest.description || "No additional details provided.";
+
+            card.appendChild(badge);
+            card.appendChild(title);
+            card.appendChild(meta);
+            card.appendChild(description);
+
+            latestUpdateContainer.replaceChildren(card);
+
+
+        } catch (error) {
+
+            console.error("LATEST UPDATE ERROR:", error);
+
+            latestUpdateContainer.replaceChildren();
+
+            const errorText = document.createElement("div");
+            errorText.className = "empty-message";
+            errorText.textContent =
+                "Unable to load the latest update. Check Firestore permissions.";
+
+            latestUpdateContainer.appendChild(errorText);
+
         }
 
-
-        // CREATE TABLE CELL SAFELY
-
-        function createCell(value) {
-
-            const cell = document.createElement("td");
-            cell.textContent = value || "—";
-
-            return cell;
-        }
+    }
 
 
-        // LOAD APPLICATIONS
+    // LOAD USERS
 
-        async function loadApplications() {
+    async function loadApplications() {
 
-            refreshBtn.disabled = true;
+        if (!currentAdmin || isLoading) return;
+
+        isLoading = true;
+        refreshBtn.disabled = true;
+
+        showLoadingRow("Loading community users...");
+        showMessage("");
+
+
+        try {
+
+            const snapshot = await getDocs(
+                collection(db, "users")
+            );
+
+
+            const users = snapshot.docs.map(documentSnapshot => ({
+                id: documentSnapshot.id,
+                ...documentSnapshot.data()
+            }));
+
+
+            // SORT NEWEST FIRST
+
+            users.sort((a, b) => {
+
+                const dateA = a.createdAt?.toMillis?.() || 0;
+                const dateB = b.createdAt?.toMillis?.() || 0;
+
+                return dateB - dateA;
+
+            });
+
+
+            // CLASSIFY USERS
+
+            const pending = users.filter(user =>
+                user.role === "student" &&
+                user.status === "pending"
+            );
+
+            const guests = users.filter(user =>
+                getEffectiveRole(user) === "guest" &&
+                user.status === "approved"
+            );
+
+            const clubMembers = users.filter(user =>
+                getEffectiveRole(user) === "clubMember" &&
+                user.status === "approved"
+            );
+
+            const admins = users.filter(user =>
+                user.role === "admin" &&
+                user.status === "approved"
+            );
+
+
+            // UPDATE STATISTICS
+
+            totalCount.textContent = users.length;
+            pendingCount.textContent = pending.length;
+            guestCount.textContent = guests.length;
+            clubCount.textContent = clubMembers.length;
+            adminCount.textContent = admins.length;
+
 
             applicationsBody.replaceChildren();
 
-            const loadingRow = document.createElement("tr");
-            const loadingCell = document.createElement("td");
 
-            loadingCell.colSpan = 7;
-            loadingCell.className = "empty-message";
-            loadingCell.textContent = "Loading applications...";
+            if (users.length === 0) {
 
-            loadingRow.appendChild(loadingCell);
-            applicationsBody.appendChild(loadingRow);
+                showLoadingRow("No registered users found.");
+                return;
 
-            showMessage("");
+            }
 
 
-            try {
+            // RENDER USERS
 
-                const snapshot = await getDocs(
-                    collection(db, "users")
+            users.forEach(user => {
+
+                const row = document.createElement("tr");
+
+                const effectiveRole = getEffectiveRole(user);
+
+                const isLegacy =
+                    user.role === "student" &&
+                    user.status === "approved";
+
+                const isPending =
+                    user.role === "student" &&
+                    user.status === "pending";
+
+                const userEmail = (user.email || "").toLowerCase();
+
+                const isAuthorisedAdmin =
+                    ADMIN_EMAILS.includes(userEmail);
+
+
+                // BASIC DETAILS
+
+                row.appendChild(createCell(user.name));
+                row.appendChild(createCell(user.email));
+                row.appendChild(createCell(user.usn));
+                row.appendChild(createCell(user.branch));
+                row.appendChild(createCell(user.academicYear));
+
+
+                // ROLE
+
+                const roleCell = document.createElement("td");
+
+                roleCell.appendChild(
+                    createRoleBadge(effectiveRole, isLegacy)
                 );
 
-                const students = snapshot.docs
-                    .map(documentSnapshot => ({
-                        id: documentSnapshot.id,
-                        ...documentSnapshot.data()
-                    }))
-                    .filter(student => student.role === "student")
-                    .sort((a, b) => {
+                row.appendChild(roleCell);
 
-                        const dateA = a.createdAt?.toMillis?.() || 0;
-                        const dateB = b.createdAt?.toMillis?.() || 0;
 
-                        return dateB - dateA;
+                // STATUS
+
+                const statusCell = document.createElement("td");
+
+                statusCell.appendChild(
+                    createStatusBadge(user.status)
+                );
+
+                row.appendChild(statusCell);
+
+
+                // ACTIONS
+
+                const actionsCell = document.createElement("td");
+                const actions = document.createElement("div");
+
+                actions.className = "actions";
+
+
+                // PENDING LEGACY APPLICATION
+
+                if (isPending) {
+
+                    const approveBtn =
+                        document.createElement("button");
+
+                    approveBtn.className = "approve-btn";
+                    approveBtn.textContent = "Approve";
+
+                    const rejectBtn =
+                        document.createElement("button");
+
+                    rejectBtn.className = "reject-btn";
+                    rejectBtn.textContent = "Reject";
+
+
+                    approveBtn.addEventListener("click", () => {
+
+                        updateStudentStatus(
+                            user.id,
+                            "approved",
+                            approveBtn,
+                            rejectBtn
+                        );
 
                     });
 
 
-                // UPDATE STATISTICS
+                    rejectBtn.addEventListener("click", () => {
 
-                const pending = students.filter(
-                    student => student.status === "pending"
-                ).length;
+                        updateStudentStatus(
+                            user.id,
+                            "rejected",
+                            approveBtn,
+                            rejectBtn
+                        );
 
-                const approved = students.filter(
-                    student => student.status === "approved"
-                ).length;
-
-                totalCount.textContent = students.length;
-                pendingCount.textContent = pending;
-                approvedCount.textContent = approved;
+                    });
 
 
-                applicationsBody.replaceChildren();
+                    actions.appendChild(approveBtn);
+                    actions.appendChild(rejectBtn);
 
-
-                if (students.length === 0) {
-
-                    const row = document.createElement("tr");
-                    const cell = document.createElement("td");
-
-                    cell.colSpan = 7;
-                    cell.className = "empty-message";
-                    cell.textContent = "No student applications found.";
-
-                    row.appendChild(cell);
-                    applicationsBody.appendChild(row);
-
-                    return;
                 }
 
 
-                // RENDER STUDENTS
+                // ADMIN ACCOUNT
 
-                students.forEach(student => {
+                else if (
+                    effectiveRole === "admin" ||
+                    isAuthorisedAdmin
+                ) {
 
-                    const row = document.createElement("tr");
+                    const adminLabel =
+                        document.createElement("span");
 
-                    row.appendChild(createCell(student.name));
-                    row.appendChild(createCell(student.email));
-                    row.appendChild(createCell(student.usn));
-                    row.appendChild(createCell(student.branch));
-                    row.appendChild(createCell(student.academicYear));
+                    adminLabel.textContent =
+                        "Protected admin account";
 
+                    adminLabel.style.color = "#facc75";
+                    adminLabel.style.fontSize = "12px";
 
-                    // STATUS
+                    actions.appendChild(adminLabel);
 
-                    const statusCell = document.createElement("td");
-                    const statusBadge = document.createElement("span");
-
-                    const currentStatus = student.status || "unknown";
-
-                    statusBadge.className =
-                        "status " + currentStatus;
-
-                    statusBadge.textContent =
-                        currentStatus.toUpperCase();
-
-                    statusCell.appendChild(statusBadge);
-                    row.appendChild(statusCell);
+                }
 
 
-                    // ACTIONS
+                // APPROVED NON-ADMIN ACCOUNT
 
-                    const actionsCell = document.createElement("td");
-                    const actions = document.createElement("div");
+                else if (
+                    user.status === "approved" &&
+                    ["guest", "clubMember", "student"].includes(user.role)
+                ) {
 
-                    actions.className = "actions";
+                    const roleSelect =
+                        document.createElement("select");
 
-
-                    if (currentStatus === "pending") {
-
-                        const approveBtn = document.createElement("button");
-
-                        approveBtn.className = "approve-btn";
-                        approveBtn.textContent = "Approve";
-
-                        const rejectBtn = document.createElement("button");
-
-                        rejectBtn.className = "reject-btn";
-                        rejectBtn.textContent = "Reject";
-
-                        approveBtn.addEventListener("click", () => {
-                            updateStudentStatus(
-                                student.id,
-                                "approved",
-                                approveBtn,
-                                rejectBtn
-                            );
-                        });
-
-                        rejectBtn.addEventListener("click", () => {
-                            updateStudentStatus(
-                                student.id,
-                                "rejected",
-                                approveBtn,
-                                rejectBtn
-                            );
-                        });
-
-                        actions.appendChild(approveBtn);
-                        actions.appendChild(rejectBtn);
-
-                    } else {
-
-                        actions.textContent = "No action required";
-
-                    }
+                    roleSelect.className = "role-select";
 
 
-                    actionsCell.appendChild(actions);
-                    row.appendChild(actionsCell);
+                    const guestOption =
+                        document.createElement("option");
 
-                    applicationsBody.appendChild(row);
+                    guestOption.value = "guest";
+                    guestOption.textContent = "Guest";
 
-                });
+
+                    const clubOption =
+                        document.createElement("option");
+
+                    clubOption.value = "clubMember";
+                    clubOption.textContent = "Club Member";
 
 
-                showMessage("Applications loaded successfully.");
+                    roleSelect.appendChild(guestOption);
+                    roleSelect.appendChild(clubOption);
 
-            } catch (error) {
+                    roleSelect.value = effectiveRole;
 
-                console.error("APPLICATION LOADING ERROR:", error);
 
-                applicationsBody.replaceChildren();
+                    roleSelect.addEventListener("change", () => {
 
-                const row = document.createElement("tr");
-                const cell = document.createElement("td");
+                        updateUserRole(
+                            user.id,
+                            effectiveRole,
+                            roleSelect.value,
+                            roleSelect
+                        );
 
-                cell.colSpan = 7;
-                cell.className = "empty-message";
-                cell.textContent =
-                    "Unable to load applications: " + error.message;
+                    });
 
-                row.appendChild(cell);
+
+                    actions.appendChild(roleSelect);
+
+                }
+
+
+                // REJECTED OR UNKNOWN ACCOUNT
+
+                else {
+
+                    const noAction =
+                        document.createElement("span");
+
+                    noAction.textContent = "No available action";
+
+                    noAction.style.color = "#888899";
+                    noAction.style.fontSize = "12px";
+
+                    actions.appendChild(noAction);
+
+                }
+
+
+                actionsCell.appendChild(actions);
+                row.appendChild(actionsCell);
+
                 applicationsBody.appendChild(row);
 
-                showMessage("Please check Firestore permissions.");
-
-            } finally {
-
-                refreshBtn.disabled = false;
-
-            }
-
-        }
+            });
 
 
-        // UPDATE STUDENT STATUS
-
-        async function updateStudentStatus(
-            studentId,
-            newStatus,
-            approveBtn,
-            rejectBtn
-        ) {
-
-            const confirmed = window.confirm(
-                `Are you sure you want to ${newStatus} this student application?`
+            showMessage(
+                `Loaded ${users.length} registered accounts successfully.`,
+                "#86efac"
             );
 
-            if (!confirmed) return;
 
-            approveBtn.disabled = true;
-            rejectBtn.disabled = true;
+        } catch (error) {
 
-            showMessage("Updating student application...");
+            console.error("USER LOADING ERROR:", error);
 
-            try {
+            showLoadingRow(
+                "Unable to load users: " + error.message
+            );
 
-                const studentRef = doc(db, "users", studentId);
+            showMessage(
+                "Please check your Firestore permissions.",
+                "#ff9999"
+            );
 
-                await updateDoc(studentRef, {
-                    status: newStatus,
-                    updatedAt: serverTimestamp()
-                });
+        } finally {
 
-                showMessage(
-                    `Student application ${newStatus} successfully.`
-                );
+            isLoading = false;
+            refreshBtn.disabled = false;
 
-                await loadApplications();
+        }
 
-            } catch (error) {
+    }
 
-                console.error("STATUS UPDATE ERROR:", error);
 
-                showMessage(
-                    "Unable to update application: " + error.message
-                );
+    // APPROVE OR REJECT LEGACY APPLICATION
 
-                approveBtn.disabled = false;
-                rejectBtn.disabled = false;
+    async function updateStudentStatus(
+        studentId,
+        newStatus,
+        approveBtn,
+        rejectBtn
+    ) {
 
+        const actionText =
+            newStatus === "approved"
+                ? "approve this application and make the user a Club Member"
+                : "reject this application";
+
+
+        const confirmed = window.confirm(
+            `Are you sure you want to ${actionText}?`
+        );
+
+        if (!confirmed) return;
+
+
+        approveBtn.disabled = true;
+        rejectBtn.disabled = true;
+
+        showMessage("Updating application...");
+
+
+        try {
+
+            const studentRef = doc(db, "users", studentId);
+
+            const updateData = {
+                status: newStatus,
+                updatedAt: serverTimestamp()
+            };
+
+
+            if (newStatus === "approved") {
+                updateData.role = "clubMember";
             }
+
+
+            await updateDoc(studentRef, updateData);
+
+
+            showMessage(
+                newStatus === "approved"
+                    ? "Application approved. User is now a Club Member."
+                    : "Application rejected.",
+                "#86efac"
+            );
+
+
+            await loadApplications();
+
+
+        } catch (error) {
+
+            console.error("APPLICATION UPDATE ERROR:", error);
+
+            showMessage(
+                "Unable to update application: " + error.message,
+                "#ff9999"
+            );
+
+            approveBtn.disabled = false;
+            rejectBtn.disabled = false;
+
+        }
+
+    }
+
+
+    // CHANGE USER ROLE
+
+    async function updateUserRole(
+        userId,
+        oldRole,
+        newRole,
+        roleSelect
+    ) {
+
+        if (!["guest", "clubMember"].includes(newRole)) {
+
+            showMessage("Invalid role selected.", "#ff9999");
+
+            roleSelect.value = oldRole;
+            return;
 
         }
 
 
-        // AUTHENTICATION AND ADMIN ACCESS
+        if (oldRole === newRole) return;
 
-        onAuthStateChanged(auth, async (user) => {
 
-            if (!user) {
+        const oldLabel = getRoleLabel(oldRole);
+        const newLabel = getRoleLabel(newRole);
 
-                adminEmail.textContent = "Not signed in";
 
-                showMessage(
-                    "Please sign in using your administrator Google account."
-                );
+        const confirmed = window.confirm(
+            `Change this user's role from ${oldLabel} to ${newLabel}?`
+        );
 
-                window.location.replace("index.html");
-                return;
 
+        if (!confirmed) {
+
+            roleSelect.value = oldRole;
+            return;
+
+        }
+
+
+        roleSelect.disabled = true;
+
+        showMessage(`Changing user role to ${newLabel}...`);
+
+
+        try {
+
+            const userRef = doc(db, "users", userId);
+
+            const userSnapshot = await getDoc(userRef);
+
+            if (!userSnapshot.exists()) {
+                throw new Error("User account no longer exists.");
             }
 
 
-            const email = (user.email || "").toLowerCase();
+            const userData = userSnapshot.data();
+
+            const userEmail = (userData.email || "").toLowerCase();
+
+
+            // PROTECT ADMIN ACCOUNTS
 
             if (
-                !user.emailVerified ||
-                !ADMIN_EMAILS.includes(email)
+                userData.role === "admin" ||
+                ADMIN_EMAILS.includes(userEmail)
             ) {
 
-                showMessage(
-                    "Access denied. This account is not an authorized administrator."
+                throw new Error(
+                    "Administrator accounts cannot be changed here."
                 );
 
-                await signOut(auth);
-
-                window.location.replace("index.html");
-                return;
-
             }
 
 
-            try {
+            // ONLY APPROVED ACCOUNTS
 
-                // VERIFY ADMIN FIRESTORE PROFILE
+            if (
+                userData.status !== "approved" ||
+                !["guest", "clubMember", "student"].includes(userData.role)
+            ) {
 
-                const adminRef = doc(db, "users", user.uid);
-                const adminSnapshot = await getDoc(adminRef);
-
-                if (!adminSnapshot.exists()) {
-                    throw new Error("Admin profile not found in Firestore.");
-                }
-
-                const adminProfile = adminSnapshot.data();
-
-                if (
-                    adminProfile.role !== "admin" ||
-                    adminProfile.status !== "approved"
-                ) {
-                    throw new Error("Admin profile is not approved.");
-                }
-
-
-                currentAdmin = user;
-
-                adminEmail.textContent = user.email;
-
-                logoutBtn.disabled = false;
-                refreshBtn.disabled = false;
-
-                await loadApplications();
-
-            } catch (error) {
-
-                console.error("ADMIN VERIFICATION ERROR:", error);
-
-                showMessage(
-                    "Admin verification failed: " + error.message
+                throw new Error(
+                    "This account is not eligible for role changes."
                 );
 
-                await signOut(auth);
+            }
 
-                window.location.replace("index.html");
+
+            await updateDoc(userRef, {
+
+                role: newRole,
+                status: "approved",
+                updatedAt: serverTimestamp()
+
+            });
+
+
+            showMessage(
+                `${userData.name || "User"} is now a ${newLabel}.`,
+                "#86efac"
+            );
+
+
+            await loadApplications();
+
+
+        } catch (error) {
+
+            console.error("ROLE UPDATE ERROR:", error);
+
+            showMessage(
+                "Unable to change role: " + error.message,
+                "#ff9999"
+            );
+
+            roleSelect.disabled = false;
+            roleSelect.value = oldRole;
+
+        }
+
+    }
+
+
+    // AUTHENTICATION AND ADMIN ACCESS
+
+    onAuthStateChanged(auth, async (user) => {
+
+        if (!user) {
+
+            adminEmail.textContent = "Not signed in";
+
+            showMessage(
+                "Please sign in using your administrator Google account.",
+                "#ff9999"
+            );
+
+            window.location.replace("index.html");
+            return;
+
+        }
+
+
+        const email = (user.email || "").toLowerCase();
+
+
+        if (
+            !user.emailVerified ||
+            !ADMIN_EMAILS.includes(email)
+        ) {
+
+            showMessage(
+                "Access denied. This account is not an authorised administrator.",
+                "#ff9999"
+            );
+
+            await signOut(auth);
+
+            window.location.replace("index.html");
+            return;
+
+        }
+
+
+        try {
+
+            // VERIFY ADMIN FIRESTORE PROFILE
+
+            const adminRef = doc(db, "users", user.uid);
+
+            const adminSnapshot = await getDoc(adminRef);
+
+
+            if (!adminSnapshot.exists()) {
+
+                throw new Error(
+                    "Admin profile not found in Firestore."
+                );
 
             }
 
-        });
+
+            const adminProfile = adminSnapshot.data();
 
 
-        // REFRESH
+            if (
+                adminProfile.role !== "admin" ||
+                adminProfile.status !== "approved"
+            ) {
 
-        refreshBtn.addEventListener("click", () => {
-
-            if (currentAdmin) {
-                loadApplications();
-            }
-
-        });
-
-
-        // LOGOUT
-
-        logoutBtn.addEventListener("click", async () => {
-
-            try {
-
-                logoutBtn.disabled = true;
-
-                await signOut(auth);
-
-                window.location.replace("index.html");
-
-            } catch (error) {
-
-                console.error("LOGOUT ERROR:", error);
-
-                showMessage("Logout failed. Please try again.");
-
-                logoutBtn.disabled = false;
+                throw new Error(
+                    "Admin profile is not approved."
+                );
 
             }
 
-        });
 
-    </script>
+            currentAdmin = user;
+
+            adminEmail.textContent = user.email;
+
+            logoutBtn.disabled = false;
+            refreshBtn.disabled = false;
+
+
+            // ADMIN'S OWN PUBLIC PROFILE URL
+            // Uses username instead of Firebase UID.
+
+            if (
+                typeof adminProfile.username === "string" &&
+                /^[a-z0-9][a-z0-9-]{1,22}[a-z0-9]$/.test(adminProfile.username)
+            ) {
+
+                viewProfileLink.href =
+                    "view-profile.html?username=" +
+                    encodeURIComponent(adminProfile.username);
+
+                viewProfileLink.textContent = "View Profile";
+
+            } else {
+
+                // Admin has not claimed a username yet.
+                // Send the admin to Edit Profile to claim one.
+
+                viewProfileLink.href = "edit-profile.html";
+
+                viewProfileLink.textContent =
+                    "Set Up Username First";
+
+            }
+
+
+            // LOAD DASHBOARD DATA
+
+            await Promise.all([
+                loadApplications(),
+                loadLatestUpdate()
+            ]);
+
+
+        } catch (error) {
+
+            console.error("ADMIN VERIFICATION ERROR:", error);
+
+            showMessage(
+                "Admin verification failed: " + error.message,
+                "#ff9999"
+            );
+
+            await signOut(auth);
+
+            window.location.replace("index.html");
+
+        }
+
+    });
+
+
+    // REFRESH USERS
+
+    refreshBtn.addEventListener("click", () => {
+
+        if (currentAdmin) {
+            loadApplications();
+        }
+
+    });
+
+
+    // LOGOUT
+
+    logoutBtn.addEventListener("click", async () => {
+
+        try {
+
+            logoutBtn.disabled = true;
+
+            await signOut(auth);
+
+            window.location.replace("index.html");
+
+        } catch (error) {
+
+            console.error("LOGOUT ERROR:", error);
+
+            showMessage(
+                "Logout failed. Please try again.",
+                "#ff9999"
+            );
+
+            logoutBtn.disabled = false;
+
+        }
+
+    });
+
+</script>
 
 </body>
 </html>

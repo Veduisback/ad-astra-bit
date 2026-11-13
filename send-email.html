@@ -1,6 +1,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -142,7 +143,7 @@
             margin-bottom: 9px;
         }
 
-        input, textarea {
+        input, textarea, select {
             width: 100%;
             padding: 14px;
             border: 1px solid #35354a;
@@ -154,14 +155,32 @@
             font-family: Arial, sans-serif;
         }
 
-        input:focus, textarea:focus {
+        input:focus,
+        textarea:focus,
+        select:focus {
             border-color: #a5a5ff;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        select option {
+            background: #151522;
+            color: white;
         }
 
         textarea {
             min-height: 230px;
             resize: vertical;
             line-height: 1.7;
+        }
+
+        .field-hint {
+            color: #777788;
+            font-size: 12px;
+            line-height: 1.6;
+            margin-top: 8px;
         }
 
         .recipient-box {
@@ -299,7 +318,6 @@
         }
     </style>
 
-    <!-- Google Identity Services -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
@@ -325,10 +343,12 @@
 
     <section class="heading">
         <div class="eyebrow">Administrator Communication</div>
+
         <h1>Community Email</h1>
+
         <p>
-            Compose an official email and share it with all approved
-            AD ASTRA BIT students and administrators.
+            Compose an official email and choose which membership
+            levels should receive it.
         </p>
     </section>
 
@@ -341,21 +361,61 @@
             of the administrator currently signed in.
         </p>
 
-        <div class="recipient-box">
-            <div>
-                <p>Eligible recipients</p>
-                <strong id="recipientCount">—</strong>
-            </div>
-
-            <div class="recipient-status" id="recipientStatus">
-                Checking access...
-            </div>
-        </div>
-
         <form id="emailForm">
 
+            <!-- RECIPIENT CLASS -->
+
             <div class="field">
+
+                <label for="recipientLevel">
+                    Select Recipient Class
+                </label>
+
+                <select id="recipientLevel" disabled>
+
+                    <option value="guest">
+                        Guests + Club Members + Admins
+                    </option>
+
+                    <option value="clubMember">
+                        Club Members + Admins
+                    </option>
+
+                    <option value="admin">
+                        Admins Only
+                    </option>
+
+                </select>
+
+                <p class="field-hint" id="recipientHint">
+                    Select the minimum membership level that should receive this email.
+                </p>
+
+            </div>
+
+
+            <!-- RECIPIENT COUNT -->
+
+            <div class="recipient-box">
+
+                <div>
+                    <p>Eligible recipients</p>
+                    <strong id="recipientCount">—</strong>
+                </div>
+
+                <div class="recipient-status" id="recipientStatus">
+                    Checking access...
+                </div>
+
+            </div>
+
+
+            <!-- SUBJECT -->
+
+            <div class="field">
+
                 <label for="emailSubject">Email Subject</label>
+
                 <input
                     type="text"
                     id="emailSubject"
@@ -364,10 +424,16 @@
                     required
                     disabled
                 >
+
             </div>
 
+
+            <!-- MESSAGE -->
+
             <div class="field">
+
                 <label for="emailBody">Message</label>
+
                 <textarea
                     id="emailBody"
                     maxlength="20000"
@@ -375,7 +441,9 @@
                     required
                     disabled
                 ></textarea>
+
             </div>
+
 
             <button
                 type="button"
@@ -397,18 +465,26 @@
 
         </form>
 
+
+        <!-- PREVIEW -->
+
         <div class="preview" id="preview">
+
             <h3 id="previewSubject"></h3>
+
             <p id="previewBody"></p>
+
         </div>
 
+
         <p id="message" aria-live="polite"></p>
+
 
         <p class="security-note">
             Emails are sent using Gmail API with the gmail.send permission.
             Recipients are added using BCC so their email addresses are
-            not exposed to one another. Only approved students and
-            administrators are included. The sending administrator is excluded.
+            not exposed to one another. The sending administrator is
+            excluded from the recipient list.
         </p>
 
     </section>
@@ -495,6 +571,9 @@
     // =====================================================
 
     const adminEmail = document.getElementById("adminEmail");
+
+    const recipientLevel = document.getElementById("recipientLevel");
+    const recipientHint = document.getElementById("recipientHint");
     const recipientCount = document.getElementById("recipientCount");
     const recipientStatus = document.getElementById("recipientStatus");
 
@@ -517,9 +596,14 @@
     // =====================================================
 
     let currentAdmin = null;
+
+    // All eligible users, separated by membership class.
+    let allRecipients = [];
+
+    // Recipients selected by the dropdown.
     let recipients = [];
+
     let gmailTokenClient = null;
-    let isAuthorized = false;
 
 
     // =====================================================
@@ -527,13 +611,15 @@
     // =====================================================
 
     function showMessage(text, type = "info") {
+
         message.textContent = text;
         message.className = type;
+
     }
 
 
     // =====================================================
-    // WAIT FOR GOOGLE IDENTITY SERVICES
+    // GOOGLE IDENTITY SERVICES
     // =====================================================
 
     function waitForGoogleIdentity() {
@@ -545,18 +631,24 @@
             const check = setInterval(() => {
 
                 if (window.google?.accounts?.oauth2) {
+
                     clearInterval(check);
                     resolve();
+
                     return;
+
                 }
 
                 attempts++;
 
                 if (attempts >= 100) {
+
                     clearInterval(check);
+
                     reject(new Error(
                         "Google authentication service could not load. Check your internet connection."
                     ));
+
                 }
 
             }, 100);
@@ -567,103 +659,58 @@
 
 
     // =====================================================
-    // ADMIN AUTHENTICATION AND ACCESS CONTROL
+    // MEMBERSHIP CLASSIFICATION
     // =====================================================
 
-    onAuthStateChanged(auth, async user => {
+    function getMembershipClass(profile) {
 
-        if (!user) {
+        const role = profile.role;
+        const status = profile.status;
 
-            window.location.replace("index.html");
-            return;
-
+        // ADMIN
+        if (
+            role === "admin" &&
+            status === "approved"
+        ) {
+            return "admin";
         }
 
-        try {
-
-            // Refresh the Firebase user state.
-            try {
-                await user.reload();
-            } catch (reloadError) {
-
-                if (reloadError.code !== "auth/network-request-failed") {
-                    throw reloadError;
-                }
-
-                console.warn("User reload skipped due to network failure.");
-            }
-
-            const verifiedUser = auth.currentUser;
-
-            if (!verifiedUser) {
-                throw new Error("Your login session has ended.");
-            }
-
-            const email = (verifiedUser.email || "").toLowerCase();
-
-            // Check email verification and allowlist.
-            if (
-                !verifiedUser.emailVerified ||
-                !ADMIN_EMAILS.includes(email)
-            ) {
-                throw new Error("This account is not an authorized administrator.");
-            }
-
-            // Verify Firestore admin profile.
-            const adminSnapshot = await getDoc(
-                doc(db, "users", verifiedUser.uid)
-            );
-
-            if (!adminSnapshot.exists()) {
-                throw new Error("Administrator profile not found.");
-            }
-
-            const profile = adminSnapshot.data();
-
-            if (
-                profile.role !== "admin" ||
-                profile.status !== "approved"
-            ) {
-                throw new Error("Administrator account is not approved.");
-            }
-
-            currentAdmin = verifiedUser;
-
-            adminEmail.textContent = verifiedUser.email;
-            logoutBtn.disabled = false;
-
-            await loadRecipients();
-
-        } catch (error) {
-
-            console.error("ADMIN ACCESS ERROR:", error);
-
-            showMessage(
-                error.message || "Administrator verification failed.",
-                "error"
-            );
-
-            recipientStatus.textContent = "Access denied";
-
-            // Do not leave the page open for an unauthorized account.
-            setTimeout(() => {
-                window.location.replace("index.html");
-            }, 1800);
-
+        // NEW CLUB MEMBER ROLE
+        if (role === "clubMember") {
+            return "clubMember";
         }
 
-    });
+        // LEGACY APPROVED STUDENT ACCOUNTS
+        // These will be treated as Club Members during migration.
+        if (
+            role === "student" &&
+            status === "approved"
+        ) {
+            return "clubMember";
+        }
+
+        // NEW GUEST ROLE
+        if (role === "guest") {
+            return "guest";
+        }
+
+        return null;
+
+    }
 
 
     // =====================================================
-    // LOAD APPROVED STUDENTS AND ADMINS
+    // LOAD RECIPIENTS FROM FIRESTORE
     // =====================================================
 
     async function loadRecipients() {
 
         recipientStatus.textContent = "Loading recipients...";
 
+        recipientCount.textContent = "—";
+
         sendBtn.disabled = true;
+        recipientLevel.disabled = true;
 
         try {
 
@@ -677,25 +724,9 @@
 
                 const profile = documentSnapshot.data();
 
-                const role = profile.role;
-                const status = profile.status;
-
-                const isApprovedStudent =
-                    role === "student" &&
-                    status === "approved";
-
-                const isApprovedAdmin =
-                    role === "admin" &&
-                    status === "approved" &&
-                    ADMIN_EMAILS.includes(
-                        (profile.email || "").toLowerCase()
-                    );
-
-                if (!isApprovedStudent && !isApprovedAdmin) {
-                    return;
-                }
-
-                const email = (profile.email || "").trim().toLowerCase();
+                const email = (profile.email || "")
+                    .trim()
+                    .toLowerCase();
 
                 if (
                     !email ||
@@ -704,33 +735,44 @@
                     return;
                 }
 
-                // Do not send the email to the current administrator.
+                // Exclude the currently signed-in administrator.
                 if (
                     email === (currentAdmin.email || "").toLowerCase()
                 ) {
                     return;
                 }
 
-                recipientMap.set(email, email);
+                const membershipClass =
+                    getMembershipClass(profile);
+
+                if (!membershipClass) {
+                    return;
+                }
+
+                // Only allow the configured administrator accounts.
+                if (
+                    membershipClass === "admin" &&
+                    !ADMIN_EMAILS.includes(email)
+                ) {
+                    return;
+                }
+
+                recipientMap.set(email, {
+                    email: email,
+                    role: membershipClass
+                });
 
             });
 
-            recipients = Array.from(recipientMap.values());
 
-            recipientCount.textContent = recipients.length;
+            allRecipients = Array.from(
+                recipientMap.values()
+            );
 
-            if (recipients.length === 0) {
 
-                recipientStatus.textContent = "No recipients found";
+            recipientLevel.disabled = false;
 
-                showMessage(
-                    "No approved student or administrator email addresses were found.",
-                    "error"
-                );
-
-                return;
-
-            }
+            updateRecipientSelection();
 
             recipientStatus.textContent = "Recipient list ready";
 
@@ -750,6 +792,8 @@
 
             recipientStatus.textContent = "Loading failed";
 
+            recipientCount.textContent = "—";
+
             showMessage(
                 "Unable to load recipients. Check your Firestore permissions: " +
                 error.message,
@@ -759,6 +803,197 @@
         }
 
     }
+
+
+    // =====================================================
+    // FILTER RECIPIENTS BY SELECTED CLASS
+    // =====================================================
+
+    function updateRecipientSelection() {
+
+        const selectedClass = recipientLevel.value;
+
+        if (selectedClass === "guest") {
+
+            // Guest level: everyone.
+            recipients = allRecipients.filter(person =>
+                ["guest", "clubMember", "admin"].includes(person.role)
+            );
+
+            recipientHint.textContent =
+                "Guests, Club Members and Admins will receive this email.";
+
+        } else if (selectedClass === "clubMember") {
+
+            // Club Member level: Club Members and Admins.
+            recipients = allRecipients.filter(person =>
+                ["clubMember", "admin"].includes(person.role)
+            );
+
+            recipientHint.textContent =
+                "Only Club Members and Admins will receive this email.";
+
+        } else if (selectedClass === "admin") {
+
+            // Admin level: Admins only.
+            recipients = allRecipients.filter(person =>
+                person.role === "admin"
+            );
+
+            recipientHint.textContent =
+                "Only Admins will receive this email.";
+
+        } else {
+
+            recipients = [];
+
+        }
+
+
+        recipientCount.textContent = recipients.length;
+
+
+        if (recipients.length === 0) {
+
+            recipientStatus.textContent = "No eligible recipients";
+
+            sendBtn.disabled = true;
+
+        } else {
+
+            recipientStatus.textContent = "Recipient list ready";
+
+            sendBtn.disabled = false;
+
+        }
+
+    }
+
+
+    // =====================================================
+    // RECIPIENT CLASS CHANGE
+    // =====================================================
+
+    recipientLevel.addEventListener("change", () => {
+
+        updateRecipientSelection();
+
+        preview.classList.remove("show");
+
+    });
+
+
+    // =====================================================
+    // ADMIN AUTHENTICATION AND ACCESS CONTROL
+    // =====================================================
+
+    onAuthStateChanged(auth, async user => {
+
+        if (!user) {
+
+            window.location.replace("index.html");
+
+            return;
+
+        }
+
+        try {
+
+            // Refresh Firebase user state.
+            try {
+
+                await user.reload();
+
+            } catch (reloadError) {
+
+                if (
+                    reloadError.code !==
+                    "auth/network-request-failed"
+                ) {
+                    throw reloadError;
+                }
+
+                console.warn(
+                    "User reload skipped due to network failure."
+                );
+
+            }
+
+            const verifiedUser = auth.currentUser;
+
+            if (!verifiedUser) {
+                throw new Error("Your login session has ended.");
+            }
+
+            const email = (verifiedUser.email || "").toLowerCase();
+
+            // Verify email and administrator allowlist.
+            if (
+                !verifiedUser.emailVerified ||
+                !ADMIN_EMAILS.includes(email)
+            ) {
+
+                throw new Error(
+                    "This account is not an authorized administrator."
+                );
+
+            }
+
+            // Verify Firestore administrator profile.
+            const adminSnapshot = await getDoc(
+                doc(db, "users", verifiedUser.uid)
+            );
+
+            if (!adminSnapshot.exists()) {
+
+                throw new Error(
+                    "Administrator profile not found."
+                );
+
+            }
+
+            const profile = adminSnapshot.data();
+
+            if (
+                profile.role !== "admin" ||
+                profile.status !== "approved"
+            ) {
+
+                throw new Error(
+                    "Administrator account is not approved."
+                );
+
+            }
+
+            currentAdmin = verifiedUser;
+
+            adminEmail.textContent = verifiedUser.email;
+
+            logoutBtn.disabled = false;
+
+            await loadRecipients();
+
+        } catch (error) {
+
+            console.error("ADMIN ACCESS ERROR:", error);
+
+            showMessage(
+                error.message ||
+                "Administrator verification failed.",
+                "error"
+            );
+
+            recipientStatus.textContent = "Access denied";
+
+            setTimeout(() => {
+
+                window.location.replace("index.html");
+
+            }, 1800);
+
+        }
+
+    });
 
 
     // =====================================================
@@ -789,7 +1024,9 @@
         let binary = "";
 
         bytes.forEach(byte => {
+
             binary += String.fromCharCode(byte);
+
         });
 
         return btoa(binary);
@@ -820,26 +1057,27 @@
     // FORMAT EMAIL MESSAGE
     // =====================================================
 
-    function createRawEmail(subject, body, batch) {
+    
+function createRawEmail(subject, body, batch) {
 
-        const encodedBody = base64EncodeUtf8(body)
-            .match(/.{1,76}/g)
-            .join("\r\n");
+    const encodedBody = base64EncodeUtf8(body)
+        .match(/.{1,76}/g)
+        .join("\r\n");
 
-        const emailMessage = [
-            `To: ${currentAdmin.email}`,
-            `Bcc: ${batch.join(", ")}`,
-            `Subject: ${encodeMimeHeader(subject)}`,
-            "MIME-Version: 1.0",
-            "Content-Type: text/plain; charset=UTF-8",
-            "Content-Transfer-Encoding: base64",
-            "",
-            encodedBody
-        ].join("\r\n");
+    const emailMessage = [
+        `To: ${currentAdmin.email}`,
+        `Bcc: ${batch.join(", ")}`,
+        `Subject: ${encodeMimeHeader(subject)}`,
+        "MIME-Version: 1.0",
+        "Content-Type: text/plain; charset=UTF-8",
+        "Content-Transfer-Encoding: base64",
+        "",
+        encodedBody
+    ].join("\r\n");
 
-        return base64UrlEncodeUtf8(emailMessage);
+    return base64UrlEncodeUtf8(emailMessage);
+}
 
-    }
 
 
     // =====================================================
@@ -852,43 +1090,50 @@
 
         return new Promise((resolve, reject) => {
 
-            gmailTokenClient = window.google.accounts.oauth2.initTokenClient({
+            gmailTokenClient =
+                window.google.accounts.oauth2.initTokenClient({
 
-                client_id: GOOGLE_CLIENT_ID,
+                    client_id: GOOGLE_CLIENT_ID,
 
-                scope: GMAIL_SCOPE,
+                    scope: GMAIL_SCOPE,
 
-                callback: response => {
+                    callback: response => {
 
-                    if (response.error) {
+                        if (response.error) {
+
+                            reject(new Error(
+                                response.error_description ||
+                                response.error
+                            ));
+
+                            return;
+
+                        }
+
+                        if (!response.access_token) {
+
+                            reject(new Error(
+                                "Google did not provide an access token."
+                            ));
+
+                            return;
+
+                        }
+
+                        resolve(response.access_token);
+
+                    },
+
+                    error_callback: error => {
 
                         reject(new Error(
-                            response.error_description ||
-                            response.error
+                            error.message ||
+                            "Google authorization failed."
                         ));
 
-                        return;
-
                     }
 
-                    if (!response.access_token) {
-                        reject(new Error("Google did not provide an access token."));
-                        return;
-                    }
-
-                    resolve(response.access_token);
-
-                },
-
-                error_callback: error => {
-
-                    reject(new Error(
-                        error.message || "Google authorization failed."
-                    ));
-
-                }
-
-            });
+                });
 
             gmailTokenClient.requestAccessToken();
 
@@ -901,7 +1146,12 @@
     // SEND ONE BCC EMAIL BATCH
     // =====================================================
 
-    async function sendEmailBatch(accessToken, subject, body, batch) {
+    async function sendEmailBatch(
+        accessToken,
+        subject,
+        body,
+        batch
+    ) {
 
         const raw = createRawEmail(
             subject,
@@ -912,22 +1162,31 @@
         const response = await fetch(
             "https://gmail.googleapis.com/gmail/v1/users/me/messages/send",
             {
+
                 method: "POST",
 
                 headers: {
+
                     "Authorization": `Bearer ${accessToken}`,
+
                     "Content-Type": "application/json"
+
                 },
 
                 body: JSON.stringify({
+
                     raw: raw
+
                 })
+
             }
         );
 
+
         if (!response.ok) {
 
-            const errorData = await response.json().catch(() => ({}));
+            const errorData = await response.json()
+                .catch(() => ({}));
 
             const errorMessage =
                 errorData.error?.message ||
@@ -943,49 +1202,110 @@
 
 
     // =====================================================
-    // SEND TO EVERYONE
+    // SEND EMAIL
     // =====================================================
 
     emailForm.addEventListener("submit", async event => {
 
         event.preventDefault();
 
+
         if (!currentAdmin) {
-            showMessage("Administrator access is required.", "error");
+
+            showMessage(
+                "Administrator access is required.",
+                "error"
+            );
+
             return;
+
         }
+
+
+        // Recalculate immediately before sending.
+        updateRecipientSelection();
+
 
         if (recipients.length === 0) {
-            showMessage("There are no eligible recipients.", "error");
+
+            showMessage(
+                "There are no eligible recipients for this class.",
+                "error"
+            );
+
             return;
+
         }
+
 
         const subject = emailSubject.value.trim();
+
         const body = emailBody.value.trim();
 
+
         if (!subject || !body) {
-            showMessage("Please enter both the subject and message.", "error");
+
+            showMessage(
+                "Please enter both the subject and message.",
+                "error"
+            );
+
             return;
+
         }
 
+
+        const selectedClass = recipientLevel.value;
+
+        const classLabels = {
+
+            guest: "Guests, Club Members and Admins",
+
+            clubMember: "Club Members and Admins",
+
+            admin: "Admins only"
+
+        };
+
+
         const confirmed = window.confirm(
-            `Send this email to ${recipients.length} approved students and administrators?`
+
+            `Send this email to ${recipients.length} recipients?\n\n` +
+
+            `Recipient class: ${classLabels[selectedClass]}\n\n` +
+
+            `Sender: ${currentAdmin.email}`
+
         );
+
 
         if (!confirmed) return;
 
+
         sendBtn.disabled = true;
+
         previewBtn.disabled = true;
+
+        recipientLevel.disabled = true;
+
 
         try {
 
-            showMessage("Requesting Gmail permission...", "info");
+            showMessage(
+                "Requesting Gmail permission...",
+                "info"
+            );
 
-            const accessToken = await requestGmailPermission();
 
-            isAuthorized = true;
+            const accessToken =
+                await requestGmailPermission();
 
-            showMessage("Gmail connected. Sending emails...", "info");
+
+            showMessage(
+                "Gmail connected. Sending emails...",
+                "info"
+            );
+
 
             /*
              * Send recipients in batches of 50.
@@ -993,7 +1313,9 @@
              */
 
             const batchSize = 50;
+
             let sentCount = 0;
+
 
             for (
                 let i = 0;
@@ -1001,10 +1323,10 @@
                 i += batchSize
             ) {
 
-                const batch = recipients.slice(
-                    i,
-                    i + batchSize
-                );
+                const batch = recipients
+                    .slice(i, i + batchSize)
+                    .map(person => person.email);
+
 
                 await sendEmailBatch(
                     accessToken,
@@ -1013,22 +1335,36 @@
                     batch
                 );
 
+
                 sentCount += batch.length;
 
+
                 showMessage(
+
                     `Sending emails... ${sentCount} of ${recipients.length} recipients processed.`,
+
                     "info"
+
                 );
 
             }
 
+
             showMessage(
-                `Email successfully sent to ${sentCount} recipients from ${currentAdmin.email}.`,
+
+                `Email successfully sent to ${sentCount} recipients (${classLabels[selectedClass]}) from ${currentAdmin.email}.`,
+
                 "success"
+
             );
 
+
             emailForm.reset();
+
             preview.classList.remove("show");
+
+            updateRecipientSelection();
+
 
         } catch (error) {
 
@@ -1042,7 +1378,10 @@
         } finally {
 
             sendBtn.disabled = false;
+
             previewBtn.disabled = false;
+
+            recipientLevel.disabled = false;
 
         }
 

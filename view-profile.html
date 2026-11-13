@@ -1,0 +1,969 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public Profile | AD ASTRA BIT</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: #080b14;
+            color: #f5f5f5;
+            padding: 35px 16px;
+        }
+
+        .page {
+            width: 100%;
+            max-width: 850px;
+            margin: auto;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .brand {
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: #cbd5e1;
+        }
+
+        .home-link {
+            color: #93c5fd;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .home-link:hover {
+            color: white;
+        }
+
+        .profile-card,
+        .section {
+            background: #111827;
+            border: 1px solid #263247;
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 20px;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 23px;
+            flex-wrap: wrap;
+        }
+
+        #profilePhoto,
+        .avatar-placeholder {
+            width: 112px;
+            height: 112px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #475569;
+            flex-shrink: 0;
+        }
+
+        .avatar-placeholder {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #263247;
+            font-size: 38px;
+            font-weight: bold;
+            color: #dbeafe;
+        }
+
+        .profile-info {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        h1 {
+            font-size: 29px;
+            margin-bottom: 9px;
+            overflow-wrap: anywhere;
+        }
+
+        .role {
+            display: inline-block;
+            background: #1e3a5f;
+            color: #bfdbfe;
+            border: 1px solid #31577e;
+            border-radius: 30px;
+            padding: 7px 12px;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .username {
+            color: #93c5fd;
+            font-size: 13px;
+            margin-bottom: 8px;
+            overflow-wrap: anywhere;
+        }
+
+        .profile-meta {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 13px;
+            margin-top: 27px;
+        }
+
+        .meta-item {
+            background: #0b1220;
+            border: 1px solid #263247;
+            border-radius: 9px;
+            padding: 15px;
+        }
+
+        .meta-label {
+            display: block;
+            color: #94a3b8;
+            font-size: 11px;
+            margin-bottom: 7px;
+            text-transform: uppercase;
+            letter-spacing: .7px;
+        }
+
+        .meta-value {
+            font-size: 14px;
+            color: #e2e8f0;
+            overflow-wrap: anywhere;
+        }
+
+        h2 {
+            font-size: 18px;
+            margin-bottom: 17px;
+        }
+
+        .bio-text {
+            color: #cbd5e1;
+            font-size: 14px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .empty-text {
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .edit-area {
+            display: none;
+            margin-top: 22px;
+            padding-top: 20px;
+            border-top: 1px solid #263247;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 110px;
+            resize: vertical;
+            padding: 13px;
+            border: 1px solid #374151;
+            border-radius: 9px;
+            background: #0b1220;
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: #60a5fa;
+        }
+
+        .edit-help {
+            color: #64748b;
+            font-size: 11px;
+            margin-top: 7px;
+        }
+
+        button {
+            border: none;
+            border-radius: 8px;
+            padding: 12px 17px;
+            background: #60a5fa;
+            color: #07111f;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 13px;
+        }
+
+        button:disabled {
+            opacity: .6;
+            cursor: wait;
+        }
+
+        .item-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .badge-item {
+            padding: 10px 13px;
+            border-radius: 8px;
+            background: #202b40;
+            border: 1px solid #34445f;
+            color: #dbeafe;
+            font-size: 13px;
+        }
+
+        .event-item {
+            width: 100%;
+            padding: 14px;
+            background: #0b1220;
+            border: 1px solid #263247;
+            border-radius: 9px;
+            margin-bottom: 10px;
+        }
+
+        .event-name {
+            color: #e2e8f0;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .event-date {
+            color: #64748b;
+            font-size: 12px;
+            margin-top: 6px;
+        }
+
+        #statusMessage {
+            color: #93c5fd;
+            font-size: 14px;
+            line-height: 1.6;
+            text-align: center;
+            padding: 25px;
+        }
+
+        #errorMessage {
+            display: none;
+            color: #fca5a5;
+            text-align: center;
+            padding: 25px;
+            line-height: 1.6;
+        }
+
+        #pageContent {
+            display: none;
+        }
+
+        #saveMessage {
+            font-size: 13px;
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+        .footer {
+            text-align: center;
+            color: #475569;
+            font-size: 11px;
+            padding: 12px;
+        }
+
+        @media(max-width: 550px) {
+            .profile-card,
+            .section {
+                padding: 21px;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .profile-meta {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <div class="topbar">
+        <div class="brand">AD ASTRA BIT</div>
+        <a href="index.html" class="home-link">← Homepage</a>
+    </div>
+
+    <div id="statusMessage">Loading public profile...</div>
+
+    <div id="errorMessage"></div>
+
+    <main id="pageContent">
+
+        <section class="profile-card">
+
+            <div class="profile-header">
+
+                <div id="avatarPlaceholder" class="avatar-placeholder">
+                    A
+                </div>
+
+                <img
+                    id="profilePhoto"
+                    alt="Profile picture"
+                    style="display:none;"
+                >
+
+                <div class="profile-info">
+
+                    <h1 id="profileName">Member Name</h1>
+
+                    <div id="profileRole" class="role">Guest</div>
+
+                    <p id="profileUsername" class="username"></p>
+
+                </div>
+
+            </div>
+
+            <div class="profile-meta">
+
+                <div class="meta-item">
+                    <span class="meta-label">Branch</span>
+                    <span class="meta-value" id="profileBranch">
+                        Not specified
+                    </span>
+                </div>
+
+                <div class="meta-item">
+                    <span class="meta-label">Academic Year</span>
+                    <span class="meta-value" id="profileYear">
+                        Not specified
+                    </span>
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="section">
+
+            <h2>About</h2>
+
+            <p id="profileBio" class="bio-text">
+                No bio has been added yet.
+            </p>
+
+            <div id="bioEditor" class="edit-area">
+
+                <h2>Edit Public Bio</h2>
+
+                <textarea
+                    id="bioInput"
+                    maxlength="500"
+                    placeholder="Write something about yourself..."
+                ></textarea>
+
+                <p class="edit-help">
+                    Maximum 500 characters. This bio is visible to everyone.
+                </p>
+
+                <button id="saveBioBtn" type="button">
+                    Save Bio
+                </button>
+
+                <p id="saveMessage"></p>
+
+            </div>
+
+        </section>
+
+        <section class="section">
+
+            <h2>Badges</h2>
+
+            <div id="badgeList" class="item-list">
+                <p class="empty-text">No badges earned yet.</p>
+            </div>
+
+        </section>
+
+        <section class="section">
+
+            <h2>Participated Events</h2>
+
+            <div id="eventList">
+                <p class="empty-text">
+                    No event participation recorded yet.
+                </p>
+            </div>
+
+        </section>
+
+    </main>
+
+    <div class="footer">
+        AD ASTRA BIT · Public Member Profile
+    </div>
+
+</div>
+
+
+<script type="module">
+
+    // =====================================
+    // FIREBASE IMPORTS
+    // =====================================
+
+    import {
+        initializeApp
+    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+
+    import {
+        getAuth,
+        onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+    import {
+        getFirestore,
+        doc,
+        getDoc,
+        updateDoc,
+        serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+
+    // =====================================
+    // FIREBASE CONFIGURATION
+    // =====================================
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyB9BQOlOO-tfuFzxjK0KEA7YcV3O11_WjM",
+        authDomain: "ad-astra-bit.firebaseapp.com",
+        projectId: "ad-astra-bit",
+        storageBucket: "ad-astra-bit.firebasestorage.app",
+        messagingSenderId: "104444066688",
+        appId: "1:104444066688:web:d84478465cd3084f315f65"
+    };
+
+
+    const app = initializeApp(firebaseConfig);
+
+    const auth = getAuth(app);
+
+    const db = getFirestore(app);
+
+    const $ = id => document.getElementById(id);
+
+
+    // =====================================
+    // URL PARAMETERS
+    // =====================================
+
+    const params = new URLSearchParams(window.location.search);
+
+    const username = (params.get("username") || "")
+        .trim()
+        .toLowerCase();
+
+    let profileUid = null;
+
+    let publicProfile = null;
+
+    let isOwner = false;
+
+    let profileLoaded = false;
+
+
+    // =====================================
+    // ERROR HANDLING
+    // =====================================
+
+    function showError(text) {
+
+        $("statusMessage").style.display = "none";
+
+        $("pageContent").style.display = "none";
+
+        $("errorMessage").textContent = text;
+
+        $("errorMessage").style.display = "block";
+    }
+
+
+    // =====================================
+    // ROLE LABEL
+    // =====================================
+
+    function getRoleLabel(role) {
+
+        if (role === "admin") return "Admin";
+
+        if (role === "clubMember" || role === "student") {
+            return "Club Member";
+        }
+
+        return "Guest";
+    }
+
+
+    // =====================================
+    // PROFILE PHOTO
+    // =====================================
+
+    function showAvatarFallback(name) {
+
+        $("profilePhoto").style.display = "none";
+
+        $("profilePhoto").removeAttribute("src");
+
+        $("avatarPlaceholder").style.display = "flex";
+
+        $("avatarPlaceholder").textContent =
+            (name || "A").trim().charAt(0).toUpperCase() || "A";
+    }
+
+
+    function setProfilePhoto(photoURL, name) {
+
+        const photo = $("profilePhoto");
+
+        photo.onerror = () => {
+            showAvatarFallback(name);
+        };
+
+        if (photoURL) {
+
+            $("avatarPlaceholder").style.display = "none";
+
+            photo.src = photoURL;
+
+            photo.style.display = "block";
+
+        } else {
+
+            showAvatarFallback(name);
+        }
+    }
+
+
+    // =====================================
+    // RENDER BADGES
+    // =====================================
+
+    function renderBadges(badges) {
+
+        const container = $("badgeList");
+
+        container.replaceChildren();
+
+        if (!Array.isArray(badges) || badges.length === 0) {
+
+            const empty = document.createElement("p");
+
+            empty.className = "empty-text";
+
+            empty.textContent = "No badges earned yet.";
+
+            container.appendChild(empty);
+
+            return;
+        }
+
+        badges.forEach(badge => {
+
+            const item = document.createElement("div");
+
+            item.className = "badge-item";
+
+            let label = "Badge";
+
+            if (typeof badge === "string") {
+
+                label = badge;
+
+            } else if (badge && typeof badge === "object") {
+
+                label = badge.name || badge.title || badge.label || "Badge";
+            }
+
+            item.textContent = label;
+
+            container.appendChild(item);
+        });
+    }
+
+
+    // =====================================
+    // RENDER PARTICIPATED EVENTS
+    // =====================================
+
+    function renderEvents(events) {
+
+        const container = $("eventList");
+
+        container.replaceChildren();
+
+        if (!Array.isArray(events) || events.length === 0) {
+
+            const empty = document.createElement("p");
+
+            empty.className = "empty-text";
+
+            empty.textContent =
+                "No event participation recorded yet.";
+
+            container.appendChild(empty);
+
+            return;
+        }
+
+        events.forEach(event => {
+
+            const item = document.createElement("div");
+
+            item.className = "event-item";
+
+            let eventName = "Participated Event";
+
+            let eventDate = "";
+
+            if (typeof event === "string") {
+
+                eventName = event;
+
+            } else if (event && typeof event === "object") {
+
+                eventName =
+                    event.title ||
+                    event.name ||
+                    event.eventName ||
+                    event.eventId ||
+                    eventName;
+
+                eventDate = event.date || event.eventDate || "";
+            }
+
+            const name = document.createElement("div");
+
+            name.className = "event-name";
+
+            name.textContent = eventName;
+
+            item.appendChild(name);
+
+            if (eventDate) {
+
+                const date = document.createElement("div");
+
+                date.className = "event-date";
+
+                date.textContent = eventDate;
+
+                item.appendChild(date);
+            }
+
+            container.appendChild(item);
+        });
+    }
+
+
+    // =====================================
+    // RENDER PROFILE
+    // =====================================
+
+    function renderProfile(data) {
+
+        publicProfile = data;
+
+        $("profileName").textContent =
+            data.name || "AD ASTRA Member";
+
+        $("profileRole").textContent =
+            getRoleLabel(data.role);
+
+        $("profileUsername").textContent =
+            data.username ? "@" + data.username : "";
+
+        $("profileBranch").textContent =
+            data.branch || "Not specified";
+
+        $("profileYear").textContent =
+            data.academicYear || "Not specified";
+
+
+        const bio = data.bio || "";
+
+        $("profileBio").textContent =
+            bio || "No bio has been added yet.";
+
+        $("bioInput").value = bio;
+
+
+        setProfilePhoto(
+            data.photoURL || "",
+            data.name || "A"
+        );
+
+        renderBadges(data.badges);
+
+        renderEvents(data.participatedEvents);
+
+
+        $("statusMessage").style.display = "none";
+
+        $("errorMessage").style.display = "none";
+
+        $("pageContent").style.display = "block";
+
+
+        // Only the authenticated owner can edit their bio.
+
+        $("bioEditor").style.display =
+            isOwner ? "block" : "none";
+    }
+
+
+    // =====================================
+    // LOAD PUBLIC PROFILE USING USERNAME
+    // =====================================
+
+    async function loadPublicProfile() {
+
+        if (!username) {
+
+            showError(
+                "No username was provided. Open a profile using view-profile.html?username=USERNAME."
+            );
+
+            return;
+        }
+
+        if (!/^[a-z0-9][a-z0-9-]{1,22}[a-z0-9]$/.test(username)) {
+
+            showError("This username format is invalid.");
+
+            return;
+        }
+
+        try {
+
+            // Step 1: Find the UID using the username mapping.
+
+            const slugRef = doc(
+                db,
+                "publicProfileSlugs",
+                username
+            );
+
+            const slugSnapshot = await getDoc(slugRef);
+
+            if (!slugSnapshot.exists()) {
+
+                showError(
+                    "No public profile exists with the username @" + username + "."
+                );
+
+                return;
+            }
+
+            const slugData = slugSnapshot.data();
+
+            profileUid = slugData.uid;
+
+            if (typeof profileUid !== "string" || !profileUid) {
+
+                showError(
+                    "The public profile mapping is invalid."
+                );
+
+                return;
+            }
+
+
+            // Step 2: Retrieve the public profile.
+
+            const profileRef = doc(
+                db,
+                "publicProfiles",
+                profileUid
+            );
+
+            const profileSnapshot = await getDoc(profileRef);
+
+            if (!profileSnapshot.exists()) {
+
+                showError(
+                    "This public profile has not been created yet."
+                );
+
+                return;
+            }
+
+            const data = profileSnapshot.data();
+
+
+            // Step 3: Ensure username and mapping match.
+
+            if (data.username !== username) {
+
+                showError(
+                    "This public profile URL does not match the registered username."
+                );
+
+                return;
+            }
+
+
+            // IMPORTANT FIX:
+            // Authentication may have loaded before profileUid.
+            // Recalculate ownership AFTER the profile UID is known.
+
+            const currentUser = auth.currentUser;
+
+            isOwner = !!currentUser
+                && currentUser.uid === profileUid;
+
+
+            // Profile is now ready.
+
+            profileLoaded = true;
+
+            renderProfile(data);
+
+        } catch (error) {
+
+            console.error(
+                "PUBLIC PROFILE LOAD ERROR:",
+                error
+            );
+
+            showError(
+                "Unable to load this profile. " + error.message
+            );
+        }
+    }
+
+
+    // =====================================
+    // AUTH STATE
+    // =====================================
+
+    onAuthStateChanged(auth, user => {
+
+        // Public profiles can be viewed without signing in.
+        // Authentication only determines bio editing permission.
+
+        if (profileLoaded && profileUid) {
+
+            isOwner = !!user && user.uid === profileUid;
+
+            renderProfile(publicProfile);
+        }
+    });
+
+
+    // Load the profile independently of authentication.
+
+    loadPublicProfile();
+
+
+    // =====================================
+    // SAVE BIO
+    // =====================================
+
+    $("saveBioBtn").addEventListener("click", async () => {
+
+        const user = auth.currentUser;
+
+        if (!user || !profileUid || user.uid !== profileUid) {
+
+            $("saveMessage").textContent =
+                "Only the profile owner can edit this bio.";
+
+            $("saveMessage").style.color = "#f87171";
+
+            return;
+        }
+
+        const bio = $("bioInput").value.trim();
+
+        if (bio.length > 500) {
+
+            $("saveMessage").textContent =
+                "Bio must be 500 characters or fewer.";
+
+            $("saveMessage").style.color = "#f87171";
+
+            return;
+        }
+
+        const button = $("saveBioBtn");
+
+        button.disabled = true;
+
+        button.textContent = "Saving...";
+
+        try {
+
+            await updateDoc(
+                doc(db, "publicProfiles", profileUid),
+                {
+                    bio,
+                    updatedAt: serverTimestamp()
+                }
+            );
+
+            publicProfile.bio = bio;
+
+            $("profileBio").textContent =
+                bio || "No bio has been added yet.";
+
+            $("saveMessage").textContent =
+                "Public bio updated successfully.";
+
+            $("saveMessage").style.color = "#4ade80";
+
+        } catch (error) {
+
+            console.error(
+                "BIO UPDATE ERROR:",
+                error
+            );
+
+            $("saveMessage").textContent =
+                "Could not update bio: " + error.message;
+
+            $("saveMessage").style.color = "#f87171";
+
+        } finally {
+
+            button.disabled = false;
+
+            button.textContent = "Save Bio";
+        }
+    });
+
+</script>
+
+</body>
+</html>

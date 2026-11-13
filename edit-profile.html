@@ -7,9 +7,7 @@
     <title>Edit Profile | AD ASTRA BIT</title>
 
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         body {
             margin: 0;
@@ -32,14 +30,12 @@
             border-radius: 18px;
         }
 
-        h1 {
-            margin: 0 0 8px;
-            font-size: 27px;
-        }
+        h1 { margin: 0 0 8px; font-size: 27px; }
 
         .subtitle {
             color: #9ca3af;
             margin-bottom: 28px;
+            line-height: 1.5;
         }
 
         .photo-section {
@@ -86,13 +82,9 @@
             width: fit-content;
         }
 
-        #photoInput {
-            display: none;
-        }
+        #photoInput { display: none; }
 
-        .field {
-            margin-bottom: 18px;
-        }
+        .field { margin-bottom: 18px; }
 
         .field-label {
             display: block;
@@ -117,17 +109,30 @@
         }
 
         input:disabled {
-            opacity: 0.65;
+            opacity: .65;
             cursor: not-allowed;
         }
 
-        select {
-            cursor: pointer;
-        }
+        select { cursor: pointer; }
 
         select option {
             background: #111827;
             color: white;
+        }
+
+        .field-note {
+            display: block;
+            margin-top: 7px;
+            color: #94a3b8;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .username-status {
+            display: block;
+            margin-top: 7px;
+            font-size: 12px;
+            line-height: 1.4;
         }
 
         .buttons {
@@ -156,7 +161,7 @@
         }
 
         button:disabled {
-            opacity: 0.6;
+            opacity: .6;
             cursor: wait;
         }
 
@@ -166,22 +171,12 @@
             line-height: 1.5;
         }
 
-        .success {
-            color: #4ade80;
-        }
-
-        .error {
-            color: #f87171;
-        }
-
-        .info {
-            color: #93c5fd;
-        }
+        .success { color: #4ade80; }
+        .error { color: #f87171; }
+        .info { color: #93c5fd; }
 
         @media(max-width: 480px) {
-            .container {
-                padding: 23px;
-            }
+            .container { padding: 23px; }
         }
     </style>
 </head>
@@ -194,8 +189,6 @@
     <p class="subtitle">
         Update your AD ASTRA BIT account details.
     </p>
-
-    <!-- PROFILE PICTURE -->
 
     <div class="photo-section">
 
@@ -228,160 +221,77 @@
             </small>
 
         </div>
-
     </div>
 
-
-    <!-- FULL NAME -->
+    <div class="field">
+        <label class="field-label" for="name">Full Name</label>
+        <input id="name" type="text" maxlength="100" required>
+    </div>
 
     <div class="field">
-
-        <label class="field-label" for="name">
-            Full Name
-        </label>
-
+        <label class="field-label" for="username">Username</label>
         <input
-            id="name"
+            id="username"
             type="text"
-            maxlength="100"
-            required
-        >
-
-    </div>
-
-
-    <!-- EMAIL -->
-
-    <div class="field">
-
-        <label class="field-label" for="email">
-            Email Address
-        </label>
-
-        <input
-            id="email"
-            type="email"
+            maxlength="24"
+            autocomplete="off"
+            spellcheck="false"
+            placeholder="e.g. vedang-jaiswal"
             disabled
         >
-
+        <small class="field-note" id="usernameNote">
+            Your username is permanent and is used in your public profile URL.
+        </small>
+        <small class="username-status" id="usernameStatus"></small>
     </div>
 
-
-    <!-- USN -->
-
     <div class="field">
-
-        <label class="field-label" for="usn">
-            USN
-        </label>
-
-        <input
-            id="usn"
-            type="text"
-            maxlength="30"
-            required
-        >
-
+        <label class="field-label" for="email">Email Address</label>
+        <input id="email" type="email" disabled>
     </div>
 
-
-    <!-- BRANCH DROPDOWN -->
+    <div class="field">
+        <label class="field-label" for="usn">USN</label>
+        <input id="usn" type="text" maxlength="30" required>
+    </div>
 
     <div class="field">
-
-        <label class="field-label" for="branch">
-            Branch
-        </label>
+        <label class="field-label" for="branch">Branch</label>
 
         <select id="branch" required>
-
-            <option value="" disabled>
-                Select your branch
-            </option>
-
-            <option value="Computer Science and Engineering">
-                Computer Science and Engineering (CSE)
-            </option>
-
-            <option value="Information Science and Engineering">
-                Information Science and Engineering (ISE)
-            </option>
-
-            <option value="Electronics and Communication Engineering">
-                Electronics and Communication Engineering (ECE)
-            </option>
-
-            <option value="Electrical and Electronics Engineering">
-                Electrical and Electronics Engineering (EEE)
-            </option>
-
-            <option value="Mechanical Engineering">
-                Mechanical Engineering
-            </option>
-
-            <option value="Civil Engineering">
-                Civil Engineering
-            </option>
-
-            <option value="Artificial Intelligence and Machine Learning">
-                Artificial Intelligence and Machine Learning (AI & ML)
-            </option>
-
-            <option value="Artificial Intelligence and Data Science">
-                Artificial Intelligence and Data Science (AI & DS)
-            </option>
-
-            <option value="Other">
-                Other
-            </option>
-
+            <option value="">Select your branch</option>
+            <option value="Computer Science and Engineering">Computer Science and Engineering (CSE)</option>
+            <option value="Information Science and Engineering">Information Science and Engineering (ISE)</option>
+            <option value="Electronics and Communication Engineering">Electronics and Communication Engineering (ECE)</option>
+            <option value="Electrical and Electronics Engineering">Electrical and Electronics Engineering (EEE)</option>
+            <option value="Mechanical Engineering">Mechanical Engineering</option>
+            <option value="Civil Engineering">Civil Engineering</option>
+            <option value="Artificial Intelligence and Machine Learning">Artificial Intelligence and Machine Learning (AI & ML)</option>
+            <option value="Artificial Intelligence and Data Science">Artificial Intelligence and Data Science (AI & DS)</option>
+            <option value="Other">Other</option>
         </select>
-
     </div>
 
-
-    <!-- ACADEMIC YEAR DROPDOWN -->
-
     <div class="field">
-
-        <label class="field-label" for="academicYear">
-            Academic Year
-        </label>
+        <label class="field-label" for="academicYear">Academic Year</label>
 
         <select id="academicYear" required>
-
-            <option value="" disabled>
-                Select your academic year
-            </option>
-
+            <option value="">Select your academic year</option>
             <option value="1st Year">1st Year</option>
             <option value="2nd Year">2nd Year</option>
             <option value="3rd Year">3rd Year</option>
             <option value="4th Year">4th Year</option>
-
         </select>
-
     </div>
 
-
-    <!-- BUTTONS -->
-
     <div class="buttons">
-
-        <button id="cancelBtn" type="button">
-            Cancel
-        </button>
-
-        <button id="saveBtn" type="button">
-            Save Changes
-        </button>
-
+        <button id="cancelBtn" type="button">Cancel</button>
+        <button id="saveBtn" type="button">Save Changes</button>
     </div>
 
     <div id="message"></div>
 
 </div>
-
 
 <script type="module">
 
@@ -399,11 +309,14 @@
         getFirestore,
         doc,
         getDoc,
-        updateDoc
+        writeBatch,
+        serverTimestamp
     } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
 
+    // =====================================
     // FIREBASE CONFIGURATION
+    // =====================================
 
     const firebaseConfig = {
         apiKey: "AIzaSyB9BQOlOO-tfuFzxjK0KEA7YcV3O11_WjM",
@@ -414,14 +327,32 @@
         appId: "1:104444066688:web:d84478465cd3084f315f65"
     };
 
-
     const ADMIN_EMAILS = [
         "rachnf99@gmail.com",
         "vedujames99@gmail.com"
     ];
 
-
-    // VALID OPTIONS
+    const RESERVED_USERNAMES = [
+        "admin",
+        "administrator",
+        "community",
+        "signup",
+        "login",
+        "logout",
+        "profile",
+        "profiles",
+        "dashboard",
+        "settings",
+        "events",
+        "event",
+        "api",
+        "assets",
+        "index",
+        "support",
+        "help",
+        "about",
+        "contact"
+    ];
 
     const ALLOWED_BRANCHES = [
         "Computer Science and Engineering",
@@ -443,31 +374,105 @@
     ];
 
 
-    // INITIALIZE FIREBASE
+    // =====================================
+    // INITIALIZATION
+    // =====================================
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-
     const $ = id => document.getElementById(id);
-
 
     let currentUser = null;
     let currentProfile = null;
+    let currentPublicProfile = null;
+
     let selectedPhoto = null;
     let removePhoto = false;
+    let profileReady = false;
+    let usernameAvailable = false;
+    let usernameCheckVersion = 0;
 
 
-    // MESSAGE
+    // =====================================
+    // HELPERS
+    // =====================================
 
-    function showMessage(message, type = "info") {
-        $("message").textContent = message;
+    function showMessage(text, type = "info") {
+        $("message").textContent = text;
         $("message").className = type;
     }
 
+    function getDashboard() {
+        return currentProfile?.role === "admin"
+            ? "admin-dashboard.html"
+            : "student-dashboard.html";
+    }
 
-    // PROFILE PICTURE
+    function normalizeRole(role) {
+        if (role === "student") return "clubMember";
+        if (role === "admin") return "admin";
+        if (role === "clubMember") return "clubMember";
+        return "guest";
+    }
+
+    function getPublicBranch(branch) {
+        const abbreviations = {
+            CSE: "Computer Science and Engineering",
+            ISE: "Information Science and Engineering",
+            AIML: "Artificial Intelligence and Machine Learning",
+            ECE: "Electronics and Communication Engineering",
+            EEE: "Electrical and Electronics Engineering",
+            ME: "Mechanical Engineering",
+            Civil: "Civil Engineering"
+        };
+
+        return abbreviations[branch] || branch || "Not specified";
+    }
+
+    function getPublicYear(year) {
+        const years = {
+            "1": "1st Year",
+            "2": "2nd Year",
+            "3": "3rd Year",
+            "4": "4th Year"
+        };
+
+        return years[year] || year || "Not specified";
+    }
+
+    function normalizeUsername(value) {
+        return value
+            .trim()
+            .toLowerCase()
+            .replace(/\s+/g, "-");
+    }
+
+    function validateUsername(username) {
+        if (!username) {
+            return "Please choose a username.";
+        }
+
+        if (username.length < 3 || username.length > 24) {
+            return "Username must contain 3–24 characters.";
+        }
+
+        if (!/^[a-z0-9][a-z0-9-]{1,22}[a-z0-9]$/.test(username)) {
+            return "Use lowercase letters, numbers and hyphens. Do not start or end with a hyphen.";
+        }
+
+        if (RESERVED_USERNAMES.includes(username)) {
+            return "This username is reserved. Please choose another.";
+        }
+
+        return null;
+    }
+
+
+    // =====================================
+    // PROFILE PHOTO
+    // =====================================
 
     function setPhoto(photoURL, name = "A") {
 
@@ -481,28 +486,14 @@
 
             $("photoPreview").removeAttribute("src");
             $("photoPreview").style.display = "none";
+
             $("photoPlaceholder").style.display = "flex";
 
             $("photoPlaceholder").textContent =
                 name.trim().charAt(0).toUpperCase() || "A";
-
         }
-
     }
 
-
-    // DASHBOARD REDIRECT
-
-    function getDashboard() {
-
-        return currentProfile?.role === "admin"
-            ? "admin-dashboard.html"
-            : "student-dashboard.html";
-
-    }
-
-
-    // IMAGE COMPRESSION
 
     async function compressImage(file) {
 
@@ -527,7 +518,6 @@
 
             width = Math.round(width * scale);
             height = Math.round(height * scale);
-
         }
 
         const canvas = document.createElement("canvas");
@@ -546,9 +536,7 @@
         while (result.length > 120000 && quality > 0.4) {
 
             quality -= 0.08;
-
             result = canvas.toDataURL("image/jpeg", quality);
-
         }
 
         if (result.length > 140000) {
@@ -558,33 +546,147 @@
         }
 
         return result;
-
     }
 
 
+    // =====================================
+    // USERNAME FIELD SETUP
+    // =====================================
+
+    function configureUsernameField() {
+
+        const hasUsername = Boolean(currentProfile?.username);
+
+        if (hasUsername) {
+
+            $("username").value = currentProfile.username;
+            $("username").disabled = true;
+
+            $("usernameNote").textContent =
+                "Your username is permanent and is used in your public profile URL.";
+
+            $("usernameStatus").textContent =
+                "Your username is already assigned.";
+
+            $("usernameStatus").className = "username-status success";
+
+        } else {
+
+            $("username").value = "";
+            $("username").disabled = false;
+
+            $("username").placeholder = "e.g. vedang-jaiswal";
+
+            $("usernameNote").textContent =
+                "Choose your username once. It will become part of your permanent public profile URL.";
+
+            $("usernameStatus").textContent =
+                "One-time username setup is required for your existing account.";
+
+            $("usernameStatus").className = "username-status info";
+        }
+    }
+
+
+    // =====================================
+    // USERNAME AVAILABILITY
+    // =====================================
+
+    $("username").addEventListener("input", async () => {
+
+        if (!currentProfile || currentProfile.username) {
+            return;
+        }
+
+        const version = ++usernameCheckVersion;
+
+        const username = normalizeUsername($("username").value);
+
+        $("username").value = username;
+        usernameAvailable = false;
+
+        if (!username) {
+            $("usernameStatus").textContent = "";
+            return;
+        }
+
+        const validationError = validateUsername(username);
+
+        if (validationError) {
+
+            $("usernameStatus").textContent = validationError;
+            $("usernameStatus").className = "username-status error";
+
+            return;
+        }
+
+        $("usernameStatus").textContent = "Checking availability...";
+        $("usernameStatus").className = "username-status info";
+
+        try {
+
+            const slugRef = doc(db, "publicProfileSlugs", username);
+            const slugSnapshot = await getDoc(slugRef);
+
+            if (version !== usernameCheckVersion) return;
+
+            if (slugSnapshot.exists()) {
+
+                $("usernameStatus").textContent =
+                    "This username is already taken.";
+
+                $("usernameStatus").className =
+                    "username-status error";
+
+                usernameAvailable = false;
+
+            } else {
+
+                $("usernameStatus").textContent =
+                    "Username appears available. It will be confirmed when you save.";
+
+                $("usernameStatus").className =
+                    "username-status success";
+
+                usernameAvailable = true;
+            }
+
+        } catch (error) {
+
+            if (version !== usernameCheckVersion) return;
+
+            console.error("USERNAME CHECK ERROR:", error);
+
+            $("usernameStatus").textContent =
+                "Could not check username availability. Please try again.";
+
+            $("usernameStatus").className =
+                "username-status error";
+
+            usernameAvailable = false;
+        }
+    });
+
+
+    // =====================================
     // LOAD PROFILE
+    // =====================================
 
     async function loadProfile(user) {
-
-        const email = (user.email || "").toLowerCase();
-
-        const isAllowlistedAdmin = ADMIN_EMAILS.includes(email);
 
         if (!user.emailVerified) {
 
             await signOut(auth);
-
             location.replace("index.html");
 
             return;
-
         }
 
+        const email = (user.email || "").toLowerCase();
+        const isAllowlistedAdmin = ADMIN_EMAILS.includes(email);
 
         const profileRef = doc(db, "users", user.uid);
-
         const snapshot = await getDoc(profileRef);
-
 
         if (!snapshot.exists()) {
 
@@ -594,12 +696,14 @@
             );
 
             return;
-
         }
-
 
         currentProfile = snapshot.data();
 
+
+        // =====================================
+        // ACCESS VALIDATION
+        // =====================================
 
         if (isAllowlistedAdmin) {
 
@@ -614,114 +718,135 @@
                 );
 
                 return;
-
             }
 
         } else {
 
-            if (currentProfile.role !== "student") {
+            const allowedRoles = [
+                "guest",
+                "clubMember",
+                "student"
+            ];
+
+            if (!allowedRoles.includes(currentProfile.role)) {
 
                 showMessage(
-                    "This account does not have student access.",
+                    "This account does not have access to edit profiles.",
                     "error"
                 );
 
                 return;
-
             }
 
-
-            if (currentProfile.status === "pending") {
+            if (
+                currentProfile.role === "student" &&
+                currentProfile.status === "pending"
+            ) {
 
                 location.replace("pending.html");
-
                 return;
-
             }
-
 
             if (currentProfile.status !== "approved") {
 
                 await signOut(auth);
-
                 location.replace("index.html");
 
                 return;
-
             }
-
         }
 
 
+        // =====================================
+        // LOAD EXISTING PUBLIC PROFILE
+        // =====================================
+
+        const publicRef = doc(db, "publicProfiles", user.uid);
+        const publicSnapshot = await getDoc(publicRef);
+
+        currentPublicProfile = publicSnapshot.exists()
+            ? publicSnapshot.data()
+            : null;
+
+
+        // =====================================
         // POPULATE FORM
+        // =====================================
 
         $("name").value = currentProfile.name || "";
-
         $("email").value = user.email || "";
-
         $("usn").value = currentProfile.usn || "";
 
+        configureUsernameField();
 
-        // RESTORE EXISTING BRANCH
+
+        // Branch compatibility
 
         const savedBranch = currentProfile.branch || "";
 
-        if (
-            [...$("branch").options].some(
-                option => option.value === savedBranch
-            )
-        ) {
+        const branchAliases = {
+            CSE: "Computer Science and Engineering",
+            ISE: "Information Science and Engineering",
+            AIML: "Artificial Intelligence and Machine Learning",
+            ECE: "Electronics and Communication Engineering",
+            EEE: "Electrical and Electronics Engineering",
+            ME: "Mechanical Engineering",
+            Civil: "Civil Engineering"
+        };
 
-            $("branch").value = savedBranch;
+        const normalizedBranch =
+            branchAliases[savedBranch] || savedBranch;
 
-        } else {
-
-            // Keep legacy/custom branch visible without accepting new free text.
-            $("branch").value = "Other";
-
-        }
+        $("branch").value = ALLOWED_BRANCHES.includes(normalizedBranch)
+            ? normalizedBranch
+            : "Other";
 
 
-        // RESTORE EXISTING ACADEMIC YEAR
+        // Academic year compatibility
 
         const savedYear = currentProfile.academicYear || "";
 
-        if (ALLOWED_YEARS.includes(savedYear)) {
+        const yearAliases = {
+            "1": "1st Year",
+            "2": "2nd Year",
+            "3": "3rd Year",
+            "4": "4th Year"
+        };
 
-            $("academicYear").value = savedYear;
+        const normalizedYear =
+            yearAliases[savedYear] || savedYear;
 
-        } else {
+        $("academicYear").value = ALLOWED_YEARS.includes(normalizedYear)
+            ? normalizedYear
+            : "";
 
-            $("academicYear").value = "";
+        if (savedYear && !ALLOWED_YEARS.includes(normalizedYear)) {
 
-            if (savedYear) {
-                showMessage(
-                    "Your saved academic year is not in the current options. Please select the correct year.",
-                    "info"
-                );
-            }
-
+            showMessage(
+                "Your saved academic year is not in the current options. Please select the correct year.",
+                "info"
+            );
         }
-
 
         setPhoto(
             currentProfile.photoURL || "",
             currentProfile.name || "A"
         );
 
+        profileReady = true;
     }
 
 
-    // AUTHENTICATION
+    // =====================================
+    // AUTH STATE
+    // =====================================
 
     onAuthStateChanged(auth, async user => {
 
         if (!user) {
 
             location.replace("index.html");
-
             return;
-
         }
 
         currentUser = user;
@@ -732,19 +857,19 @@
 
         } catch (error) {
 
-            console.error(error);
+            console.error("PROFILE LOAD ERROR:", error);
 
             showMessage(
-                "Unable to load your profile. Please refresh.",
+                "Unable to load your profile: " + error.message,
                 "error"
             );
-
         }
-
     });
 
 
-    // PHOTO SELECTION
+    // =====================================
+    // PHOTO INPUT
+    // =====================================
 
     $("photoInput").addEventListener("change", event => {
 
@@ -753,30 +878,28 @@
         if (!file) return;
 
         selectedPhoto = file;
-
         removePhoto = false;
 
         const previewURL = URL.createObjectURL(file);
 
         $("photoPreview").src = previewURL;
-
         $("photoPreview").style.display = "block";
-
         $("photoPlaceholder").style.display = "none";
 
         showMessage(
-            "Picture selected. It will be compressed when saved."
+            "Picture selected. It will be compressed when saved.",
+            "info"
         );
-
     });
 
 
+    // =====================================
     // REMOVE PHOTO
+    // =====================================
 
     $("removePhotoBtn").addEventListener("click", () => {
 
         selectedPhoto = null;
-
         removePhoto = true;
 
         $("photoInput").value = "";
@@ -784,13 +907,15 @@
         setPhoto("", $("name").value || "A");
 
         showMessage(
-            "Profile picture will be removed when you save."
+            "Profile picture will be removed when you save.",
+            "info"
         );
-
     });
 
 
-    // NAME INITIAL
+    // =====================================
+    // NAME PREVIEW
+    // =====================================
 
     $("name").addEventListener("input", () => {
 
@@ -801,38 +926,47 @@
         ) {
 
             setPhoto("", $("name").value || "A");
-
         }
-
     });
 
 
+    // =====================================
     // CANCEL
+    // =====================================
 
     $("cancelBtn").addEventListener("click", () => {
 
         if (currentProfile) {
             location.href = getDashboard();
         }
-
     });
 
 
+    // =====================================
     // SAVE PROFILE
+    // =====================================
 
     $("saveBtn").addEventListener("click", async () => {
 
-        if (!currentUser || !currentProfile) return;
-
+        if (!currentUser || !currentProfile || !profileReady) {
+            return;
+        }
 
         const name = $("name").value.trim();
-
-        const usn = $("usn").value.trim();
-
+        const usn = $("usn").value.trim().toUpperCase();
         const branch = $("branch").value;
-
         const academicYear = $("academicYear").value;
 
+        const isUsernameMigration = !currentProfile.username;
+
+        const username = isUsernameMigration
+            ? normalizeUsername($("username").value)
+            : currentProfile.username;
+
+
+        // =====================================
+        // VALIDATION
+        // =====================================
 
         if (!name || !usn || !branch || !academicYear) {
 
@@ -842,47 +976,89 @@
             );
 
             return;
-
         }
 
-
-        // VALIDATE DROPDOWN VALUES
-
-        if (!ALLOWED_BRANCHES.includes(branch)) {
+        if (name.length > 100 || usn.length > 30) {
 
             showMessage(
-                "Please select a valid branch.",
+                "Please check the length of your details.",
                 "error"
             );
 
             return;
-
         }
 
-
-        if (!ALLOWED_YEARS.includes(academicYear)) {
+        if (
+            !ALLOWED_BRANCHES.includes(branch) ||
+            !ALLOWED_YEARS.includes(academicYear)
+        ) {
 
             showMessage(
-                "Please select a valid academic year.",
+                "Please select valid branch and academic year values.",
                 "error"
             );
 
             return;
+        }
 
+        if (isUsernameMigration) {
+
+            const usernameError = validateUsername(username);
+
+            if (usernameError) {
+
+                showMessage(usernameError, "error");
+                return;
+            }
+
+            if (!usernameAvailable || $("username").value !== username) {
+
+                showMessage(
+                    "Please wait for the username availability check to finish.",
+                    "error"
+                );
+
+                return;
+            }
         }
 
 
         const saveBtn = $("saveBtn");
 
         saveBtn.disabled = true;
-
         saveBtn.textContent = "Saving...";
 
 
         try {
 
-            let photoURL = currentProfile.photoURL || "";
+            // =====================================
+            // VERIFY USERNAME AGAIN
+            // =====================================
 
+            if (isUsernameMigration) {
+
+                const slugRef = doc(
+                    db,
+                    "publicProfileSlugs",
+                    username
+                );
+
+                const slugSnapshot = await getDoc(slugRef);
+
+                if (slugSnapshot.exists()) {
+
+                    throw new Error(
+                        "This username has just been claimed. Please choose another."
+                    );
+                }
+            }
+
+
+            // =====================================
+            // PROCESS PROFILE PHOTO
+            // =====================================
+
+            let photoURL = currentProfile.photoURL || "";
 
             if (selectedPhoto) {
 
@@ -896,33 +1072,40 @@
             } else if (removePhoto) {
 
                 photoURL = "";
-
             }
-
 
             if (photoURL.length > 150000) {
 
                 throw new Error(
                     "Compressed picture exceeds the allowed size."
                 );
-
             }
 
 
-            await updateDoc(
-                doc(db, "users", currentUser.uid),
-                {
-                    name,
-                    usn,
-                    branch,
-                    academicYear,
-                    photoURL
-                }
+            // =====================================
+            // FIRESTORE REFERENCES
+            // =====================================
+
+            const userRef = doc(
+                db,
+                "users",
+                currentUser.uid
             );
 
+            const publicRef = doc(
+                db,
+                "publicProfiles",
+                currentUser.uid
+            );
 
-            currentProfile = {
-                ...currentProfile,
+            const batch = writeBatch(db);
+
+
+            // =====================================
+            // PRIVATE PROFILE UPDATE
+            // =====================================
+
+            const privateFields = {
                 name,
                 usn,
                 branch,
@@ -930,9 +1113,105 @@
                 photoURL
             };
 
+            // Username can only be added once to a legacy account.
+
+            if (isUsernameMigration) {
+                privateFields.username = username;
+            }
+
+            batch.update(userRef, privateFields);
+
+
+            // =====================================
+            // PUBLIC PROFILE UPDATE
+            // =====================================
+
+            const existingBio =
+                typeof currentPublicProfile?.bio === "string"
+                    ? currentPublicProfile.bio
+                    : "";
+
+            const publicFields = {
+
+                uid: currentUser.uid,
+
+                name,
+
+                username,
+
+                role: normalizeRole(currentProfile.role),
+
+                branch: getPublicBranch(branch),
+
+                academicYear,
+
+                photoURL,
+
+                bio: existingBio,
+
+                updatedAt: serverTimestamp()
+            };
+
+            // Merge preserves existing badges and participatedEvents.
+            // Existing bio is explicitly preserved above.
+
+            batch.set(publicRef, publicFields, {
+                merge: true
+            });
+
+
+            // =====================================
+            // CLAIM USERNAME FOR LEGACY ACCOUNT
+            // =====================================
+
+            if (isUsernameMigration) {
+
+                const slugRef = doc(
+                    db,
+                    "publicProfileSlugs",
+                    username
+                );
+
+                // The rules prevent overwriting an existing slug.
+                // The user, public profile and slug are committed atomically.
+
+                batch.set(slugRef, {
+                    uid: currentUser.uid
+                });
+            }
+
+
+            // =====================================
+            // COMMIT ALL CHANGES
+            // =====================================
+
+            await batch.commit();
+
+
+            // =====================================
+            // UPDATE LOCAL PROFILE
+            // =====================================
+
+            currentProfile = {
+                ...currentProfile,
+                name,
+                username,
+                usn,
+                branch,
+                academicYear,
+                photoURL
+            };
+
+            currentPublicProfile = {
+                ...currentPublicProfile,
+                ...publicFields
+            };
+
 
             showMessage(
-                "Profile updated successfully! Redirecting...",
+                isUsernameMigration
+                    ? "Username created! Your profile has been migrated successfully. Redirecting..."
+                    : "Profile and public profile updated successfully! Redirecting...",
                 "success"
             );
 
@@ -941,26 +1220,28 @@
 
                 location.href = getDashboard();
 
-            }, 1200);
+            }, 1500);
 
 
         } catch (error) {
 
-            console.error(error);
+            console.error("PROFILE SAVE ERROR:", error);
 
-            showMessage(
-                error.message || "Could not save your profile.",
-                "error"
-            );
+            let message = error.message || "Could not save your profile.";
+
+            if (error.code === "permission-denied") {
+
+                message =
+                    "Permission denied. Your Firestore Rules must be updated to allow one-time username migration. No profile changes were saved.";
+            }
+
+            showMessage(message, "error");
 
         } finally {
 
             saveBtn.disabled = false;
-
             saveBtn.textContent = "Save Changes";
-
         }
-
     });
 
 </script>

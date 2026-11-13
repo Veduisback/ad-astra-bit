@@ -1,10 +1,11 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Dashboard | AD ASTRA BIT</title>
+    <title>Community Dashboard | AD ASTRA BIT</title>
 
     <style>
         * {
@@ -21,19 +22,21 @@
         }
 
         header {
-            height: 75px;
-            padding: 0 7%;
+            min-height: 75px;
+            padding: 15px 7%;
             display: flex;
             align-items: center;
             justify-content: space-between;
             border-bottom: 1px solid #202633;
             background: #0c1019;
+            gap: 15px;
         }
 
         .logo {
             font-size: 21px;
             font-weight: 800;
             letter-spacing: 2px;
+            white-space: nowrap;
         }
 
         .logo span {
@@ -55,7 +58,8 @@
             position: relative;
         }
 
-        .settings-btn, .logout-btn {
+        .settings-btn,
+        .logout-btn {
             background: transparent;
             color: white;
             border: 1px solid #343c4c;
@@ -65,12 +69,17 @@
             font-size: 13px;
         }
 
+        .settings-btn:hover,
+        .logout-btn:hover {
+            background: #252e40;
+        }
+
         .settings-menu {
             display: none;
             position: absolute;
             right: 0;
             top: 45px;
-            width: 170px;
+            width: 180px;
             background: #151b27;
             border: 1px solid #343c4c;
             border-radius: 9px;
@@ -122,6 +131,32 @@
             line-height: 1.6;
         }
 
+        .role-badge {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 7px 13px;
+            border-radius: 20px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        .role-guest {
+            background: #202b40;
+            color: #a9c5ff;
+        }
+
+        .role-club {
+            background: #123a2b;
+            color: #72e0a8;
+        }
+
+        .role-admin {
+            background: #352b48;
+            color: #d6b5ff;
+        }
+
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -163,7 +198,8 @@
             min-height: 190px;
         }
 
-        .action-card p, .events-card p {
+        .action-card p,
+        .events-card p {
             color: #9ba4b5;
             font-size: 13px;
             line-height: 1.7;
@@ -180,38 +216,82 @@
             text-decoration: none;
             font-size: 13px;
             font-weight: 700;
+            transition: 0.2s;
         }
 
         .action-link:hover {
             background: #aab5ff;
+            transform: translateY(-1px);
+        }
+
+        .checkin-link {
+            background: #72d6a0;
+        }
+
+        .checkin-link:hover {
+            background: #9aebbd;
         }
 
         .events-card {
             grid-column: 1 / -1;
         }
 
+        .latest-update {
+            margin-top: 22px;
+            padding: 20px;
+            background: #0b1220;
+            border: 1px solid #29364b;
+            border-radius: 11px;
+        }
+
+        .update-type {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            background: #202b40;
+            color: #a9c5ff;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 13px;
+        }
+
+        .latest-update h3 {
+            font-size: 17px;
+            margin-bottom: 10px;
+            overflow-wrap: anywhere;
+        }
+
+        .update-meta {
+            color: #8792a6;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .update-description {
+            color: #aeb8c9;
+            font-size: 13px;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
         .empty-state {
-            padding: 25px 0 5px;
+            padding: 20px 0 5px;
             color: #8792a6;
             font-size: 13px;
         }
 
-        .status {
-            display: inline-block;
-            margin-top: 12px;
-            padding: 6px 11px;
-            border-radius: 20px;
-            background: #123a2b;
-            color: #72e0a8;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        .community-link {
+            margin-top: 18px;
         }
 
         #pageMessage {
             color: #ff9999;
             margin-top: 20px;
             font-size: 13px;
+            line-height: 1.5;
         }
 
         footer {
@@ -225,7 +305,16 @@
 
         @media (max-width: 700px) {
             header {
-                padding: 0 5%;
+                padding: 15px 5%;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: flex-start;
+                flex-wrap: wrap;
+                gap: 12px;
             }
 
             .user-email {
@@ -254,34 +343,51 @@
     <div class="logo">AD ASTRA <span>BIT</span></div>
 
     <div class="header-right">
+
         <span class="user-email" id="headerEmail"></span>
 
         <div class="settings">
-            <button class="settings-btn" id="settingsBtn">
+
+            <button class="settings-btn" id="settingsBtn" type="button">
                 Settings &#9662;
             </button>
 
             <div class="settings-menu" id="settingsMenu">
+                <a href="#" id="viewProfileLink">View Profile</a>
                 <a href="edit-profile.html">Edit Profile</a>
             </div>
+
         </div>
 
-        <button class="logout-btn" id="logoutBtn">Logout</button>
+        <button class="logout-btn" id="logoutBtn" type="button">
+            Logout
+        </button>
+
     </div>
 </header>
 
 <main>
 
     <section class="welcome">
-        <div class="eyebrow">Student Portal</div>
-        <h1>Welcome, <span id="studentName">Student</span>.</h1>
-        <p>Your AD ASTRA BIT student dashboard.</p>
-        <span class="status">Approved Student</span>
+
+        <div class="eyebrow">Community Portal</div>
+
+        <h1>Welcome, <span id="studentName">Member</span>.</h1>
+
+        <p>Your AD ASTRA BIT community dashboard.</p>
+
+        <span class="role-badge role-guest" id="roleBadge">
+            Checking access...
+        </span>
+
     </section>
 
     <section class="dashboard-grid">
 
+        <!-- PROFILE CARD -->
+
         <div class="card">
+
             <h2>My Profile</h2>
 
             <div class="profile-item">
@@ -308,11 +414,16 @@
                 <small>Academic Year</small>
                 <strong id="profileYear">Loading...</strong>
             </div>
+
         </div>
 
+        <!-- COMMUNITY CARD -->
+
         <div class="card action-card">
+
             <div>
                 <h2>Community</h2>
+
                 <p>
                     Connect with fellow students, participate in discussions,
                     and stay updated with the AD ASTRA BIT community.
@@ -322,18 +433,52 @@
             <a href="community.html" class="action-link">
                 Enter Community
             </a>
+
         </div>
 
+        <!-- CHECK-IN CARD -->
+
+        <div class="card action-card">
+
+            <div>
+                <h2>Event Check-in</h2>
+
+                <p>
+                    Check in to AD ASTRA BIT events using the check-in
+                    facility. Your participation can be reflected on
+                    your public profile.
+                </p>
+            </div>
+
+            <a href="checkin.html" class="action-link checkin-link">
+                Open Check-in
+            </a>
+
+        </div>
+
+        <!-- LATEST ANNOUNCEMENT OR EVENT -->
+
         <div class="card events-card">
-            <h2>Events & Announcements</h2>
+
+            <h2>Latest from AD ASTRA</h2>
+
             <p>
-                Stay updated with upcoming college events and important
-                announcements.
+                Here's the latest announcement or event published
+                by the administration.
             </p>
 
-            <div class="empty-state" id="eventsMessage">
-                No announcements available yet.
+            <div id="latestUpdateContainer">
+
+                <div class="empty-state" id="eventsMessage">
+                    Loading latest community update...
+                </div>
+
             </div>
+
+            <a href="community.html" class="action-link community-link">
+                View All Events & Announcements
+            </a>
+
         </div>
 
     </section>
@@ -343,10 +488,11 @@
 </main>
 
 <footer>
-    AD ASTRA BIT · Student Portal
+    AD ASTRA BIT · Community Portal
 </footer>
 
 <script type="module">
+
     import { initializeApp } from
         "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
 
@@ -360,9 +506,17 @@
     import {
         getFirestore,
         doc,
-        getDoc
+        getDoc,
+        collection,
+        query,
+        orderBy,
+        limit,
+        getDocs
     } from
         "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+
+    // FIREBASE CONFIGURATION
 
     const firebaseConfig = {
         apiKey: "AIzaSyB9BQOlOO-tfuFzxjK0KEA7YcV3O11_WjM",
@@ -370,16 +524,33 @@
         projectId: "ad-astra-bit",
         storageBucket: "ad-astra-bit.firebasestorage.app",
         messagingSenderId: "104444066688",
-        appId: "1:104444066688:web:d84478465cd3084f315f65"
+        appId: "1:104444066688:web:d84478465cd3084f315f65",
+        measurementId: "G-JJLDJF02K0"
     };
 
-    const ADMIN_EMAILS = ["rachnf99@gmail.com","vedujames99@gmail.com"];
+
+    // ADMIN CONFIGURATION
+
+    const ADMIN_EMAILS = [
+        "rachnf99@gmail.com",
+        "vedujames99@gmail.com"
+    ];
+
+
+    // INITIALIZE FIREBASE
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
+
+    // DOM ELEMENTS
+
     const pageMessage = document.getElementById("pageMessage");
+    const roleBadge = document.getElementById("roleBadge");
+
+
+    // HELPERS
 
     function showError(message) {
         pageMessage.textContent = message;
@@ -390,98 +561,502 @@
             value || "Not provided";
     }
 
-    onAuthStateChanged(auth, async (user) => {
-        if (!user) {
-            window.location.replace("index.html");
-            return;
+
+    function displayRole(role) {
+
+        roleBadge.className = "role-badge";
+
+        if (role === "guest") {
+
+            roleBadge.textContent = "Guest";
+            roleBadge.classList.add("role-guest");
+
+        } else if (role === "clubMember") {
+
+            roleBadge.textContent = "Club Member";
+            roleBadge.classList.add("role-club");
+
         }
 
-        if (!user.emailVerified) {
-            await signOut(auth);
-            window.location.replace("index.html");
-            return;
+    }
+
+
+    // CONVERT FIRESTORE DATE
+
+    function convertDate(value) {
+
+        if (!value) return null;
+
+        if (value.toDate) {
+            return value.toDate();
         }
 
-        const email = user.email.toLowerCase();
-
-        if (ADMIN_EMAILS.includes(email)) {
-            window.location.replace("admin-dashboard.html");
-            return;
+        if (value instanceof Date) {
+            return value;
         }
+
+        const date = new Date(value);
+
+        return Number.isNaN(date.getTime()) ? null : date;
+
+    }
+
+
+    function formatDate(value) {
+
+        const date = convertDate(value);
+
+        if (!date) return "Date not available";
+
+        return date.toLocaleString("en-IN", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+            hour: "numeric",
+            minute: "2-digit"
+        });
+
+    }
+
+
+    // LOAD LATEST ANNOUNCEMENT OR EVENT
+
+    async function loadLatestUpdate() {
+
+        const container = document.getElementById(
+            "latestUpdateContainer"
+        );
+
+        const message = document.getElementById("eventsMessage");
 
         try {
-            const studentRef = doc(db, "users", user.uid);
-            const studentSnap = await getDoc(studentRef);
 
-            if (!studentSnap.exists()) {
+            const announcementsQuery = query(
+                collection(db, "communityAnnouncements"),
+                orderBy("createdAt", "desc"),
+                limit(1)
+            );
+
+            const eventsQuery = query(
+                collection(db, "communityEvents"),
+                orderBy("createdAt", "desc"),
+                limit(1)
+            );
+
+            const [announcementSnapshot, eventSnapshot] =
+                await Promise.all([
+                    getDocs(announcementsQuery),
+                    getDocs(eventsQuery)
+                ]);
+
+
+            const updates = [];
+
+
+            // LATEST ANNOUNCEMENT
+
+            if (!announcementSnapshot.empty) {
+
+                const announcementDoc =
+                    announcementSnapshot.docs[0];
+
+                const announcement = announcementDoc.data();
+
+                updates.push({
+                    type: "Announcement",
+                    title: announcement.title || "Announcement",
+                    description: announcement.body || "",
+                    createdAt: announcement.createdAt,
+                    meta: "Published by AD ASTRA BIT"
+                });
+
+            }
+
+
+            // LATEST EVENT
+
+            if (!eventSnapshot.empty) {
+
+                const eventDoc = eventSnapshot.docs[0];
+
+                const event = eventDoc.data();
+
+                const eventDate = convertDate(event.eventDate);
+
+                let eventMeta = "Published by AD ASTRA BIT";
+
+                if (eventDate) {
+                    eventMeta += " · Event date: " +
+                        eventDate.toLocaleDateString("en-IN", {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric"
+                        });
+                }
+
+                if (event.location) {
+                    eventMeta += " · " + event.location;
+                }
+
+                updates.push({
+                    type: "Event",
+                    title: event.title || "Community Event",
+                    description: event.description || "",
+                    createdAt: event.createdAt,
+                    meta: eventMeta
+                });
+
+            }
+
+
+            // NO UPDATES
+
+            if (updates.length === 0) {
+
+                container.innerHTML = "";
+
+                const empty = document.createElement("div");
+                empty.className = "empty-state";
+                empty.textContent =
+                    "No announcements or events have been published yet.";
+
+                container.appendChild(empty);
+
+                return;
+
+            }
+
+
+            // COMPARE CREATION DATES
+
+            updates.sort((a, b) => {
+
+                const dateA = convertDate(a.createdAt);
+                const dateB = convertDate(b.createdAt);
+
+                const timeA = dateA ? dateA.getTime() : 0;
+                const timeB = dateB ? dateB.getTime() : 0;
+
+                return timeB - timeA;
+
+            });
+
+
+            // DISPLAY THE NEWEST ONE
+
+            const latest = updates[0];
+
+            container.innerHTML = "";
+
+
+            const card = document.createElement("div");
+            card.className = "latest-update";
+
+
+            const badge = document.createElement("span");
+            badge.className = "update-type";
+            badge.textContent = latest.type;
+
+
+            const title = document.createElement("h3");
+            title.textContent = latest.title;
+
+
+            const meta = document.createElement("div");
+            meta.className = "update-meta";
+            meta.textContent =
+                latest.meta + " · " + formatDate(latest.createdAt);
+
+
+            const description = document.createElement("div");
+            description.className = "update-description";
+            description.textContent =
+                latest.description || "No additional details provided.";
+
+
+            card.appendChild(badge);
+            card.appendChild(title);
+            card.appendChild(meta);
+            card.appendChild(description);
+
+            container.appendChild(card);
+
+
+        } catch (error) {
+
+            console.error("Latest update error:", error);
+
+            container.innerHTML = "";
+
+            const errorMessage = document.createElement("div");
+            errorMessage.className = "empty-state";
+            errorMessage.textContent =
+                "Unable to load the latest update. Please visit the Community page.";
+
+            container.appendChild(errorMessage);
+
+        }
+
+    }
+
+
+    // AUTHENTICATION AND PROFILE CHECK
+
+    onAuthStateChanged(auth, async (user) => {
+
+        if (!user) {
+
+            window.location.replace("index.html");
+            return;
+
+        }
+
+
+        if (!user.emailVerified) {
+
+            await signOut(auth);
+
+            window.location.replace("index.html");
+            return;
+
+        }
+
+
+        try {
+
+            const email = (user.email || "").toLowerCase();
+
+            const isAllowlistedAdmin =
+                ADMIN_EMAILS.includes(email);
+
+
+            const userRef = doc(db, "users", user.uid);
+
+            const userSnap = await getDoc(userRef);
+
+
+            // PROFILE DOES NOT EXIST
+
+            if (!userSnap.exists()) {
+
                 window.location.replace("signup.html");
                 return;
+
             }
 
-            const student = studentSnap.data();
 
-            if (student.role !== "student") {
-                await signOut(auth);
-                window.location.replace("index.html");
+            const profile = userSnap.data();
+
+
+            // VERIFY ADMIN ACCOUNT BEFORE REDIRECTING
+
+            if (isAllowlistedAdmin) {
+
+                if (
+                    profile.role === "admin" &&
+                    profile.status === "approved"
+                ) {
+
+                    window.location.replace("admin-dashboard.html");
+                    return;
+
+                }
+
+                showError(
+                    "Your administrator account is not approved. Contact the administrator."
+                );
+
                 return;
+
             }
 
-            if (student.status === "pending") {
+
+            // NORMALIZE LEGACY ROLE
+
+            let role = profile.role;
+
+            if (
+                role === "student" &&
+                profile.status === "approved"
+            ) {
+
+                role = "clubMember";
+
+            }
+
+
+            // ALLOW ONLY GUEST AND CLUB MEMBER ACCOUNTS
+
+            const validRoles = [
+                "guest",
+                "clubMember"
+            ];
+
+            if (!validRoles.includes(role)) {
+
+                showError(
+                    "Your account role could not be recognised. Contact an administrator."
+                );
+
+                await signOut(auth);
+                return;
+
+            }
+
+
+            // ACCOUNT STATUS CHECK
+
+            if (
+                profile.role === "student" &&
+                profile.status === "pending"
+            ) {
+
                 window.location.replace("pending.html");
                 return;
+
             }
 
-            if (student.status === "rejected") {
-                showError("Your application has been rejected. Please contact the administration.");
+
+            if (profile.status === "rejected") {
+
+                showError(
+                    "Your application has been rejected. Please contact the administration."
+                );
+
                 await signOut(auth);
                 return;
+
             }
 
-            if (student.status !== "approved") {
-                showError("Your account status could not be verified.");
+
+            if (profile.status !== "approved") {
+
+                showError(
+                    "Your account is not active. Please contact an administrator."
+                );
+
+                await signOut(auth);
                 return;
+
             }
 
-            // Approved student: load dashboard
-            const name = student.name || "Student";
+
+            // LOAD PROFILE DETAILS
+
+            const name = profile.name || user.displayName || "Member";
 
             setText("studentName", name);
             setText("profileName", name);
-            setText("profileEmail", student.email || user.email);
-            setText("profileUSN", student.usn);
-            setText("profileBranch", student.branch);
-            setText("profileYear", student.academicYear);
+            setText("profileEmail", profile.email || user.email);
+            setText("profileUSN", profile.usn);
+            setText("profileBranch", profile.branch);
+            setText("profileYear", profile.academicYear);
+
 
             document.getElementById("headerEmail").textContent =
-                user.email;
+                user.email || "";
+
+
+            // ROLE BADGE
+
+            displayRole(role);
+
+
+            
+// =====================================
+// UNIQUE PUBLIC PROFILE URL
+// =====================================
+
+const viewProfileLink = document.getElementById("viewProfileLink");
+
+if (
+    typeof profile.username === "string" &&
+    /^[a-z0-9][a-z0-9-]{1,22}[a-z0-9]$/.test(profile.username)
+) {
+
+    viewProfileLink.href =
+        "view-profile.html?username=" +
+        encodeURIComponent(profile.username);
+
+    viewProfileLink.style.pointerEvents = "auto";
+    viewProfileLink.style.opacity = "1";
+
+} else {
+
+    // Username has not been assigned yet.
+    viewProfileLink.href = "edit-profile.html";
+
+    viewProfileLink.textContent = "Set Up Username First";
+
+}
+
+
+            // LOAD LATEST COMMUNITY UPDATE
+
+            await loadLatestUpdate();
+
 
         } catch (error) {
+
             console.error("Dashboard error:", error);
-            showError("Unable to load your dashboard. Please refresh the page.");
+
+            showError(
+                "Unable to load your dashboard. Please refresh the page."
+            );
+
         }
+
     });
 
-    document.getElementById("settingsBtn").addEventListener("click", () => {
-        document.getElementById("settingsMenu").classList.toggle("show");
-    });
+
+    // SETTINGS DROPDOWN
+
+    document.getElementById("settingsBtn")
+        .addEventListener("click", (event) => {
+
+            event.stopPropagation();
+
+            document.getElementById("settingsMenu")
+                .classList.toggle("show");
+
+        });
+
 
     document.addEventListener("click", (event) => {
+
         const settings = document.querySelector(".settings");
 
         if (!settings.contains(event.target)) {
-            document.getElementById("settingsMenu").classList.remove("show");
+
+            document.getElementById("settingsMenu")
+                .classList.remove("show");
+
         }
+
     });
 
-    document.getElementById("logoutBtn").addEventListener("click", async () => {
-        try {
-            await signOut(auth);
-            window.location.replace("index.html");
-        } catch (error) {
-            console.error("Logout error:", error);
-            showError("Unable to log out. Please try again.");
-        }
-    });
+
+    // LOGOUT
+
+    document.getElementById("logoutBtn")
+        .addEventListener("click", async () => {
+
+            try {
+
+                await signOut(auth);
+
+                window.location.replace("index.html");
+
+            } catch (error) {
+
+                console.error("Logout error:", error);
+
+                showError("Unable to log out. Please try again.");
+
+            }
+
+        });
+
 </script>
 
 </body>

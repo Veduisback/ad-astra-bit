@@ -190,7 +190,6 @@
 
     </header>
 
-
     <main>
 
         <section class="hero">
@@ -221,16 +220,13 @@
 
         </section>
 
-        <section id="about">
-        </section>
+        <section id="about"></section>
 
     </main>
-
 
     <footer>
         © 2026 AD ASTRA BIT. All Rights Reserved.
     </footer>
-
 
     <script type="module">
 
@@ -239,13 +235,13 @@
         } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
 
         import {
-    getAuth,
-    GoogleAuthProvider,
-    signInWithPopup,
-    onAuthStateChanged,
-    setPersistence,
-    browserLocalPersistence
-} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+            getAuth,
+            GoogleAuthProvider,
+            signInWithPopup,
+            onAuthStateChanged,
+            setPersistence,
+            browserLocalPersistence
+        } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
         import {
             getFirestore,
@@ -254,7 +250,9 @@
         } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
 
+        // =====================================
         // FIREBASE CONFIGURATION
+        // =====================================
 
         const firebaseConfig = {
             apiKey: "AIzaSyB9BQOlOO-tfuFzxjK0KEA7YcV3O11_WjM",
@@ -262,11 +260,10 @@
             projectId: "ad-astra-bit",
             storageBucket: "ad-astra-bit.firebasestorage.app",
             messagingSenderId: "104444066688",
-            appId: "1:104444066688:web:d84478465cd3084f315f65"
+            appId: "1:104444066688:web:d84478465cd3084f315f65",
+            measurementId: "G-JJLDJF02K0"
         };
 
-
-        // INITIALIZE FIREBASE
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
@@ -279,7 +276,9 @@
         });
 
 
+        // =====================================
         // ADMIN EMAIL ALLOWLIST
+        // =====================================
 
         const ADMIN_EMAILS = [
             "rachnf99@gmail.com",
@@ -288,18 +287,21 @@
 
 
         let currentUser = null;
-        let authReady = false;
         let routingInProgress = false;
 
 
+        // =====================================
         // DISPLAY MESSAGE
+        // =====================================
 
         function showMessage(text) {
             document.getElementById("authMessage").textContent = text;
         }
 
 
+        // =====================================
         // BUTTON CONTROL
+        // =====================================
 
         function setButtonsDisabled(disabled) {
             document.querySelectorAll("button").forEach(button => {
@@ -308,7 +310,9 @@
         }
 
 
-        // ROUTE USER
+        // =====================================
+        // USER ROUTING
+        // =====================================
 
         async function routeUser(user, intent = "signin") {
 
@@ -326,11 +330,10 @@
 
                 const email = user.email.toLowerCase();
 
-                const isAdmin = ADMIN_EMAILS.includes(email);
-
-                // CHECK FIRESTORE PROFILE FIRST
+                const isAdminEmail = ADMIN_EMAILS.includes(email);
 
                 const userRef = doc(db, "users", user.uid);
+
                 const userSnapshot = await getDoc(userRef);
 
 
@@ -338,13 +341,13 @@
                 // ADMIN ROUTING
                 // =================================
 
-                if (isAdmin) {
-
-                    // Admin has no Firestore profile
+                if (isAdminEmail) {
 
                     if (!userSnapshot.exists()) {
 
-                        showMessage("Admin profile not found. Redirecting to registration...");
+                        showMessage(
+                            "Admin profile not found. Redirecting to registration..."
+                        );
 
                         window.location.replace("signup.html");
                         return;
@@ -352,8 +355,6 @@
                     }
 
                     const userData = userSnapshot.data();
-
-                    // Existing admin
 
                     if (
                         userData.role === "admin" &&
@@ -363,32 +364,30 @@
                         if (intent === "community") {
 
                             window.location.replace("community.html");
-                            return;
+
+                        } else {
+
+                            window.location.replace("admin-dashboard.html");
 
                         }
 
-                        window.location.replace("admin-dashboard.html");
                         return;
-
                     }
 
-                    // Admin email linked to a student profile
-
                     showMessage(
-                        "This email is allowlisted for administration, but its existing profile is not an admin profile. Contact the administrator."
+                        "This email is allowlisted for administration, but its existing profile is not an approved admin profile. Contact the administrator."
                     );
 
                     routingInProgress = false;
-                    return;
+                    setButtonsDisabled(false);
 
+                    return;
                 }
 
 
                 // =================================
-                // STUDENT ROUTING
+                // NON-ADMIN ROUTING
                 // =================================
-
-                // New student
 
                 if (!userSnapshot.exists()) {
 
@@ -399,13 +398,15 @@
 
                 const userData = userSnapshot.data();
 
+                const role = userData.role;
+                const status = userData.status;
 
-                // Pending student
 
-                if (
-                    userData.role === "student" &&
-                    userData.status === "pending"
-                ) {
+                // =================================
+                // LEGACY PENDING STUDENT
+                // =================================
+
+                if (role === "student" && status === "pending") {
 
                     window.location.replace("pending.html");
                     return;
@@ -413,50 +414,93 @@
                 }
 
 
-                // Approved student
+                // =================================
+                // REJECTED LEGACY STUDENT
+                // =================================
 
-                if (
-                    userData.role === "student" &&
-                    userData.status === "approved"
-                ) {
-
-                    if (intent === "community") {
-
-                        window.location.replace("community.html");
-                        return;
-
-                    }
-
-                    window.location.replace("student-dashboard.html");
-                    return;
-
-                }
-
-
-                // Rejected student
-
-                if (
-                    userData.role === "student" &&
-                    userData.status === "rejected"
-                ) {
+                if (role === "student" && status === "rejected") {
 
                     showMessage(
                         "Your registration was rejected. Please contact an administrator."
                     );
 
                     routingInProgress = false;
-                    return;
+                    setButtonsDisabled(false);
 
+                    return;
                 }
 
 
-                // Invalid profile
+                // =================================
+                // APPROVED GUEST
+                // =================================
+
+                if (role === "guest" && status === "approved") {
+
+                    if (intent === "community") {
+
+                        window.location.replace("community.html");
+
+                    } else {
+
+                        window.location.replace("student-dashboard.html");
+
+                    }
+
+                    return;
+                }
+
+
+                // =================================
+                // APPROVED CLUB MEMBER
+                // =================================
+
+                if (role === "clubMember" && status === "approved") {
+
+                    if (intent === "community") {
+
+                        window.location.replace("community.html");
+
+                    } else {
+
+                        window.location.replace("student-dashboard.html");
+
+                    }
+
+                    return;
+                }
+
+
+                // =================================
+                // LEGACY APPROVED STUDENT
+                // =================================
+
+                if (role === "student" && status === "approved") {
+
+                    if (intent === "community") {
+
+                        window.location.replace("community.html");
+
+                    } else {
+
+                        window.location.replace("student-dashboard.html");
+
+                    }
+
+                    return;
+                }
+
+
+                // =================================
+                // INVALID PROFILE
+                // =================================
 
                 showMessage(
                     "Your account does not have access. Please contact an administrator."
                 );
 
                 routingInProgress = false;
+                setButtonsDisabled(false);
 
             } catch (error) {
 
@@ -467,6 +511,7 @@
                 );
 
                 routingInProgress = false;
+                setButtonsDisabled(false);
 
                 throw error;
 
@@ -475,31 +520,50 @@
         }
 
 
+        // =====================================
         // AUTHENTICATION STATE
+        // =====================================
 
         onAuthStateChanged(auth, user => {
 
             currentUser = user;
-            authReady = true;
 
-            if (user) {
+            if (!user) {
+
+                const intentParam =
+                    new URLSearchParams(window.location.search)
+                        .get("intent");
+
+                if (intentParam === "community") {
+
+                    showMessage(
+                        "Please sign in to continue to the community."
+                    );
+
+                    setTimeout(() => {
+
+                        if (!routingInProgress && !currentUser) {
+                            googleSignIn("community");
+                        }
+
+                    }, 300);
+
+                }
+
                 return;
             }
 
-            const intentParam = new URLSearchParams(window.location.search).get("intent");
-            if (intentParam === "community") {
-                showMessage("Please sign in to continue to the community.");
-                setTimeout(() => {
-                    if (!routingInProgress) {
-                        googleSignIn("community");
-                    }
-                }, 300);
-            }
+            // Route an existing signed-in user automatically.
+            routeUser(user, "signin").catch(error => {
+                console.error("AUTO ROUTING ERROR:", error);
+            });
 
         });
 
 
+        // =====================================
         // GOOGLE SIGN IN
+        // =====================================
 
         async function googleSignIn(intent = "signin") {
 
@@ -515,9 +579,15 @@
 
                 if (!user) {
 
-                    await setPersistence(auth, browserLocalPersistence);
+                    await setPersistence(
+                        auth,
+                        browserLocalPersistence
+                    );
 
-                    const result = await signInWithPopup(auth, provider);
+                    const result = await signInWithPopup(
+                        auth,
+                        provider
+                    );
 
                     await result.user.getIdToken(true);
 
@@ -540,7 +610,8 @@
                 } else {
 
                     showMessage(
-                        error.message || "Something went wrong. Please try again."
+                        error.message ||
+                        "Something went wrong. Please try again."
                     );
 
                 }
@@ -553,7 +624,9 @@
         }
 
 
+        // =====================================
         // BUTTON EVENT LISTENERS
+        // =====================================
 
         document.getElementById("signupBtn")
             .addEventListener("click", () => {
@@ -576,7 +649,9 @@
             });
 
 
+        // =====================================
         // COMMUNITY ACCESS
+        // =====================================
 
         document.getElementById("communityLink")
             .addEventListener("click", async event => {
@@ -586,7 +661,6 @@
                 await googleSignIn("community");
 
             });
-
 
     </script>
 
