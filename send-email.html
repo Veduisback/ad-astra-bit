@@ -990,28 +990,41 @@
     // FORMAT EMAIL MESSAGE
     // =====================================================
 
-    function createRawEmail(subject, body, batch) {
+    
+function createRawEmail(subject, body, batch) {
 
-        const encodedBody = base64EncodeUtf8(body)
-            .match(/.{1,76}/g)
-            ?.join("\r\n") || "";
+    const emailRegex = /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/;
 
-        const safeSubject = subject.replace(/[\r\n]/g, " ");
+    const cleanRecipients = batch.map(email =>
+        String(email || "").trim()
+    );
 
-        const emailMessage = [
-            "To: undisclosed-recipients:;",
-            `Bcc: ${batch.join(", ")}`,
-            `Subject: ${encodeMimeHeader(safeSubject)}`,
-            "MIME-Version: 1.0",
-            "Content-Type: text/plain; charset=UTF-8",
-            "Content-Transfer-Encoding: base64",
-            "",
-            encodedBody
-        ].join("\r\n");
-
-        return base64UrlEncodeUtf8(emailMessage);
-
+    if (
+        cleanRecipients.length === 0 ||
+        cleanRecipients.some(email => !emailRegex.test(email))
+    ) {
+        throw new Error(
+            "One or more recipient email addresses are invalid."
+        );
     }
+
+    const encodedBody = base64EncodeUtf8(body)
+        .match(/.{1,76}/g)
+        .join("\r\n");
+
+    const emailMessage = [
+        "To: undisclosed-recipients:;",
+        `Bcc: ${cleanRecipients.join(", ")}`,
+        `Subject: ${encodeMimeHeader(subject)}`,
+        "MIME-Version: 1.0",
+        "Content-Type: text/plain; charset=UTF-8",
+        "Content-Transfer-Encoding: base64",
+        "",
+        encodedBody
+    ].join("\r\n");
+
+    return base64UrlEncodeUtf8(emailMessage);
+}
 
 
     // =====================================================
