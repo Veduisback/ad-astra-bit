@@ -155,6 +155,8 @@
         serverTimestamp
     } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
+    import { isAdminEmail } from "./js/admin-email-check.js";
+
     const firebaseConfig = {
         apiKey: "AIzaSyB9BQOlOO-tfuFzxjK0KEA7YcV3O11_WjM",
         authDomain: "ad-astra-bit.firebaseapp.com",
@@ -168,11 +170,6 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
-
-    const ADMIN_EMAILS = [
-        "rachnf99@gmail.com",
-        "vedujames99@gmail.com","maiyamdev@gmail.com","rachnajaiswal41@gmail.com"
-    ];
 
     const RESERVED_USERNAMES = [
         "admin",
@@ -292,7 +289,7 @@
         const userSnapshot = await getDoc(userRef);
 
         const userEmail = (user.email || "").toLowerCase();
-        const isAllowlistedAdmin = ADMIN_EMAILS.includes(userEmail);
+        const isAllowlistedAdmin = await isAdminEmail(app, userEmail);
 
         if (!userSnapshot.exists()) {
             showRegistrationForm(isAllowlistedAdmin);
@@ -451,7 +448,7 @@
             }
 
             const adminEmail = (currentUser.email || "").toLowerCase();
-            const verifiedAdmin = ADMIN_EMAILS.includes(adminEmail);
+            const verifiedAdmin = await isAdminEmail(app, adminEmail);
             const role = verifiedAdmin ? "admin" : "guest";
 
             const userData = {

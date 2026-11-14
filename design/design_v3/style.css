@@ -1,0 +1,300 @@
+:root {
+    color-scheme: dark;
+    --space-black: #030407;
+    --star-white: #ffffff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    min-height: 100svh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    isolation: isolate;
+    background:
+        radial-gradient(ellipse at 50% 46%, rgba(15, 36, 67, 0.25), transparent 55%),
+        radial-gradient(ellipse at 80% 18%, rgba(39, 23, 70, 0.15), transparent 44%),
+        var(--space-black);
+}
+
+/* Layer of distant stars */
+.space-background {
+    position: fixed;
+    inset: 0;
+    z-index: -3;
+    pointer-events: none;
+    opacity: 0.7;
+    background-image:
+        radial-gradient(1px 1px at 10% 20%, rgba(255, 255, 255, 0.9) 99%, transparent),
+        radial-gradient(1.5px 1.5px at 25% 75%, rgba(220, 235, 255, 0.9) 99%, transparent),
+        radial-gradient(1px 1px at 45% 15%, rgba(255, 255, 255, 0.8) 99%, transparent),
+        radial-gradient(1.5px 1.5px at 65% 80%, rgba(220, 235, 255, 0.9) 99%, transparent),
+        radial-gradient(1px 1px at 85% 35%, rgba(255, 255, 255, 0.85) 99%, transparent),
+        radial-gradient(1px 1px at 92% 85%, rgba(255, 255, 255, 0.75) 99%, transparent),
+        radial-gradient(1px 1px at 35% 45%, rgba(220, 235, 255, 0.8) 99%, transparent),
+        radial-gradient(1.5px 1.5px at 75% 55%, rgba(255, 255, 255, 0.8) 99%, transparent);
+    background-size: 550px 450px;
+    animation: star-drift 110s linear infinite;
+}
+
+/* A second, faint layer gives the background more depth */
+.space-background::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0.35;
+    background-image:
+        radial-gradient(1px 1px at 18% 58%, #ffffff 99%, transparent),
+        radial-gradient(1px 1px at 58% 32%, #ffffff 99%, transparent),
+        radial-gradient(1px 1px at 78% 12%, #ffffff 99%, transparent),
+        radial-gradient(1px 1px at 88% 68%, #ffffff 99%, transparent);
+    background-size: 390px 340px;
+    animation: star-twinkle 5s ease-in-out infinite alternate;
+}
+
+/* Soft blue-violet nebula; intentionally subtle */
+.nebula {
+    position: fixed;
+    z-index: -2;
+    width: min(72vw, 900px);
+    aspect-ratio: 1;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    pointer-events: none;
+    background: radial-gradient(
+        circle,
+        rgba(31, 77, 130, 0.13),
+        rgba(38, 29, 83, 0.065) 42%,
+        transparent 71%
+    );
+    filter: blur(48px);
+    animation: nebula-breathe 12s ease-in-out infinite alternate;
+}
+
+/* One meteor passes through the distant background */
+.shooting-star {
+    position: fixed;
+    z-index: -1;
+    top: 15%;
+    left: -190px;
+    width: 150px;
+    height: 2px;
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+    transform: rotate(25deg);
+    transform-origin: left center;
+    background: linear-gradient(90deg, transparent, rgba(130, 190, 255, 0.45), #ffffff);
+    filter: drop-shadow(0 0 5px rgba(125, 186, 255, 0.9));
+    animation: meteor-flight 14s 1.8s ease-in-out infinite;
+}
+
+/* Small glowing object that enters and settles above the logo */
+.arrival-star {
+    position: fixed;
+    z-index: 1;
+    top: 17%;
+    left: 73%;
+    width: 12px;
+    height: 12px;
+    opacity: 0;
+    pointer-events: none;
+    animation: star-arrival 6s 0.4s cubic-bezier(0.22, 0.8, 0.3, 1) forwards;
+}
+
+.star-core {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: var(--star-white);
+    box-shadow:
+        0 0 8px 3px rgba(255, 255, 255, 0.8),
+        0 0 22px 7px rgba(85, 160, 255, 0.5),
+        0 0 48px 14px rgba(65, 120, 255, 0.18);
+    animation: star-pulse 3.2s 6.5s ease-in-out infinite;
+}
+
+/* Main logo */
+.hero {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 5vw;
+}
+
+.hero-logo-container {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transform: translateY(16px);
+    animation: logo-reveal 2s 1.15s ease-out forwards;
+}
+
+.hero-main-logo {
+    display: block;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 0 12px rgba(130, 180, 255, 0.07));
+}
+
+@keyframes star-drift {
+    from {
+        background-position: 0 0;
+    }
+    to {
+        background-position: 550px 450px;
+    }
+}
+
+@keyframes star-twinkle {
+    from {
+        opacity: 0.16;
+    }
+    to {
+        opacity: 0.48;
+    }
+}
+
+@keyframes nebula-breathe {
+    from {
+        opacity: 0.55;
+        scale: 0.96;
+    }
+    to {
+        opacity: 0.95;
+        scale: 1.06;
+    }
+}
+
+@keyframes meteor-flight {
+    0%, 14% {
+        opacity: 0;
+        transform: translate(-8vw, -4vh) rotate(25deg);
+    }
+    18% {
+        opacity: 0.9;
+    }
+    34% {
+        opacity: 0;
+        transform: translate(125vw, 67vh) rotate(25deg);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(125vw, 67vh) rotate(25deg);
+    }
+}
+
+@keyframes star-arrival {
+    0% {
+        opacity: 0;
+        transform: translate(0, 0) scale(0.35);
+    }
+    12% {
+        opacity: 1;
+        transform: translate(-3vw, 3vh) scale(1);
+    }
+    52% {
+        opacity: 1;
+        transform: translate(-19vw, 17vh) scale(1);
+    }
+    63% {
+        transform: translate(-19vw, 15.5vh) scale(1.2);
+    }
+    73% {
+        transform: translate(-19vw, 17vh) scale(0.92);
+    }
+    84% {
+        transform: translate(-19vw, 16.5vh) scale(1.04);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-19vw, 17vh) scale(1);
+    }
+}
+
+@keyframes star-pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.85;
+    }
+    50% {
+        transform: scale(1.22);
+        opacity: 1;
+    }
+}
+
+@keyframes logo-reveal {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Smaller screens */
+@media (max-width: 768px) {
+    .hero {
+        padding: 0 4vw;
+    }
+
+    .arrival-star {
+        left: 76%;
+        top: 20%;
+    }
+
+    .shooting-star {
+        width: 100px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero {
+        padding: 0 6vw;
+    }
+
+    .arrival-star {
+        top: 24%;
+    }
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+    }
+
+    .hero-logo-container {
+        opacity: 1;
+        transform: none;
+    }
+
+    .arrival-star {
+        opacity: 0;
+    }
+}

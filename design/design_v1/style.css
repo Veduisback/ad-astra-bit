@@ -1,0 +1,195 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap');
+
+:root {
+    color-scheme: dark;
+    --space-black: #03050b;
+    --star-white: #eaf3ff;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    min-width: 320px;
+    min-height: 100%;
+    margin: 0;
+    background: var(--space-black);
+}
+
+body {
+    overflow: hidden;
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    color: var(--star-white);
+}
+
+.space-scene {
+    position: relative;
+    display: grid;
+    width: 100%;
+    min-height: 100svh;
+    place-items: center;
+    isolation: isolate;
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse at 49% 48%, rgba(13, 28, 53, 0.32) 0%, rgba(5, 10, 22, 0.12) 38%, transparent 66%),
+        radial-gradient(ellipse at 16% 24%, rgba(22, 48, 83, 0.15) 0%, transparent 38%),
+        radial-gradient(ellipse at 82% 72%, rgba(50, 31, 79, 0.13) 0%, transparent 42%),
+        #03050b;
+}
+
+.space-canvas,
+.formation-canvas {
+    position: fixed;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.space-canvas {
+    z-index: 0;
+}
+
+.formation-canvas {
+    z-index: 4;
+}
+
+.nebula {
+    position: fixed;
+    z-index: 0;
+    width: min(76vw, 1050px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(72px);
+    transform: translate3d(0, 0, 0);
+    will-change: transform, opacity;
+}
+
+.nebula--blue {
+    top: 4%;
+    left: 3%;
+    opacity: 0.19;
+    background: radial-gradient(circle, rgba(32, 86, 150, 0.34) 0%, rgba(17, 47, 91, 0.16) 34%, transparent 69%);
+    animation: nebula-drift-blue 34s ease-in-out infinite alternate;
+}
+
+.nebula--violet {
+    right: -13%;
+    bottom: -36%;
+    width: min(70vw, 920px);
+    opacity: 0.13;
+    background: radial-gradient(circle, rgba(89, 53, 137, 0.34) 0%, rgba(42, 35, 95, 0.12) 39%, transparent 70%);
+    animation: nebula-drift-violet 42s ease-in-out infinite alternate;
+}
+
+.space-vignette {
+    position: fixed;
+    z-index: 1;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse at center, transparent 35%, rgba(1, 3, 8, 0.35) 100%),
+        linear-gradient(180deg, rgba(0, 0, 0, 0.15), transparent 24%, transparent 76%, rgba(0, 0, 0, 0.23));
+}
+
+.hero-stage {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    width: min(85vw, 1200px);
+    aspect-ratio: 2569 / 392;
+    place-items: center;
+    opacity: 1;
+    transform: scale(1.16);
+    transform-origin: center center;
+    will-change: transform;
+}
+
+.hero-main-logo {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    opacity: 0;
+    transform: scale(1.012);
+    filter: drop-shadow(0 0 12px rgba(151, 193, 255, 0.12));
+    transition:
+        opacity 1.55s cubic-bezier(0.2, 0.75, 0.25, 1),
+        transform 1.8s cubic-bezier(0.18, 0.72, 0.2, 1),
+        filter 1.8s ease;
+}
+
+.hero-stage.is-pulling-back {
+    transform: scale(1);
+    transition: transform 2.15s cubic-bezier(0.18, 0.72, 0.2, 1);
+}
+
+.hero-stage.is-solid .hero-main-logo {
+    opacity: 1;
+    transform: scale(1);
+    filter: drop-shadow(0 0 16px rgba(151, 193, 255, 0.10));
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+@keyframes nebula-drift-blue {
+    from { transform: translate3d(-2%, -1%, 0) scale(0.96); }
+    to   { transform: translate3d(5%, 4%, 0) scale(1.08); }
+}
+
+@keyframes nebula-drift-violet {
+    from { transform: translate3d(2%, 0, 0) scale(1.02); }
+    to   { transform: translate3d(-5%, -4%, 0) scale(0.93); }
+}
+
+@media (max-width: 700px) {
+    .hero-stage {
+        width: 92vw;
+        transform: scale(1.10);
+    }
+
+    .hero-stage.is-pulling-back {
+        transform: scale(1);
+    }
+
+    .nebula {
+        filter: blur(48px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .hero-stage,
+    .hero-stage.is-pulling-back {
+        transform: none;
+    }
+
+    .hero-main-logo,
+    .hero-stage.is-solid .hero-main-logo {
+        opacity: 1;
+        transform: none;
+    }
+}

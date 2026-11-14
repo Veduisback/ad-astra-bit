@@ -203,6 +203,8 @@
             getDoc
         } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
+        import { isAdminEmail } from "./js/admin-email-check.js";
+
 
         // FIREBASE CONFIGURATION
 
@@ -226,14 +228,6 @@
 
         const db = getFirestore(app);
 
-
-        // ADMIN EMAILS
-
-        const ADMIN_EMAILS = [
-            "rachnf99@gmail.com","maiyamdev@gmail.com","vedujames99@gmail.com","rachnajaiswal41@gmail.com"
-
-            // Add more admin emails here later.
-        ];
 
 
         const heading = document.getElementById("heading");
@@ -265,7 +259,7 @@
 
                 if (
                     user.emailVerified &&
-                    ADMIN_EMAILS.includes(user.email.toLowerCase())
+                    (await isAdminEmail(app, user.email.toLowerCase()))
                 ) {
 
                     window.location.replace("admin-dashboard.html");

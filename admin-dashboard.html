@@ -724,6 +724,8 @@
         limit
     } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
+    import { isAdminEmail } from "./js/admin-email-check.js";
+
 
     // FIREBASE CONFIGURATION
 
@@ -744,13 +746,6 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-
-    // ADMIN EMAIL ALLOWLIST
-
-    const ADMIN_EMAILS = [
-        "rachnf99@gmail.com",
-        "vedujames99@gmail.com","maiyamdev@gmail.com","rachnajaiswal41@gmail.com"
-    ];
 
 
     // ELEMENTS
@@ -1197,7 +1192,7 @@
 
             // RENDER USERS
 
-            users.forEach(user => {
+            for (const user of users) {
 
                 const row = document.createElement("tr");
 
@@ -1214,7 +1209,7 @@
                 const userEmail = (user.email || "").toLowerCase();
 
                 const isAuthorisedAdmin =
-                    ADMIN_EMAILS.includes(userEmail);
+                    await isAdminEmail(app, userEmail);
 
 
                 // BASIC DETAILS
@@ -1396,7 +1391,7 @@
 
                 applicationsBody.appendChild(row);
 
-            });
+            }
 
 
             showMessage(
@@ -1566,7 +1561,7 @@
 
             if (
                 userData.role === "admin" ||
-                ADMIN_EMAILS.includes(userEmail)
+                (await isAdminEmail(app, userEmail))
             ) {
 
                 throw new Error(
@@ -1649,7 +1644,7 @@
 
         if (
             !user.emailVerified ||
-            !ADMIN_EMAILS.includes(email)
+            !(await isAdminEmail(app, email))
         ) {
 
             showMessage(

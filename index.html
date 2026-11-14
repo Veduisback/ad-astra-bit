@@ -249,6 +249,8 @@
             getDoc
         } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
+        import { isAdminEmail } from "./js/admin-email-check.js";
+
 
         // =====================================
         // FIREBASE CONFIGURATION
@@ -274,16 +276,6 @@
         provider.setCustomParameters({
             prompt: "select_account"
         });
-
-
-        // =====================================
-        // ADMIN EMAIL ALLOWLIST
-        // =====================================
-
-        const ADMIN_EMAILS = [
-            "rachnf99@gmail.com",
-            "vedujames99@gmail.com","maiyamdev@gmail.com","rachnajaiswal41@gmail.com"
-        ];
 
 
         let currentUser = null;
@@ -330,7 +322,7 @@
 
                 const email = user.email.toLowerCase();
 
-                const isAdminEmail = ADMIN_EMAILS.includes(email);
+                const isAuthorizedAdmin = await isAdminEmail(app, email);
 
                 const userRef = doc(db, "users", user.uid);
 
@@ -341,7 +333,7 @@
                 // ADMIN ROUTING
                 // =================================
 
-                if (isAdminEmail) {
+                if (isAuthorizedAdmin) {
 
                     if (!userSnapshot.exists()) {
 

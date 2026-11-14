@@ -1,6 +1,7 @@
 
 const { setGlobalOptions } = require("firebase-functions");
 const { onDocumentCreated } = require("firebase-functions/v2/firestore");
+const { onCall, HttpsError } = require("firebase-functions/v2/https");
 const logger = require("firebase-functions/logger");
 
 const { initializeApp } = require("firebase-admin/app");
@@ -41,6 +42,28 @@ function formatEventDate(value) {
     timeZone: "Asia/Kolkata"
   });
 }
+
+exports.isAdminEmail = onCall(async (request) => {
+  if (!request.auth) {
+    throw new HttpsError("unauthenticated", "Authentication required.");
+  }
+
+  const email = request.data && typeof request.data.email === "string" ? request.data.email : "";
+  const normalizedEmail = email.trim().toLowerCase();
+
+  if (!normalizedEmail) {
+    throw new HttpsError("invalid-argument", "Email is required.");
+  }
+
+  const rawAllowlist = process.env.ADMIN_EMAILS || "";
+  const allowlist = rawAllowlist.split(",").map(item => item.trim().toLowerCase()).filter(Boolean);
+
+  if (!allowlist.length) {
+    throw new HttpsError("internal", "Admin email allowlist is not configured.");
+  }
+
+  return { isAdmin: allowlist.includes(normalizedEmail) };
+});
 
 // Automatically add checked-in events to public profiles.
 exports.syncParticipatedEvent = onDocumentCreated(

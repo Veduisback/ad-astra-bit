@@ -646,6 +646,8 @@
         serverTimestamp
     } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
+    import { isAdminEmail } from "./js/admin-email-check.js";
+
     const firebaseConfig = {
         apiKey: "AIzaSyB9BQOlOO-tfuFzxjK0KEA7YcV3O11_WjM",
         authDomain: "ad-astra-bit.firebaseapp.com",
@@ -655,11 +657,6 @@
         appId: "1:104444066688:web:d84478465cd3084f315f65",
         measurementId: "G-JJLDJF02K0"
     };
-
-    const ADMIN_EMAILS = [
-        "rachnf99@gmail.com",
-        "vedujames99@gmail.com","maiyamdev@gmail.com","rachnajaiswal41@gmail.com"
-    ];
 
     const REACTIONS = ["👍", "❤️", "😂", "😮", "😢"];
 
@@ -1535,7 +1532,7 @@
             const email = (refreshedUser.email || "").toLowerCase();
 
             isAdmin =
-                ADMIN_EMAILS.includes(email) &&
+                (await isAdminEmail(app, email)) &&
                 currentProfile.role === "admin" &&
                 currentProfile.status === "approved";
 

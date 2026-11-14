@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#03050b">
+    <meta name="description" content="AD ASTRA — a journey written in the stars.">
+    <title>AD ASTRA — Beyond the Ordinary</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="space-scene" aria-label="AD ASTRA introduction">
+        <!-- Procedural deep-space background: stars and drifting constellations -->
+        <canvas id="spaceCanvas" class="space-canvas" aria-hidden="true"></canvas>
+
+        <!-- Subtle atmospheric layers -->
+        <div class="nebula nebula--blue" aria-hidden="true"></div>
+        <div class="nebula nebula--violet" aria-hidden="true"></div>
+        <div class="space-vignette" aria-hidden="true"></div>
+
+        <!-- Main logo stage. The solid logo is revealed after its stars assemble. -->
+        <section class="hero-stage" id="heroStage" aria-label="AD ASTRA logo">
+            <svg
+                id="adAstraLogo"
+                class="hero-main-logo"
+                viewBox="0 0 2569 392"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                role="img"
+                aria-label="AD ASTRA"
+                focusable="false"
+            >
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M2484.41 0.0021504C2530.23 -0.308555 2567.63 33.0831 2567.01 80.5166C2567.01 80.692 2567.01 80.8571 2567 81.0115L2569 375.47L2506.32 375.895C2506.32 375.895 2504.45 101.135 2504.35 85.4848C2504.24 69.8349 2490.06 62.5661 2480.22 62.6328C2457.79 62.7849 2446.11 75.7808 2429.75 97.7695C2413.38 119.758 2281.43 325.689 2281.43 325.689L2246.63 263.251C2246.63 263.251 2348.67 104.032 2376.21 65.1584C2403.76 26.2849 2440.12 0.30245 2484.41 0.0021504Z" fill="#FFFFFF"></path>
+
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M2158.42 66.5825L1959.46 66.4157L1959.04 4.16222C1959.04 4.16222 2107 0.940978 2163.9 4.66399C2225.57 8.69847 2270.01 54.83 2270.43 116.068C2270.74 162.641 2244.14 200.325 2200.08 215.249L2290.47 377.204L2218.3 377.694L2131.38 224.651C2121.69 224.787 2114.93 224.926 2105.24 224.829C2083.68 224.611 2052.8 223.514 2037.38 239.149C2021.95 254.784 2023.73 279.838 2024.05 298.958C2024.48 325.635 2024.44 352.327 2024.62 379.007L1962.5 379.428L1961.99 304.522C1961.73 265.577 1965.19 223.946 1994.1 194.641C2028.45 159.823 2078.88 162.891 2123.81 162.751C2157.28 162.647 2206.78 161.593 2206.48 116.502C2206.28 87.0557 2188.58 67.2593 2158.42 66.5825Z" fill="#FFFFFF"></path>
+
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M1775.71 67.6672L1654.3 68.4904L1653.88 6.2205L1959.01 4.15171L1959.43 66.4216L1838.02 67.2448L1840.14 379.51L1777.83 379.933L1775.71 67.6672Z" fill="#FFFFFF"></path>
+
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M1471.92 7.45488L1660.21 6.17832L1660.63 68.6008L1473.67 69.8683C1444.29 72.0801 1418.93 88.7 1419.14 119.811C1419.34 148.787 1447.07 165.847 1473.66 166.26C1506.99 166.034 1570.03 165.607 1588.98 165.479C1648.32 165.25 1699.17 213.038 1699.58 273.055C1699.99 334.451 1652.25 381.016 1590.32 381.204L1590.29 381.204L1248.47 383.522L1248.04 321.099L1590.1 318.78C1590.12 318.78 1590.15 318.779 1590.19 318.778C1617.99 318.007 1637.47 301.353 1637.29 273.477C1637.1 245.415 1617.19 228.627 1589.21 227.905C1589.18 227.904 1589.16 227.903 1589.14 227.903C1553.1 228.147 1492.8 228.556 1473.87 228.684C1413.88 228.923 1357.27 182.162 1356.85 120.233C1356.42 56.0121 1408.87 9.92146 1471.92 7.45488Z" fill="#FFFFFF"></path>
+
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M1226.65 9.11796C1272.17 8.80935 1309.31 42.0256 1308.7 89.2095C1308.7 89.384 1308.7 89.5482 1308.69 89.7018L1310.13 302.161L1247.87 302.583C1247.87 302.583 1246.56 109.718 1246.46 94.1509C1246.35 78.5834 1232.27 71.3527 1222.5 71.4189C1200.21 71.57 1188.62 84.4974 1172.36 106.37C1156.11 128.243 991.133 385.267 991.133 385.267L916.053 385.776C916.053 385.776 1091.84 112.599 1119.19 73.9302C1146.55 35.2615 1182.66 9.41623 1226.65 9.11796Z" fill="#FFFFFF"></path>
+
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M549.356 76.0617L426.112 76.8973L425.691 14.7793C487.813 14.3581 548.062 13.9489 549.052 13.9429C657.632 13.4691 744.778 91.1879 744.88 200.073C744.981 308.262 659.869 387.25 551.592 388.478C550.965 388.483 403.698 389.481 332.441 389.964L332.019 327.846L551.05 326.361C623.002 325.065 682.826 274.99 682.756 200.131C682.686 124.708 621.256 76.3998 549.356 76.0617Z" fill="#FFFFFF"></path>
+
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M310.599 15.3417C356.116 15.0331 393.259 48.2493 392.647 95.4333C392.645 95.6078 392.642 95.772 392.639 95.9256L394.079 308.385L331.818 308.807C331.818 308.807 330.51 115.942 330.404 100.375C330.299 84.8071 316.216 77.5764 306.443 77.6427C284.161 77.7937 272.565 90.7212 256.309 112.594C240.054 134.467 75.0801 391.491 75.0801 391.491L-2.41125e-08 392C-2.41125e-08 392 175.784 118.823 203.139 80.154C230.493 41.4853 266.607 15.64 310.599 15.3417Z" fill="#FFFFFF"></path>
+            </svg>
+        </section>
+
+        <!-- Foreground particles assemble the logo, then dissolve into the solid mark. -->
+        <canvas id="formationCanvas" class="formation-canvas" aria-hidden="true"></canvas>
+
+        <p class="sr-only">AD ASTRA</p>
+    </main>
+
+    <script>
+    (() => {
+        "use strict";
+
+        const SPACE_CANVAS = document.getElementById("spaceCanvas");
+        const FORMATION_CANVAS = document.getElementById("formationCanvas");
+        const STAGE = document.getElementById("heroStage");
+        const LOGO = document.getElementById("adAstraLogo");
+
+        const spaceCtx = SPACE_CANVAS.getContext("2d", { alpha: true });
+        const formationCtx = FORMATION_CANVAS.getContext("2d", { alpha: true });
+        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        const VIEWBOX_WIDTH = 2569;
+        const VIEWBOX_HEIGHT = 392;
+        const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+        const random = (min, max) => min + Math.random() * (max - min);
+        const easeOutCubic = (value) => 1 - Math.pow(1 - clamp(value, 0, 1), 3);
+
+        let width = window.innerWidth;
+        let height = window.innerHeight;
+        let dpr = Math.min(window.devicePixelRatio || 1, 1.75);
+        let backgroundStars = [];
+        let driftingConstellations = [];
+        let logoParticles = [];
+        let logoConnections = [];
+        let startTime = performance.now();
+        let lastTime = startTime;
+        let pullingBack = false;
+        let solidReveal = false;
+        let animationFrame = 0;
+
+        function setupCanvas(canvas, context) {
+            canvas.width = Math.round(width * dpr);
+            canvas.height = Math.round(height * dpr);
+            context.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+
+        function createBackgroundStars() {
+            const count = clamp(Math.round((width * height) / 2100), 260, 850);
+            backgroundStars = Array.from({ length: count }, () => ({
+                x: random(0, width),
+                y: random(0, height),
+                radius: random(0.35, 1.35),
+                alpha: random(0.22, 0.82),
+                phase: random(0, Math.PI * 2),
+                speed: random(0.35, 1.4),
+                drift: random(0.15, 1.0),
+                tint: Math.random() < 0.13 ? "warm" : (Math.random() < 0.38 ? "blue" : "white")
+            }));
+        }
+
+        function createDriftingConstellations() {
+            const patterns = [
+                {
+                    points: [[0, 0], [0.22, -0.13], [0.43, -0.03], [0.65, 0.12], [0.82, 0.33], [0.58, 0.48], [0.35, 0.37], [0.13, 0.53]],
+                    edges: [[0,1],[1,2],[2,3],[3,4],[3,5],[5,6],[6,7],[1,6]]
+                },
+                {
+                    points: [[0.05, 0.42], [0.24, 0.2], [0.42, 0.28], [0.57, 0.03], [0.76, 0.16], [0.92, 0.38], [0.65, 0.55]],
+                    edges: [[0,1],[1,2],[2,3],[3,4],[4,5],[2,6],[6,5]]
+                },
+                {
+                    points: [[0.08, 0.05], [0.32, 0.18], [0.47, 0.02], [0.64, 0.23], [0.88, 0.13], [0.74, 0.48], [0.45, 0.43]],
+                    edges: [[0,1],[1,2],[2,3],[3,4],[3,5],[5,6],[6,1]]
+                },
+                {
+                    points: [[0.02, 0.32], [0.2, 0.08], [0.44, 0.17], [0.58, 0.42], [0.83, 0.33], [0.68, 0.06]],
+                    edges: [[0,1],[1,2],[2,3],[3,4],[4,5],[5,2]]
+                }
+            ];
+
+            driftingConstellations = patterns.map((pattern, index) => ({
+                ...pattern,
+                x: width * [0.12, 0.81, 0.17, 0.84][index],
+                y: height * [0.22, 0.28, 0.78, 0.76][index],
+                scale: random(36, 76),
+                phase: random(0, Math.PI * 2),
+                speed: random(0.10, 0.22),
+                driftX: random(7, 17),
+                driftY: random(6, 14),
+                rotation: random(-0.16, 0.16),
+                alpha: random(0.11, 0.19)
+            }));
+        }
+
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            dpr = Math.min(window.devicePixelRatio || 1, 1.75);
+            setupCanvas(SPACE_CANVAS, spaceCtx);
+            setupCanvas(FORMATION_CANVAS, formationCtx);
+            createBackgroundStars();
+            createDriftingConstellations();
+            updateLogoTargets();
+        }
+
+        function getStageLayoutRect() {
+            // The stage is centered by the page layout. Use its untransformed size
+            // so the constellation targets remain stable while the stage zooms out.
+            const stageWidth = STAGE.offsetWidth;
+            const stageHeight = STAGE.offsetHeight;
+            return {
+                left: (width - stageWidth) / 2,
+                top: (height - stageHeight) / 2,
+                width: stageWidth,
+                height: stageHeight
+            };
+        }
+
+        function addPathConstellation(path, pathIndex, rect) {
+            const bounds = path.getBBox();
+            const pathLength = path.getTotalLength();
+            const targetCount = clamp(Math.round((bounds.width * bounds.height) / 2450), 28, 105);
+            const groupPoints = [];
+
+            // Sample points inside the filled logo path. These form the star map's body.
+            if (typeof path.isPointInFill === "function") {
+                let attempts = 0;
+                const maxAttempts = targetCount * 45;
+                while (groupPoints.length < targetCount && attempts < maxAttempts) {
+                    attempts++;
+                    const x = random(bounds.x, bounds.x + bounds.width);
+                    const y = random(bounds.y, bounds.y + bounds.height);
+                    try {
+                        if (path.isPointInFill(new DOMPoint(x, y))) {
+                            groupPoints.push({ x, y, pathIndex, boundary: false });
+                        }
+                    } catch (_) {
+                        break;
+                    }
+                }
+            }
+
+            // Keep a clear constellation outline around each letterform.
+            const outlineCount = clamp(Math.round(pathLength / 48), 24, 100);
+            const outlineStart = groupPoints.length;
+            for (let i = 0; i < outlineCount; i++) {
+                const point = path.getPointAtLength((i / outlineCount) * pathLength);
+                groupPoints.push({ x: point.x, y: point.y, pathIndex, boundary: true });
+            }
+
+            // If fill sampling is unavailable or the browser rejects it, the outline
+            // still gives us a visible and recognizable constellation letterform.
+            const offset = logoParticles.length;
+            for (let i = 0; i < groupPoints.length; i++) {
+                const point = groupPoints[i];
+                const targetX = rect.left + (point.x / VIEWBOX_WIDTH) * rect.width;
+                const targetY = rect.top + (point.y / VIEWBOX_HEIGHT) * rect.height;
+                const spread = random(230, 560);
+                const angle = random(0, Math.PI * 2);
+                const horizontalOrder = clamp(point.x / VIEWBOX_WIDTH, 0, 1);
+
+                logoParticles.push({
+                    x: random(0, width),
+                    y: random(0, height),
+                    startX: targetX + Math.cos(angle) * spread,
+                    startY: targetY + Math.sin(angle) * spread * 0.58,
+                    targetX,
+                    targetY,
+                    pathIndex,
+                    boundary: point.boundary,
+                    delay: 0.10 + horizontalOrder * 0.62 + random(0, 0.24),
+                    curveX: random(-26, 26),
+                    curveY: random(-23, 23),
+                    radius: point.boundary ? random(0.85, 1.55) : random(0.55, 1.2),
+                    brightness: random(0.66, 1),
+                    phase: random(0, Math.PI * 2),
+                    featured: point.boundary && i % 5 === 0
+                });
+            }
+
+            // Connect outline points in sequence so each letter keeps its silhouette.
+            for (let i = 0; i < outlineCount; i++) {
+                const a = offset + outlineStart + i;
+                const b = offset + outlineStart + ((i + 1) % outlineCount);
+                logoConnections.push({ a, b, strength: 0.78, boundary: true });
+            }
+
+            // Add a sparse nearest-neighbour web inside each filled letterform.
+            const first = offset;
+            const last = offset + groupPoints.length;
+            for (let i = first; i < last; i++) {
+                const p = logoParticles[i];
+                const nearest = [];
+                for (let j = first; j < last; j++) {
+                    if (i === j) continue;
+                    const q = logoParticles[j];
+                    const dx = p.targetX - q.targetX;
+                    const dy = p.targetY - q.targetY;
+                    const distance = Math.hypot(dx, dy);
+                    if (distance < 25) nearest.push({ index: j, distance });
+                }
+                nearest.sort((a, b) => a.distance - b.distance);
+                for (const candidate of nearest.slice(0, 2)) {
+                    if (candidate.index > i) {
+                        logoConnections.push({
+                            a: i,
+                            b: candidate.index,
+                            strength: 0.34,
+                            boundary: false
+                        });
+                    }
+                }
+            }
+        }
+
+        function buildLogoConstellation() {
+            logoParticles = [];
+            logoConnections = [];
+            const rect = getStageLayoutRect();
+            const paths = LOGO.querySelectorAll("path");
+            paths.forEach((path, index) => addPathConstellation(path, index, rect));
+        }
+
+        function updateLogoTargets() {
+            if (!logoParticles.length) return;
+            const rect = getStageLayoutRect();
+            const paths = Array.from(LOGO.querySelectorAll("path"));
+            // Rebuild only on resize; the animation is restarted cleanly below.
+            if (paths.length) buildLogoConstellation();
+        }
+
+        function drawBackground(time, delta) {
+            spaceCtx.clearRect(0, 0, width, height);
+
+            // Deep starfield with restrained colour and slow parallax drift.
+            for (const star of backgroundStars) {
+                star.x += star.drift * delta * 0.006;
+                star.y += star.drift * delta * 0.002;
+                if (star.x > width + 2) star.x = -2;
+                if (star.y > height + 2) star.y = -2;
+
+                const twinkle = 0.72 + Math.sin(time * star.speed + star.phase) * 0.28;
+                const alpha = star.alpha * twinkle;
+                let color = `rgba(223,235,255,${alpha})`;
+                if (star.tint === "warm") color = `rgba(255,224,190,${alpha * 0.85})`;
+                if (star.tint === "blue") color = `rgba(164,198,255,${alpha})`;
+
+                spaceCtx.beginPath();
+                spaceCtx.fillStyle = color;
+                spaceCtx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                spaceCtx.fill();
+
+                if (star.radius > 1.05 && alpha > 0.52) {
+                    spaceCtx.save();
+                    spaceCtx.globalAlpha = alpha * 0.28;
+                    spaceCtx.strokeStyle = "rgba(185,215,255,0.7)";
+                    spaceCtx.lineWidth = 0.45;
+                    spaceCtx.beginPath();
+                    spaceCtx.moveTo(star.x - 3.2, star.y);
+                    spaceCtx.lineTo(star.x + 3.2, star.y);
+                    spaceCtx.moveTo(star.x, star.y - 3.2);
+                    spaceCtx.lineTo(star.x, star.y + 3.2);
+                    spaceCtx.stroke();
+                    spaceCtx.restore();
+                }
+            }
+
+            // Small independent constellations drifting in the distant background.
+            for (const constellation of driftingConstellations) {
+                const driftX = Math.sin(time * constellation.speed + constellation.phase) * constellation.driftX;
+                const driftY = Math.cos(time * constellation.speed * 0.83 + constellation.phase) * constellation.driftY;
+                const rotation = constellation.rotation + Math.sin(time * 0.055 + constellation.phase) * 0.035;
+                const cos = Math.cos(rotation);
+                const sin = Math.sin(rotation);
+                const points = constellation.points.map(([px, py], index) => {
+                    const x = (px - 0.46) * constellation.scale;
+                    const y = (py - 0.28) * constellation.scale;
+                    return {
+                        x: constellation.x + driftX + x * cos - y * sin,
+                        y: constellation.y + driftY + x * sin + y * cos,
+                        phase: index * 0.9
+                    };
+                });
+
+                spaceCtx.save();
+                spaceCtx.lineWidth = 0.65;
+                spaceCtx.strokeStyle = `rgba(134,174,230,${constellation.alpha})`;
+                spaceCtx.beginPath();
+                for (const [a, b] of constellation.edges) {
+                    spaceCtx.moveTo(points[a].x, points[a].y);
+                    spaceCtx.lineTo(points[b].x, points[b].y);
+                }
+                spaceCtx.stroke();
+
+                for (const point of points) {
+                    const pulse = 0.7 + Math.sin(time * 0.8 + point.phase + constellation.phase) * 0.3;
+                    spaceCtx.beginPath();
+                    spaceCtx.fillStyle = `rgba(205,225,255,${constellation.alpha * 3.2 * pulse})`;
+                    spaceCtx.arc(point.x, point.y, 0.85 + pulse * 0.45, 0, Math.PI * 2);
+                    spaceCtx.fill();
+                }
+                spaceCtx.restore();
+            }
+        }
+
+        function particlePosition(particle, elapsed) {
+            const local = clamp((elapsed - particle.delay) / 2.65, 0, 1);
+            const progress = easeOutCubic(local);
+            const curve = Math.sin(progress * Math.PI);
+
+            // The stars first settle into an enlarged wordmark. As the solid logo
+            // approaches, every constellation point pulls back with the same
+            // camera-like scale change as the logo stage.
+            const zoomProgress = easeOutCubic((elapsed - 3.65) / 2.15);
+            const zoomScale = 1.16 + (1 - 1.16) * zoomProgress;
+            const targetX = width / 2 + (particle.targetX - width / 2) * zoomScale;
+            const targetY = height / 2 + (particle.targetY - height / 2) * zoomScale;
+
+            return {
+                x: particle.startX + (targetX - particle.startX) * progress + particle.curveX * curve,
+                y: particle.startY + (targetY - particle.startY) * progress + particle.curveY * curve,
+                progress
+            };
+        }
+
+        function drawLogoConstellation(time, elapsed) {
+            formationCtx.clearRect(0, 0, width, height);
+
+            const dissolve = easeOutCubic((elapsed - 4.55) / 1.65);
+            const globalAlpha = 1 - dissolve;
+            if (globalAlpha <= 0.005) return;
+
+            const positions = new Array(logoParticles.length);
+            for (let i = 0; i < logoParticles.length; i++) {
+                const particle = logoParticles[i];
+                const position = particlePosition(particle, elapsed);
+                positions[i] = position;
+            }
+
+            // The network only connects once neighbouring stars are close to their
+            // final positions; this prevents long temporary lines across the screen.
+            formationCtx.save();
+            formationCtx.lineWidth = 0.62;
+            for (const edge of logoConnections) {
+                const a = positions[edge.a];
+                const b = positions[edge.b];
+                const joined = Math.min(a.progress, b.progress);
+                if (joined < 0.74) continue;
+                const alpha = ((joined - 0.74) / 0.26) * edge.strength * globalAlpha;
+                formationCtx.strokeStyle = edge.boundary
+                    ? `rgba(188,218,255,${alpha * 0.56})`
+                    : `rgba(145,185,245,${alpha * 0.42})`;
+                formationCtx.beginPath();
+                formationCtx.moveTo(a.x, a.y);
+                formationCtx.lineTo(b.x, b.y);
+                formationCtx.stroke();
+            }
+            formationCtx.restore();
+
+            // Individual stars travel into the letterforms and settle with a soft glint.
+            for (let i = 0; i < logoParticles.length; i++) {
+                const particle = logoParticles[i];
+                const position = positions[i];
+                const twinkle = 0.82 + Math.sin(time * 2.0 + particle.phase) * 0.18;
+                const alpha = (0.12 + position.progress * 0.88) * particle.brightness * twinkle * globalAlpha;
+                const radius = particle.radius * (0.65 + position.progress * 0.35);
+
+                formationCtx.beginPath();
+                formationCtx.fillStyle = `rgba(225,239,255,${alpha})`;
+                formationCtx.arc(position.x, position.y, radius, 0, Math.PI * 2);
+                formationCtx.fill();
+
+                if (particle.featured && position.progress > 0.72) {
+                    const glint = (position.progress - 0.72) / 0.28;
+                    formationCtx.save();
+                    formationCtx.globalAlpha = alpha * glint * 0.7;
+                    formationCtx.shadowColor = "rgba(153,202,255,0.95)";
+                    formationCtx.shadowBlur = 8;
+                    formationCtx.fillStyle = "rgba(255,255,255,0.95)";
+                    formationCtx.beginPath();
+                    formationCtx.arc(position.x, position.y, radius * 1.7, 0, Math.PI * 2);
+                    formationCtx.fill();
+                    formationCtx.restore();
+                }
+            }
+        }
+
+        function animate(now) {
+            const delta = Math.min(now - lastTime, 40);
+            lastTime = now;
+            const elapsed = (now - startTime) / 1000;
+            const time = now / 1000;
+
+            drawBackground(time, delta);
+            drawLogoConstellation(time, elapsed);
+
+            if (!pullingBack && elapsed >= 3.65) {
+                STAGE.classList.add("is-pulling-back");
+                pullingBack = true;
+            }
+
+            if (!solidReveal && elapsed >= 4.65) {
+                STAGE.classList.add("is-solid");
+                solidReveal = true;
+            }
+
+            animationFrame = requestAnimationFrame(animate);
+        }
+
+        function showStaticLogo() {
+            STAGE.classList.add("is-pulling-back", "is-solid");
+            formationCtx.clearRect(0, 0, width, height);
+            drawBackground(0, 0);
+        }
+
+        function restartIntro() {
+            cancelAnimationFrame(animationFrame);
+            STAGE.classList.remove("is-pulling-back", "is-solid");
+            pullingBack = false;
+            solidReveal = false;
+            buildLogoConstellation();
+            startTime = performance.now();
+            lastTime = startTime;
+            animationFrame = requestAnimationFrame(animate);
+        }
+
+        resize();
+        buildLogoConstellation();
+
+        if (reducedMotion) {
+            showStaticLogo();
+        } else {
+            animationFrame = requestAnimationFrame(animate);
+        }
+
+        let resizeTimer;
+        window.addEventListener("resize", () => {
+            window.clearTimeout(resizeTimer);
+            resizeTimer = window.setTimeout(() => {
+                resize();
+                if (!reducedMotion) restartIntro();
+                else showStaticLogo();
+            }, 120);
+        }, { passive: true });
+
+        // Replaying the intro is useful while developing the homepage.
+        // Press R to replay the constellation reveal.
+        window.addEventListener("keydown", (event) => {
+            if (event.key.toLowerCase() === "r" && !reducedMotion) restartIntro();
+        });
+    })();
+    </script>
+</body>
+</html>

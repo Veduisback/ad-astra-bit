@@ -488,6 +488,8 @@
         getDoc
     } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
+    import { isAdminEmail } from "./js/admin-email-check.js";
+
 
     // =====================================================
     // FIREBASE CONFIGURATION
@@ -523,17 +525,6 @@
     const GMAIL_SCOPE =
         "https://www.googleapis.com/auth/gmail.send";
 
-
-    // =====================================================
-    // ADMIN EMAIL ALLOWLIST
-    // =====================================================
-
-    const ADMIN_EMAILS = [
-        "rachnf99@gmail.com",
-        "vedujames99@gmail.com",
-        "maiyamdev@gmail.com",
-        "rachnajaiswal41@gmail.com"
-    ];
 
 
     // =====================================================
@@ -673,7 +664,7 @@
 
             const recipientMap = new Map();
 
-            snapshot.forEach(documentSnapshot => {
+            for (const documentSnapshot of snapshot.docs) {
 
                 const profile = documentSnapshot.data();
 
@@ -705,7 +696,7 @@
                 // Only allow configured administrator accounts.
                 if (
                     membershipClass === "admin" &&
-                    !ADMIN_EMAILS.includes(email)
+                    !(await isAdminEmail(app, email))
                 ) {
                     return;
                 }
@@ -715,7 +706,7 @@
                     role: membershipClass
                 });
 
-            });
+            }
 
             allRecipients = Array.from(
                 recipientMap.values()
@@ -870,7 +861,7 @@
             // Verify email and administrator allowlist.
             if (
                 !verifiedUser.emailVerified ||
-                !ADMIN_EMAILS.includes(email)
+                !(await isAdminEmail(app, email))
             ) {
 
                 throw new Error(

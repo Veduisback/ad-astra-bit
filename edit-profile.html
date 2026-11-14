@@ -313,6 +313,8 @@
         serverTimestamp
     } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
+    import { isAdminEmail } from "./js/admin-email-check.js";
+
 
     // =====================================
     // FIREBASE CONFIGURATION
@@ -326,11 +328,6 @@
         messagingSenderId: "104444066688",
         appId: "1:104444066688:web:d84478465cd3084f315f65"
     };
-
-    const ADMIN_EMAILS = [
-        "rachnf99@gmail.com",
-        "vedujames99@gmail.com","maiyamdev@gmail.com","rachnajaiswal41@gmail.com"
-    ];
 
     const RESERVED_USERNAMES = [
         "admin",
@@ -683,7 +680,7 @@
         }
 
         const email = (user.email || "").toLowerCase();
-        const isAllowlistedAdmin = ADMIN_EMAILS.includes(email);
+        const isAllowlistedAdmin = await isAdminEmail(app, email);
 
         const profileRef = doc(db, "users", user.uid);
         const snapshot = await getDoc(profileRef);

@@ -529,14 +529,6 @@
     };
 
 
-    // ADMIN CONFIGURATION
-
-    const ADMIN_EMAILS = [
-        "rachnf99@gmail.com",
-        "vedujames99@gmail.com","maiyamdev@gmail.com","rachnajaiswal41@gmail.com"
-    ];
-
-
     // INITIALIZE FIREBASE
 
     const app = initializeApp(firebaseConfig);
@@ -827,7 +819,7 @@
             const email = (user.email || "").toLowerCase();
 
             const isAllowlistedAdmin =
-                ADMIN_EMAILS.includes(email);
+                await isAdminEmail(app, email);
 
 
             const userRef = doc(db, "users", user.uid);
