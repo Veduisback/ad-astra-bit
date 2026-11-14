@@ -991,21 +991,38 @@
     // =====================================================
 
     
+
 function createRawEmail(subject, body, batch) {
 
     const emailRegex = /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/;
+
+    const sender = String(currentAdmin?.email || "").trim();
 
     const cleanRecipients = batch.map(email =>
         String(email || "").trim()
     );
 
-    if (
-        cleanRecipients.length === 0 ||
-        cleanRecipients.some(email => !emailRegex.test(email))
-    ) {
+    // Validate sender
+    if (!emailRegex.test(sender)) {
+        console.error("Invalid sender email:", sender);
+        throw new Error("The administrator's sender email is invalid.");
+    }
+
+    // Validate BCC recipients
+    const invalidRecipients = cleanRecipients.filter(
+        email => !emailRegex.test(email)
+    );
+
+    if (invalidRecipients.length > 0) {
+        console.error("Invalid BCC recipients:", invalidRecipients);
         throw new Error(
-            "One or more recipient email addresses are invalid."
+            "Invalid recipient email addresses: " +
+            invalidRecipients.join(", ")
         );
+    }
+
+    if (cleanRecipients.length === 0) {
+        throw new Error("No valid recipients found.");
     }
 
     const encodedBody = base64EncodeUtf8(body)
@@ -1013,7 +1030,7 @@ function createRawEmail(subject, body, batch) {
         .join("\r\n");
 
     const emailMessage = [
-        "To: undisclosed-recipients:;",
+        `To: ${sender}`,
         `Bcc: ${cleanRecipients.join(", ")}`,
         `Subject: ${encodeMimeHeader(subject)}`,
         "MIME-Version: 1.0",
@@ -1023,8 +1040,15 @@ function createRawEmail(subject, body, batch) {
         encodedBody
     ].join("\r\n");
 
+    console.log("Gmail message header diagnostic:", {
+        sender,
+        recipientCount: cleanRecipients.length,
+        invalidRecipients
+    });
+
     return base64UrlEncodeUtf8(emailMessage);
 }
+
 
 
     // =====================================================
